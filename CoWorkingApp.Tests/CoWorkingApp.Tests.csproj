@@ -33,6 +33,7 @@
     <Folder Include="Core\Application\Services\" />
     <Folder Include="Core\Domain\Entities\" />
     <Folder Include="Core\Domain\DTOs\" />
+    <Folder Include="Infrastructure\Controllers\" />
     <Folder Include="Infrastructure\Repositories\" />
     <Folder Include="Infrastructure\UnitOfWorks\" />
     <Folder Include="ClassData\" />
