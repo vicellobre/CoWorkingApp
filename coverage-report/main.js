@@ -221,7 +221,7 @@ var assemblies = [
   {
     "name": "CoWorkingApp.API",
     "classes": [
-      { "name": "CoWorkingApp.API.Infrastructure.Adapters.AutoMapperAdapter", "rp": "CoWorkingApp.API_AutoMapperAdapter.html", "cl": 0, "ucl": 10, "cal": 10, "tl": 46, "cb": 0, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "CoWorkingApp.API.Infrastructure.Adapters.AutoMapperAdapter", "rp": "CoWorkingApp.API_AutoMapperAdapter.html", "cl": 10, "ucl": 0, "cal": 10, "tl": 46, "cb": 2, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "CoWorkingApp.API.Infrastructure.Adapters.MappingProfile", "rp": "CoWorkingApp.API_MappingProfile.html", "cl": 27, "ucl": 0, "cal": 27, "tl": 54, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "CoWorkingApp.API.Infrastructure.Context.CoWorkingContext", "rp": "CoWorkingApp.API_CoWorkingContext.html", "cl": 58, "ucl": 0, "cal": 58, "tl": 110, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "CoWorkingApp.API.Infrastructure.Persistence.Repositories.RepositoryGeneric<T>", "rp": "CoWorkingApp.API_RepositoryGeneric_1.html", "cl": 44, "ucl": 0, "cal": 44, "tl": 133, "cb": 2, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
