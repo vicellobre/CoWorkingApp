@@ -35,6 +35,7 @@
     <Folder Include="Core\Domain\DTOs\" />
     <Folder Include="Infrastructure\Repositories\" />
     <Folder Include="Infrastructure\UnitOfWorks\" />
+    <Folder Include="ClassData\" />
   </ItemGroup>
 
 </Project>
