@@ -31,6 +31,7 @@
 
   <ItemGroup>
     <Folder Include="Core\Domain\Entities\" />
+    <Folder Include="Core\Domain\DTOs\" />
     <Folder Include="Infrastructure\Repositories\" />
     <Folder Include="Infrastructure\UnitOfWorks\" />
   </ItemGroup>
