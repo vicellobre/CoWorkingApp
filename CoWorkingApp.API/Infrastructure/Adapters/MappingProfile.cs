@@ -18,6 +18,13 @@ namespace CoWorkingApp.API.Infrastructure.Adapters
             CreateMap<User, UserResponse>();
             // Configura el mapeo entre el DTO UserRequest y su correspondiente entidad User
             CreateMap<UserRequest, User>();
+
+            // Configura el mapeo entre la entidad Seat y su correspondiente DTO SeatResponse
+            CreateMap<Seat, SeatResponse>();
+            // Configura el mapeo entre el DTO SeatRequest y su correspondiente entidad Seat
+            CreateMap<SeatRequest, Seat>();
+
+            // Agrega otros mapeos necesarios aquí
         }
     }
 }
