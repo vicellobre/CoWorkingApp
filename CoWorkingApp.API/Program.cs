@@ -1,11 +1,8 @@
 using CoWorkingApp.API.Infrastructure.Adapters;
 using CoWorkingApp.API.Infrastructure.Context;
 using CoWorkingApp.API.Infrastructure.Extensions;
-using CoWorkingApp.API.Infrastructure.Adapters;
-using CoWorkingApp.API.Infrastructure.Context;
 using CoWorkingApp.Core.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
