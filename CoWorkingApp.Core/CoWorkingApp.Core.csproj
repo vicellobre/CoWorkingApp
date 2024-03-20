@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Folder Include="Application\Contracts\" />
+    <Folder Include="Application\Abstracts\" />
     <Folder Include="Application\Services\" />
     <Folder Include="Domain\Entities\" />
     <Folder Include="Domain\DTOs\" />
