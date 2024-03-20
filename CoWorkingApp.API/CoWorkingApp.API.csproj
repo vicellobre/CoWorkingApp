@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <Folder Include="Infrastructure\Context\" />
+    <Folder Include="Infrastructure\UnitOfWorks\" />
     <Folder Include="Infrastructure\Presentation\Controllers\" />
   </ItemGroup>
 

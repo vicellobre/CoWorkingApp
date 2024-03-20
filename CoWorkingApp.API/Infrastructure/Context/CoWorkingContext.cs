@@ -1,7 +1,7 @@
 ﻿using CoWorkingApp.Core.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace CoWorkingApp.API.Infra.Context
+namespace CoWorkingApp.API.Infrastructure.Context
 {
     /// <summary>
     /// Clase que representa el contexto de la base de datos para la aplicación CoWorking.
