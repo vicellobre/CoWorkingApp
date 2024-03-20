@@ -30,6 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Core\Application\Services\" />
     <Folder Include="Core\Domain\Entities\" />
     <Folder Include="Core\Domain\DTOs\" />
     <Folder Include="Infrastructure\Repositories\" />
