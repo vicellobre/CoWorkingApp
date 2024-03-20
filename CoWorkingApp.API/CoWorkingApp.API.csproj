@@ -21,4 +21,9 @@
     <ProjectReference Include="..\CoWorkingApp.Core\CoWorkingApp.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Infrastructure\Context\" />
+    <Folder Include="Infrastructure\Presentation\Controllers\" />
+  </ItemGroup>
+
 </Project>
