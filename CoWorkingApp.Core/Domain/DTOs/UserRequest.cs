@@ -5,7 +5,7 @@ namespace CoWorkingApp.Core.Domain.DTOs
     /// <summary>
     /// Representa una solicitud para crear o actualizar un usuario en el sistema.
     /// </summary>
-    public class UserRequest : IRequest
+    public record UserRequest : IRequest
     {
         /// <summary>
         /// Obtiene o establece el nombre del usuario.
