@@ -5,7 +5,7 @@ namespace CoWorkingApp.Core.Domain.DTOs
     /// <summary>
     /// Representa la respuesta de una reserva en el sistema.
     /// </summary>
-    public class ReservationResponse : ResponseMessage
+    public record ReservationResponse : ResponseMessage
     {
         /// <summary>
         /// Obtiene o establece la fecha de la reserva.

@@ -5,7 +5,7 @@ namespace CoWorkingApp.Core.Domain.DTOs
     /// <summary>
     /// Representa la respuesta de un asiento en el sistema.
     /// </summary>
-    public class SeatResponse : ResponseMessage
+    public record SeatResponse : ResponseMessage
     {
         /// <summary>
         /// Obtiene o establece el nombre del asiento.

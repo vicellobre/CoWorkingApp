@@ -3,7 +3,7 @@
     /// <summary>
     /// Clase base abstracta para los mensajes de respuesta del sistema.
     /// </summary>
-    public abstract class ResponseMessage
+    public abstract record ResponseMessage
     {
         /// <summary>
         /// Obtiene o establece un valor que indica si la operación fue exitosa.
@@ -13,7 +13,7 @@
         /// <summary>
         /// Obtiene o establece el mensaje asociado a la operación.
         /// </summary>
-        public string Message { get; set; }
+        public string? Message { get; set; }
 
         /// <summary>
         /// Obtiene o establece la lista de errores asociados a la operación, si los hay.

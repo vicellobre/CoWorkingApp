@@ -5,7 +5,7 @@ namespace CoWorkingApp.Core.Domain.DTOs
     /// <summary>
     /// Representa la respuesta de un usuario en el sistema.
     /// </summary>
-    public class UserResponse : ResponseMessage
+    public record UserResponse : ResponseMessage
     {
         /// <summary>
         /// Obtiene o establece el nombre del usuario.
