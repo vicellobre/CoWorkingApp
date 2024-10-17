@@ -3,6 +3,9 @@ using CoWorkingApp.API.Infrastructure.Context;
 using CoWorkingApp.API.Infrastructure.Extensions;
 using CoWorkingApp.Core.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
@@ -18,44 +21,36 @@ namespace CoWorkingApp.API
     /// Clase estática Startup que contiene los métodos para inicializar y configurar la aplicación.
     /// </summary>
     [ExcludeFromCodeCoverage]
-    public static class Startup
+    public class Startup
     {
+        private readonly IConfiguration _configuration;
+
         /// <summary>
-        /// Inicializa la aplicación configurando los servicios y devolviendo la instancia de WebApplication.
+        /// Inicializa una nueva instancia de la clase <see cref="Startup"/>.
         /// </summary>
-        /// <param name="args">Parámetros de entrada de la aplicación.</param>
-        /// <returns>Una instancia de WebApplication lista para ejecutarse.</returns>
-        public static WebApplication Initialize(string[] args)
+        /// <param name="configuration">Instancia de <see cref="IConfiguration"/> que contiene la configuración de la aplicación.</param>
+        public Startup(IConfiguration configuration)
         {
-            // Crea una instancia del constructor de la aplicación
-            var builder = WebApplication.CreateBuilder(args);
-            ConfigureServices(builder);
-
-            // Construye la aplicación
-            var app = builder.Build();
-            Configure(app);
-
-            // Ejecuta la aplicación
-            return app;
+            _configuration = configuration;
         }
 
         /// <summary>
         /// Configura los servicios que serán utilizados por la aplicación, como la base de datos, autenticación, CORS, Swagger, entre otros.
         /// </summary>
-        /// <param name="builder">El constructor de la aplicación que se utiliza para registrar servicios.</param>
-        static void ConfigureServices(WebApplicationBuilder builder)
+        /// <param name="services">La colección de servicios que se utilizará para registrar los servicios.</param>
+        public void ConfigureServices(IServiceCollection services)
         {
             // Configuración del contexto de la base de datos
-            builder.Services.AddDbContext<CoWorkingContext>(options =>
+            services.AddDbContext<CoWorkingContext>(options =>
             {
-                options .UseSqlServer(builder.Configuration.GetConnectionString("ConnectionCoWorking"));
+                options.UseSqlServer(_configuration.GetConnectionString("ConnectionCoWorking"));
             });
 
             // Agrega dependencias adicionales
-            builder.Services.AddDependency();
+            services.AddDependency();
 
             // Configuración CORS
-            builder.Services.AddCors(options =>
+            services.AddCors(options =>
             {
                 options.AddPolicy("MyPolicy", builder =>
                 {
@@ -66,13 +61,23 @@ namespace CoWorkingApp.API
             });
 
             // Configuración de autenticación JWT
-            builder.Services.AddTokenAuthentication(builder.Configuration);
+            services.AddTokenAuthentication(_configuration);
 
             // Configuración de AutoMapper y registro del perfil de mapeo
-            builder.Services.AddAutoMapper(typeof(MappingProfile));
+            services.AddAutoMapper(typeof(MappingProfile));
+
+            // Configuración de protección de datos con encriptador
+            services.AddDataProtection()
+                .PersistKeysToFileSystem(new DirectoryInfo(@"/app/DataProtectionKeys")) //(@"H:\Vicentico\Proyectos\CoWorking Project\DataProtectionKeys"))
+                .SetApplicationName("CoWorkingApp")
+                .UseCryptographicAlgorithms(new AuthenticatedEncryptorConfiguration
+                {
+                     EncryptionAlgorithm = EncryptionAlgorithm.AES_256_CBC,
+                     ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
+                });
 
             // Configuración de los controladores (API Endpoints)
-            builder.Services.AddControllers(options =>
+            services.AddControllers(options =>
             {
                 // Requiere que los usuarios estén autenticados
                 var policy = new AuthorizationPolicyBuilder()
@@ -82,11 +87,11 @@ namespace CoWorkingApp.API
             });
 
             // Configuración para habilitar la caché de respuestas
-            builder.Services.AddResponseCaching();
+            services.AddResponseCaching();
 
             // Configuración de Swagger/OpenAPI (documentación de la API)
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen(options =>
+            services.AddEndpointsApiExplorer();
+            services.AddSwaggerGen(options =>
             {
                 // Información del archivo XML de documentación
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -116,8 +121,8 @@ namespace CoWorkingApp.API
             });
 
             // Configuración para OData
-            builder.Services.AddODataQueryFilter();
-            builder.Services.AddControllers().AddOData(options =>
+            services.AddODataQueryFilter();
+            services.AddControllers().AddOData(options =>
             {
                 // Configuración de rutas y opciones de OData
                 options.AddRouteComponents("odata", GetEdmModel()).Select().Filter().OrderBy().Count().Expand().SetMaxTop(100);
@@ -128,7 +133,7 @@ namespace CoWorkingApp.API
         /// Define el modelo EDM para OData con las entidades disponibles.
         /// </summary>
         /// <returns>El modelo EDM configurado con las entidades de la aplicación.</returns>
-        static IEdmModel GetEdmModel()
+        private IEdmModel GetEdmModel()
         {
             var odataBuilder = new ODataConventionModelBuilder();
 
@@ -143,11 +148,12 @@ namespace CoWorkingApp.API
         /// <summary>
         /// Configura la aplicación y define cómo se procesarán las solicitudes HTTP.
         /// </summary>
-        /// <param name="app">La instancia de la aplicación web.</param>
-        static void Configure(WebApplication app)
+        /// <param name="app">El constructor para configurar la aplicación.</param>
+        /// <param name="env">El entorno de alojamiento web.</param>
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             // Configuración específica para entornos de desarrollo
-            if (app.Environment.IsDevelopment())
+            if (env.IsDevelopment())
             {
                 app.UseExceptionHandler("/error");
             }
@@ -181,7 +187,10 @@ namespace CoWorkingApp.API
             app.UseAuthorization();
 
             // Asigna los controladores para procesar las solicitudes HTTP
-            app.MapControllers();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 }
