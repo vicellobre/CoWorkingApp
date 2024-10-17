@@ -5,7 +5,7 @@ namespace CoWorkingApp.Core.Domain.DTOs
     /// <summary>
     /// Representa la solicitud de un asiento en el sistema.
     /// </summary>
-    public class SeatRequest : IRequest
+    public record SeatRequest : IRequest
     {
         /// <summary>
         /// Obtiene o establece el nombre del asiento.

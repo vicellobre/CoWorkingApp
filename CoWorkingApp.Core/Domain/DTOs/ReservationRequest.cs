@@ -5,7 +5,7 @@ namespace CoWorkingApp.Core.Domain.DTOs
     /// <summary>
     /// Representa la solicitud de una reserva en el sistema.
     /// </summary>
-    public class ReservationRequest : IRequest
+    public record ReservationRequest : IRequest
     {
         /// <summary>
         /// Obtiene o establece la fecha de la reserva.
