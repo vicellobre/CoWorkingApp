@@ -6,11 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <InvariantGlobalization>true</InvariantGlobalization>
 	<GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <!--
 	<UserSecretsId>07f75224-f5af-47df-b70f-170ed82ee118</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <DockerfileContext>.</DockerfileContext>
-	-->
   </PropertyGroup>
 
   <ItemGroup>
