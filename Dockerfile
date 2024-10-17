@@ -31,5 +31,5 @@ FROM build AS final
 WORKDIR /app
 COPY --from=build /app/publish ./
 
-# Comando de entrada
-ENTRYPOINT ["dotnet", "CoWorkingApp.API.dll"]
+# Comando de entrada: Aplicar las migraciones antes de iniciar la aplicación
+CMD dotnet ef database update --project /src/CoWorkingApp.API/CoWorkingApp.API.csproj && dotnet CoWorkingApp.API.dll

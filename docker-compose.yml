@@ -9,23 +9,25 @@ services:
         ports:
             - "1433:1433"  # Puerto del SQL Server en el contenedor mapeado al host
         volumes:
-            - sqlserver-data:/var/opt/mssql  # Esto persistirá los datos de la base de datos
+            - sqlserver-data:/var/opt/mssql  # Persistir datos de la base de datos
         networks:
             - coworking-network
-      
+        healthcheck:
+           test: "exit 0"
+
     api:
-        #image: ${DOCKER_REGISTRY-}coworkingapp-api
         build:
             context: .
             dockerfile: Dockerfile
         container_name: coworking-api
         ports:
-            - "8080:8080"  # Mapea el puerto del contenedor al puerto de tu host (puedes cambiar 5000 si es necesario)
+            - "8080:8080"  # Mapea el puerto del contenedor al puerto de tu host
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
             - ConnectionStrings__ConnectionCoWorking=Server=db;Database=CoWorkingDb;User=sa;Password=Your_password123;MultipleActiveResultSets=True;TrustServerCertificate=True;
         depends_on:
-          - db
+          db:
+            condition: service_healthy
         volumes:
             - dataprotection-keys:/app/DataProtectionKeys
         networks:
@@ -38,5 +40,3 @@ networks:
 volumes:
     sqlserver-data:
     dataprotection-keys:
-
-    
