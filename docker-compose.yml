@@ -1,0 +1,42 @@
+services:
+    db:
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        container_name: coworking-db
+        environment:
+            - ACCEPT_EULA=Y
+            - SA_PASSWORD=Your_password123
+            - MSSQL_PID=Express
+        ports:
+            - "1433:1433"  # Puerto del SQL Server en el contenedor mapeado al host
+        volumes:
+            - sqlserver-data:/var/opt/mssql  # Esto persistirá los datos de la base de datos
+        networks:
+            - coworking-network
+      
+    api:
+        #image: ${DOCKER_REGISTRY-}coworkingapp-api
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: coworking-api
+        ports:
+            - "8080:8080"  # Mapea el puerto del contenedor al puerto de tu host (puedes cambiar 5000 si es necesario)
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Development
+            - ConnectionStrings__ConnectionCoWorking=Server=db;Database=CoWorkingDb;User=sa;Password=Your_password123;MultipleActiveResultSets=True;TrustServerCertificate=True;
+        depends_on:
+          - db
+        volumes:
+            - dataprotection-keys:/app/DataProtectionKeys
+        networks:
+            - coworking-network
+
+networks:
+    coworking-network:
+        driver: bridge
+
+volumes:
+    sqlserver-data:
+    dataprotection-keys:
+
+    
