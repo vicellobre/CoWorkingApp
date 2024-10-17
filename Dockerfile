@@ -31,5 +31,11 @@ FROM build AS final
 WORKDIR /app
 COPY --from=build /app/publish ./
 
-# Comando de entrada: Aplicar las migraciones antes de iniciar la aplicación
-CMD dotnet ef database update --project /src/CoWorkingApp.API/CoWorkingApp.API.csproj && dotnet CoWorkingApp.API.dll
+# Copiar el script de arranque
+COPY entrypoint.sh /app/entrypoint.sh
+
+# Hacer el script ejecutable
+RUN chmod +x /app/entrypoint.sh
+
+# Usar el script como entrypoint
+ENTRYPOINT ["/app/entrypoint.sh"]
