@@ -13,3 +13,4 @@ fi
 # Iniciar la aplicación
 echo "Iniciando la aplicación..."
 exec dotnet CoWorkingApp.API.dll
+
