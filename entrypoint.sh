@@ -1,7 +1,15 @@
 #!/bin/bash
+set -e
 
 # Ejecutar las migraciones de EF Core
-dotnet ef database update --project /src/CoWorkingApp.API/CoWorkingApp.API.csproj
+echo "Aplicando migraciones de la base de datos..."
+if dotnet ef database update --project /src/CoWorkingApp.API/CoWorkingApp.API.csproj; then
+    echo "Migraciones aplicadas correctamente."
+else
+    echo "Error al aplicar migraciones."
+    exit 1
+fi
 
 # Iniciar la aplicación
-dotnet CoWorkingApp.API.dll
+echo "Iniciando la aplicación..."
+exec dotnet CoWorkingApp.API.dll
