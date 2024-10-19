@@ -14,6 +14,7 @@ using Microsoft.OData.ModelBuilder;
 using Microsoft.OpenApi.Models;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using CoWorkingApp.API.Configurations;
 
 namespace CoWorkingApp.API
 {
@@ -40,10 +41,24 @@ namespace CoWorkingApp.API
         /// <param name="services">La colección de servicios que se utilizará para registrar los servicios.</param>
         public void ConfigureServices(IServiceCollection services)
         {
+            // Detectar si estamos en un contenedor Docker
+            var isRunningInContainer = Environment.GetEnvironmentVariable("RUNNING_IN_CONTAINER") == "true";
+
+            // Seleccionar la cadena de conexión adecuada
+            string? connectionString = isRunningInContainer
+                ? _configuration.GetConnectionString("ConnectionCoWorking_LocalContainer")
+                : _configuration.GetConnectionString("ConnectionCoWorking_Local");
+
+            // Verificar si la cadena de conexión es null
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new InvalidOperationException("The connection string is not configured correctly.");
+            }
+
             // Configuración del contexto de la base de datos
             services.AddDbContext<CoWorkingContext>(options =>
             {
-                options.UseSqlServer(_configuration.GetConnectionString("ConnectionCoWorking"));
+                options.UseSqlServer(_configuration.GetConnectionString(connectionString));
             });
 
             // Agrega dependencias adicionales
@@ -68,7 +83,7 @@ namespace CoWorkingApp.API
 
             // Configuración de protección de datos con encriptador
             services.AddDataProtection()
-                .PersistKeysToFileSystem(new DirectoryInfo(@"/app/DataProtectionKeys")) //(@"H:\Vicentico\Proyectos\CoWorking Project\DataProtectionKeys"))
+                .PersistKeysToFileSystem(new DirectoryInfo(@"/app/DataProtectionKeys"))
                 .SetApplicationName("CoWorkingApp")
                 .UseCryptographicAlgorithms(new AuthenticatedEncryptorConfiguration
                 {
@@ -98,25 +113,35 @@ namespace CoWorkingApp.API
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 options.IncludeXmlComments(xmlPath);
 
-                // Configuración de Swagger
-                options.SwaggerDoc("v1", new OpenApiInfo
+                // Obtener la sección Swagger desde appsettings
+                var swaggerConfig = _configuration.GetSection("Swagger").Get<SwaggerConfig>();
+
+                // Configurar Swagger usando los valores desde appsettings
+                services.AddSwaggerGen(options =>
                 {
-                    Version = "v1",
-                    Title = "CoWorking API",
-                    Description = "Este proyecto de API ASP.NET Core, denominado CoWorkingApp, tiene como objetivo demostrar la evolución en el diseño y desarrollo de software a través de la implementación gradual de diferentes patrones arquitectónicos." +
-                    "\n\n La aplicación está centrada en la gestión de espacios de trabajo compartidos, con un enfoque educativo para que los desarrolladores comprendan la adopción de las buenas prácticas de desarrollo de software y los patrones de diseño como Repository, Adapter, Factory, Service, UseCase y Controller .\n\n" +
-                    "## Repositorio\nEste repositorio se presenta como un recurso educativo y de referencia para aquellos interesados en aprender sobre la evolución de un proyecto desde un diseño basado en servicios hasta la adopción de Casos de Uso. Siéntete libre de explorar y contribuir al proyecto para enriquecer aún más este aprendizaje.\n\n¡Gracias por ser parte de CoWorkingApp y explorar la evolución de las arquitecturas de software!",
-                    Contact = new OpenApiContact
+                    //// Documentación para la versión 1
+                    //options.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+
+                    //// Documentación para la versión 2
+                    //options.SwaggerDoc("v2", new OpenApiInfo { Title = "My API", Version = "v2" });
+
+                    options.SwaggerDoc("v1", new OpenApiInfo
                     {
-                        Name = "Llobregat Vicente",
-                        Email = "vicente.llobregat94@gmail.com",
-                        Url = new Uri("https://github.com/vicellobre/CoWorkingApp"),
-                    },
-                    License = new OpenApiLicense
-                    {
-                        Name = "MIT License",
-                        Url = new Uri("https://opensource.org/licenses/MIT"),
-                    }
+                        Version = "v1",
+                        Title = swaggerConfig!.Title,
+                        Description = swaggerConfig.Description,
+                        Contact = new OpenApiContact
+                        {
+                            Name = swaggerConfig.Contact.Name,
+                            Email = swaggerConfig.Contact.Email,
+                            Url = new Uri(swaggerConfig.Contact.Url!)
+                        },
+                        License = new OpenApiLicense
+                        {
+                            Name = swaggerConfig.License.Name,
+                            Url = new Uri(swaggerConfig.License.Url!)
+                        }
+                    });
                 });
             });
 
@@ -167,6 +192,11 @@ namespace CoWorkingApp.API
             // Configura la interfaz de usuario de Swagger
             app.UseSwaggerUI(options =>
             {
+                //// Endpoint para la versión 1 de la API
+                //options.SwaggerEndpoint("/swagger/v1/swagger.json", "My API v1");
+
+                //// Endpoint para la versión 2 de la API
+                //options.SwaggerEndpoint("/swagger/v2/swagger.json", "My API v2");
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Services v1.0");
             });
 

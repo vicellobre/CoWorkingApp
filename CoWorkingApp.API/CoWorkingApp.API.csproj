@@ -2,12 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
+	<Version>1.0.0</Version>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <InvariantGlobalization>false</InvariantGlobalization>
 	<GenerateDocumentationFile>true</GenerateDocumentationFile>
 	<UserSecretsId>07f75224-f5af-47df-b70f-170ed82ee118</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <StartupObject></StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
