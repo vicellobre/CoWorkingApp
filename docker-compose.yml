@@ -30,6 +30,7 @@ services:
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
             - ConnectionStrings__ConnectionCoWorking=Server=db;Database=CoWorkingDb;User=sa;Password=Your_password123;MultipleActiveResultSets=True;TrustServerCertificate=True;
+            - RUNNING_IN_CONTAINER=true
         depends_on:
             db:
                 condition: service_healthy
