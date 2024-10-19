@@ -41,7 +41,7 @@ namespace CoWorkingApp.API
         /// <param name="services">La colección de servicios que se utilizará para registrar los servicios.</param>
         public void ConfigureServices(IServiceCollection services)
         {
-            // Detectar si estamos en un contenedor Docker
+            // Detectar si se ejecuta en un contenedor Docker
             var isRunningInContainer = Environment.GetEnvironmentVariable("RUNNING_IN_CONTAINER") == "true";
 
             // Seleccionar la cadena de conexión adecuada
