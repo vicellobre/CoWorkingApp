@@ -7,6 +7,8 @@ namespace CoWorkingApp.API.Infrastructure.UnitOfWorks
     /// </summary>
     public class UnitOfWork : IUnitOfWork
     {
+        private bool _disposed;
+
         /// <summary>
         /// Obtiene el contexto de la base de datos utilizado para acceder y manipular los datos.
         /// </summary>
@@ -35,7 +37,26 @@ namespace CoWorkingApp.API.Infrastructure.UnitOfWorks
         /// </summary>
         public void Dispose()
         {
-            Context.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        private void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    try
+                    {
+                        Context?.Dispose();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error disposing context: {ex.Message}");
+                    }
+                }
+                _disposed = true;
+            }
         }
     }
 }

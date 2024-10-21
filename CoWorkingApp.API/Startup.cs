@@ -45,16 +45,19 @@ namespace CoWorkingApp.API
             var isRunningInContainer = Environment.GetEnvironmentVariable("RUNNING_IN_CONTAINER") == "true";
 
             // Seleccionar la cadena de conexión adecuada
-            string? connectionString = isRunningInContainer
-                ? _configuration.GetConnectionString("ConnectionCoWorking_LocalContainer")
-                : _configuration.GetConnectionString("ConnectionCoWorking_Local");
+            var connectionString = isRunningInContainer
+                ? _configuration.GetConnectionString("ConnectionCoWorking_Container")
+                : _configuration.GetConnectionString("ConnectionCoWorking");
 
             // Verificar si la cadena de conexión es null
             if (string.IsNullOrEmpty(connectionString))
             {
                 throw new InvalidOperationException("The connection string is not configured correctly.");
             }
-
+            else
+            {
+                Console.WriteLine(connectionString);
+            }
             // Configuración del contexto de la base de datos
             services.AddDbContext<CoWorkingContext>(options =>
             {

@@ -29,6 +29,7 @@ namespace CoWorkingApp.API.Infrastructure.Context
         /// </summary>
         public DbSet<Reservation> Reservations { get; set; }
 
+
         /// <summary>
         /// Método que se llama al crear el modelo de la base de datos y define las configuraciones adicionales.
         /// </summary>
