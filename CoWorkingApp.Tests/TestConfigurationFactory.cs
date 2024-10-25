@@ -12,7 +12,7 @@ namespace CoWorkingApp.Tests
         /// </summary>
         /// <param name="configValues">Diccionario de valores de configuración.</param>
         /// <returns>Instancia de IConfiguration configurada con los valores proporcionados.</returns>
-        public static IConfiguration CreateConfiguration(Dictionary<string, string> configValues)
+        public static IConfiguration CreateConfiguration(Dictionary<string, string?>? configValues)
         {
             // Configura la configuración en memoria
             IConfiguration configuration = new ConfigurationBuilder()

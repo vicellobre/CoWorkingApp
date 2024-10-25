@@ -42,7 +42,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Controllers
                 // Crear un mock para ISeatService
                 var mockService = new Mock<ISeatService>();
                 // Inicializar el logger como nulo
-                ILogger<ControllerGeneric<ISeatService, SeatRequest, SeatResponse>> logger = null;
+                ILogger<ControllerGeneric<ISeatService, SeatRequest, SeatResponse>>? logger = null;
 
                 // ACT
                 // Utilizar una expresión lambda para intentar crear una instancia de SeatController con el logger nulo
@@ -63,7 +63,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Controllers
             {
                 // ARRANGE 
                 // Inicializar el servicio como nulo
-                ISeatService service = null;
+                ISeatService? service = null;
                 // Crear un mock para ILogger
                 var mockLogger = new Mock<ILogger<ControllerGeneric<ISeatService, SeatRequest, SeatResponse>>>();
 

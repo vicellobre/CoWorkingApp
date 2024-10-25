@@ -97,7 +97,7 @@ namespace CoWorkingApp.API.Infrastructure.Persistence.Repositories
         /// </summary>
         /// <param name="email">Correo electrónico del usuario.</param>
         /// <returns>Una colección de reservaciones asociadas al usuario con el correo electrónico especificado.</returns>
-        public async Task<IEnumerable<Reservation>> GetByUserEmailAsync(string email)
+        public async Task<IEnumerable<Reservation>> GetByUserEmailAsync(string? email)
         {
             // Verifica que el email no sea nulo o vacío
             if (string.IsNullOrWhiteSpace(email))
@@ -119,7 +119,7 @@ namespace CoWorkingApp.API.Infrastructure.Persistence.Repositories
         /// </summary>
         /// <param name="seatName">El nombre del asiento del que se desean obtener las reservaciones.</param>
         /// <returns>Una colección de reservaciones asociadas al nombre de asiento especificado, incluyendo información detallada del usuario y del asiento asociados a cada reserva.</returns>
-        public async Task<IEnumerable<Reservation>> GetBySeatNameAsync(string seatName)
+        public async Task<IEnumerable<Reservation>> GetBySeatNameAsync(string? seatName)
         {
             // Incluye información detallada del usuario y del asiento asociados a cada reserva
             return await _dbSet

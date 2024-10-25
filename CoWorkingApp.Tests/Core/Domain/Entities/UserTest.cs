@@ -65,8 +65,8 @@ namespace CoWorkingApp.Tests.Core.Domain.Entities
         public void Equals_Returns_False_When_ComparedWith_NullUser()
         {
             // ARRANGE
-            User user_1 = new User();
-            User user_2 = null;
+            User user_1 = new();
+            User? user_2 = null;
 
             // ACT
             var result = user_1.Equals(user_2);

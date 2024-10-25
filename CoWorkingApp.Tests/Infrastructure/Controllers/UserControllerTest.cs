@@ -45,7 +45,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Controllers
                 // Crear un mock para IUserService
                 var mockService = new Mock<IUserService>();
                 // Inicializar el logger como nulo
-                ILogger<ControllerGeneric<IUserService, UserRequest, UserResponse>> logger = null;
+                ILogger<ControllerGeneric<IUserService, UserRequest, UserResponse>>? logger = null;
 
                 // ACT
                 // Utilizar una expresión lambda para intentar crear una instancia de UserController con el logger nulo
@@ -66,7 +66,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Controllers
             {
                 // ARRANGE 
                 // Inicializar el servicio como nulo
-                IUserService service = null;
+                IUserService? service = null;
                 // Crear un mock para ILogger
                 var mockLogger = new Mock<ILogger<ControllerGeneric<IUserService, UserRequest, UserResponse>>>();
 

@@ -43,7 +43,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Controllers
                 // Crear un mock para IReservationService
                 var mockService = new Mock<IReservationService>();
                 // Declarar el logger como nulo
-                ILogger<ControllerGeneric<IReservationService, ReservationRequest, ReservationResponse>> logger = null;
+                ILogger<ControllerGeneric<IReservationService, ReservationRequest, ReservationResponse>>? logger = null;
 
                 // ACT
                 // Intentar crear una instancia de ReservationController con el logger nulo
@@ -64,7 +64,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Controllers
             {
                 // ARRANGE 
                 // Declarar el servicio como nulo
-                IReservationService service = null;
+                IReservationService? service = null;
                 // Crear un mock para ILogger
                 var mockLogger = new Mock<ILogger<ControllerGeneric<IReservationService, ReservationRequest, ReservationResponse>>>();
 

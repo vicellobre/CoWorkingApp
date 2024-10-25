@@ -27,7 +27,7 @@ namespace CoWorkingApp.API.Infrastructure.Presentation.Controllers
         /// </summary>
         /// <param name="service">Instancia del servicio de usuarios.</param>
         /// <param name="configuration">Instancia de IConfiguration para acceder a la configuración de la aplicación.</param>
-        public LoginUserController(IUserService? service, IConfiguration configuration)
+        public LoginUserController(IUserService? service, IConfiguration? configuration)
         {
             _service = service ?? throw new ArgumentNullException(nameof(service));
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));

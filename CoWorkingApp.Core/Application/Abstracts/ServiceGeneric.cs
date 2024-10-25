@@ -102,7 +102,7 @@ namespace CoWorkingApp.Core.Application.Abstracts
         /// </summary>
         /// <param name="request">El objeto de solicitud.</param>
         /// <returns>Un objeto de respuesta.</returns>
-        public virtual async Task<TResponse> CreateAsync(TRequest request)
+        public virtual async Task<TResponse> CreateAsync(TRequest? request)
         {
             try
             {
@@ -166,7 +166,7 @@ namespace CoWorkingApp.Core.Application.Abstracts
         /// <param name="id">El ID de la entidad.</param>
         /// <param name="request">El objeto de solicitud.</param>
         /// <returns>Un objeto de respuesta.</returns>
-        public virtual async Task<TResponse> UpdateAsync(Guid id, TRequest request)
+        public virtual async Task<TResponse> UpdateAsync(Guid id, TRequest? request)
         {
             try
             {

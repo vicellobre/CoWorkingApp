@@ -50,7 +50,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 // ARRANGE
 
                 // Establecer el repositorio como nulo
-                IUserRepository repository = null;
+                IUserRepository? repository = null;
 
                 // Crear un mock del adaptador IMapperAdapter
                 var mockMapper = new Mock<IMapperAdapter>();
@@ -81,7 +81,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 var mockRepository = new Mock<IUserRepository>();
 
                 // Establecer el mapeador como nulo
-                IMapperAdapter mapper = null;
+                IMapperAdapter? mapper = null;
 
                 // ACT
 
@@ -111,8 +111,8 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 // Crear una lista de usuarios de prueba
                 var users = new List<User>
                 {
-                    new User { Id = Guid.NewGuid(), Name = "John", LastName = "Doe", Email = "john@example.com", Password = "123" },
-                    new User { Id = Guid.NewGuid(), Name = "Jane", LastName = "Smith", Email = "jane@example.com", Password = "456" }
+                    new() { Id = Guid.NewGuid(), Name = "John", LastName = "Doe", Email = "john@example.com", Password = "123" },
+                    new() { Id = Guid.NewGuid(), Name = "Jane", LastName = "Smith", Email = "jane@example.com", Password = "456" }
                 };
 
                 // Crear un mapeador AutoMapper para simular el mapeo de entidades de usuario a respuestas de usuario
@@ -296,7 +296,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 // ARRANGE
 
                 // Crear un usuario nulo para simular un usuario que no existe en el repositorio
-                User nullUser = null;
+                User? nullUser = null;
 
                 // Configurar un mock para el repositorio IUserRepository y establecer su comportamiento para devolver un usuario nulo cuando se llame a GetByIdAsync con cualquier ID
                 var mockRepository = new Mock<IUserRepository>();
@@ -441,7 +441,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 var errorMessage = exception.Message;
 
                 // Crear una solicitud de usuario nula
-                UserRequest user = null;
+                UserRequest? user = null;
 
                 // Configurar un mock para el repositorio IUserRepository
                 var mockRepository = new Mock<IUserRepository>();
@@ -798,7 +798,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 // Generar un nuevo ID de usuario
                 var userId = Guid.NewGuid();
                 // Establecer el usuario como nulo
-                User user = null;
+                User? user = null;
 
                 // Crear una excepción de ArgumentException con el mensaje adecuado
                 var exception = new ArgumentException($"Entity with id {userId} not found");
@@ -1208,12 +1208,14 @@ namespace CoWorkingApp.Tests.Core.Application.Services
             public void GetByEmailAsync_Returns_NegativeResponse_When_NullEmail()
             {
                 // ARRANGE
+                string? email = null;
+
                 // Crear una excepción de ArgumentNullException con el mensaje adecuado
-                var exception = new ArgumentNullException("The email cannot be null or empty");
+                var exception = new ArgumentNullException(nameof(email), "The email cannot be null or empty");
                 var errorMessage = exception.Message;
 
                 // Establecer el usuario como nulo
-                User nullUser = null;
+                User? nullUser = null;
 
                 // Configurar un mock para el adaptador IMapperAdapter
                 var mockMapper = new Mock<IMapperAdapter>();
@@ -1227,7 +1229,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
 
                 // ACT
                 // Llamar al método GetUserByEmailAsync con un correo electrónico nulo y obtener el resultado
-                var result = service.GetByEmailAsync(null)?.Result;
+                var result = service.GetByEmailAsync(email)?.Result;
 
                 // ASSERT
                 // Verificar que el resultado no sea nulo
@@ -1421,12 +1423,12 @@ namespace CoWorkingApp.Tests.Core.Application.Services
             public void AuthenticateAsync_Returns_NegativeResponse_When_NullRequest()
             {
                 // ARRANGE
-                // Crear una excepción de ArgumentNullException con el mensaje adecuado
-                var exception = new ArgumentNullException("The request object cannot be null or empty");
-                var errorMessage = exception.Message;
-
                 // Establecer la solicitud como nula
-                UserRequest nullRequest = null;
+                UserRequest? request = null;
+                
+                // Crear una excepción de ArgumentNullException con el mensaje adecuado
+                var exception = new ArgumentNullException(nameof(request), "The request object cannot be null or empty");
+                var errorMessage = exception.Message;
 
                 // Configurar mocks para el adaptador IMapperAdapter y el repositorio IUserRepository
                 var mockMapper = new Mock<IMapperAdapter>();
@@ -1437,7 +1439,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
 
                 // ACT
                 // Llamar al método AuthenticateUserAsync con la solicitud nula y obtener el resultado
-                var result = service.AuthenticateAsync(nullRequest)?.Result;
+                var result = service.AuthenticateAsync(request)?.Result;
 
                 // ASSERT
                 // Verificar que el resultado no sea nulo
@@ -1463,16 +1465,17 @@ namespace CoWorkingApp.Tests.Core.Application.Services
             public void AuthenticateAsync_Returns_NegativeResponse_When_NullCredentials(string? email, string? password)
             {
                 // ARRANGE
-                // Crear una excepción de ArgumentNullException con el mensaje adecuado
-                var exception = new ArgumentNullException("The email or password cannot be null or empty");
-                var errorMessage = exception.Message;
-
                 // Crear una solicitud de usuario con los datos proporcionados
-                var userRequest = new UserRequest
+                var request = new UserRequest
                 {
                     Email = email,
                     Password = password
                 };
+
+                // Crear una excepción de ArgumentNullException con el mensaje adecuado
+                var exception = new ArgumentNullException(nameof(request), "The email or password cannot be null or empty");
+                var errorMessage = exception.Message;
+                
 
                 // Configurar mocks para el adaptador IMapperAdapter y el repositorio IUserRepository
                 var mockMapper = new Mock<IMapperAdapter>();
@@ -1483,7 +1486,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
 
                 // ACT
                 // Llamar al método AuthenticateUserAsync con la solicitud y obtener el resultado
-                var result = service.AuthenticateAsync(userRequest)?.Result;
+                var result = service.AuthenticateAsync(request)?.Result;
 
                 // ASSERT
                 // Verificar que el resultado no sea nulo
@@ -1558,7 +1561,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 };
 
                 // Establecer el usuario como nulo para simular una autenticación fallida
-                User nullUser = null;
+                User? nullUser = null;
 
                 // Configurar mocks para el adaptador IMapperAdapter y el repositorio IUserRepository
                 var mockMapper = new Mock<IMapperAdapter>();

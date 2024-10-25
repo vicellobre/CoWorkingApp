@@ -26,7 +26,7 @@ namespace CoWorkingApp.Core.Application.Services
         /// </summary>
         /// <param name="email">La dirección de correo electrónico del usuario.</param>
         /// <returns>Un objeto UserResponse que representa al usuario encontrado.</returns>
-        public async Task<UserResponse> GetByEmailAsync(string email)
+        public async Task<UserResponse> GetByEmailAsync(string? email)
         {
             try
             {
@@ -34,7 +34,7 @@ namespace CoWorkingApp.Core.Application.Services
                 if (string.IsNullOrEmpty(email))
                 {
                     // Si es nulo o vacío, lanzar una excepción
-                    throw new ArgumentNullException("The email cannot be null or empty");
+                    throw new ArgumentNullException(nameof(email), "The email cannot be null or empty");
                 }
 
                 // Validar el formato del correo electrónico
@@ -80,7 +80,7 @@ namespace CoWorkingApp.Core.Application.Services
         /// </summary>
         /// <param name="request">La solicitud de autenticación que contiene la dirección de correo electrónico y la contraseña del usuario.</param>
         /// <returns>Un objeto UserResponse que representa al usuario autenticado.</returns>
-        public async Task<UserResponse> AuthenticateAsync(UserRequest request)
+        public async Task<UserResponse> AuthenticateAsync(UserRequest? request)
         {
             try
             {
@@ -88,14 +88,14 @@ namespace CoWorkingApp.Core.Application.Services
                 if (request is null)
                 {
                     // Si es nula, lanzar una excepción
-                    throw new ArgumentNullException("The request object cannot be null or empty");
+                    throw new ArgumentNullException(nameof(request), "The request object cannot be null or empty");
                 }
 
                 // Verificar si el correo electrónico o la contraseña son nulos o vacíos
                 if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))
                 {
                     // Si lo son, lanzar una excepción
-                    throw new ArgumentNullException("The email or password cannot be null or empty");
+                    throw new ArgumentNullException(nameof(request), "The email or password cannot be null or empty");
                 }
 
                 // Validar el formato del correo electrónico y la contraseña
@@ -105,14 +105,7 @@ namespace CoWorkingApp.Core.Application.Services
                 }
 
                 // Autenticar al usuario utilizando el correo electrónico y la contraseña proporcionados
-                var user = await _repository.AuthenticateAsync(request.Email, request.Password);
-
-                // Verificar si el usuario fue autenticado correctamente
-                if (user is null)
-                {
-                    // Si no se autentica correctamente, lanzar una excepción
-                    throw new ArgumentException($"Credentials incorrect");
-                }
+                var user = await _repository.AuthenticateAsync(request.Email, request.Password) ?? throw new ArgumentException($"Credentials incorrect");
 
                 // Mapear el usuario autenticado a una respuesta de usuario y establecer el éxito en verdadero
                 var response = _mapper.Map<User, UserResponse>(user);
@@ -183,7 +176,7 @@ namespace CoWorkingApp.Core.Application.Services
         /// </summary>
         /// <param name="email">La dirección de correo electrónico a validar.</param>
         /// <returns>True si el formato del correo electrónico es válido, de lo contrario False.</returns>
-        private bool EmailIsValid(string email)
+        private static bool EmailIsValid(string email)
         {
             // Verificar si el formato del correo electrónico es válido
             return email.Length > 1 && email.Contains('@');
@@ -194,7 +187,7 @@ namespace CoWorkingApp.Core.Application.Services
         /// </summary>
         /// <param name="password">La contraseña a validar.</param>
         /// <returns>True si la contraseña tiene una longitud mayor que 1, de lo contrario False.</returns>
-        private bool PasswordIsValid(string password)
+        private static bool PasswordIsValid(string password)
         {
             // Verificar si la contraseña tiene una longitud mayor que 1
             return password.Length > 1;
@@ -206,7 +199,7 @@ namespace CoWorkingApp.Core.Application.Services
         /// <param name="email">El correo electrónico a validar.</param>
         /// <param name="password">La contraseña a validar.</param>
         /// <returns>True si tanto el correo electrónico como la contraseña son válidos, de lo contrario False.</returns>
-        private bool CredentialsIsValid(string email, string password)
+        private static bool CredentialsIsValid(string email, string password)
         {
             return EmailIsValid(email) && PasswordIsValid(password);
         }

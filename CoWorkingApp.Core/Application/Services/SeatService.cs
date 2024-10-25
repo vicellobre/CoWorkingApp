@@ -48,7 +48,7 @@ namespace CoWorkingApp.Core.Application.Services
         /// </summary>
         /// <param name="name">El nombre del asiento.</param>
         /// <returns>Una respuesta de asiento correspondiente al nombre proporcionado.</returns>
-        public async Task<SeatResponse> GetByNameAsync(string name)
+        public async Task<SeatResponse> GetByNameAsync(string? name)
         {
             try
             {
@@ -56,7 +56,7 @@ namespace CoWorkingApp.Core.Application.Services
                 if (string.IsNullOrEmpty(name))
                 {
                     // Si es nulo o vacío, lanzar una excepción
-                    throw new ArgumentNullException("The name cannot be null or empty");
+                    throw new ArgumentNullException(nameof(name), "The name cannot be null or empty");
                 }
 
                 // Obtener el asiento por su nombre desde el repositorio. Si no, lanzar una excepción

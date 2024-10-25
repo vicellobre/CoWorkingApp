@@ -38,7 +38,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
             {
                 // ARRANGE
                 // Se establece unitOfWork como nulo
-                IUnitOfWork unitOfWork = null;
+                IUnitOfWork? unitOfWork = null;
 
                 // ACT
                 // Se intenta crear una instancia de ReservationRepository con unitOfWork nulo
@@ -767,7 +767,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
                 // ASSERT
                 Assert.NotNull(result);
                 Assert.NotEmpty(result);
-                Assert.True(result.All(r => r.User.Email == email));
+                Assert.True(result.All(r => r.User != null && r.User.Email == email));
             }
 
             /// <summary>
@@ -832,7 +832,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
                 // ASSERT
                 Assert.NotNull(result);
                 Assert.NotEmpty(result);
-                Assert.True(result.All(r => r.Seat.Name == seatName));
+                Assert.True(result.All(r => r.Seat != null && r.Seat.Name == seatName));
             }
 
             /// <summary>
