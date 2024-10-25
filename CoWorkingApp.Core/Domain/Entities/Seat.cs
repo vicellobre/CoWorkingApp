@@ -10,7 +10,7 @@ namespace CoWorkingApp.Core.Domain.Entities
         /// <summary>
         /// Obtiene o establece el nombre del asiento.
         /// </summary>
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// Obtiene o establece un valor que indica si el asiento está bloqueado.
@@ -33,7 +33,7 @@ namespace CoWorkingApp.Core.Domain.Entities
         /// </summary>
         /// <param name="obj">El objeto que se va a comparar con el objeto actual.</param>
         /// <returns>True si el objeto actual es igual al parámetro obj; de lo contrario, false.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             // Verifica si el objeto proporcionado no es nulo y es del mismo tipo que Seat
             if (obj is null || GetType() != obj.GetType())
