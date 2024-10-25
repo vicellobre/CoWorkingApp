@@ -14,7 +14,7 @@ namespace CoWorkingApp.API.Infrastructure.Persistence.Repositories
         /// Constructor de la clase SeatRepository.
         /// </summary>
         /// <param name="unitOfWork">Unidad de trabajo que gestiona las transacciones de la base de datos.</param>
-        public SeatRepository(IUnitOfWork unitOfWork) : base(unitOfWork) { }
+        public SeatRepository(IUnitOfWork? unitOfWork) : base(unitOfWork) { }
 
         /// <summary>
         /// Obtiene los asientos disponibles (no bloqueados) de manera asincrónica.
@@ -34,10 +34,10 @@ namespace CoWorkingApp.API.Infrastructure.Persistence.Repositories
         /// </summary>
         /// <param name="name">Nombre del asiento.</param>
         /// <returns>Asiento correspondiente al nombre especificado o null si no se encuentra.</returns>
-        public async Task<Seat> GetByNameAsync(string name)
+        public async Task<Seat?> GetByNameAsync(string name)
         {
             // Busca el primer asiento que coincida con el nombre
-            return await _dbSet.FirstOrDefaultAsync(s => s.Name.Equals(name));
+            return await _dbSet.FirstOrDefaultAsync(s => s != null && s.Name != null && s.Name.Equals(name));
         }
 
         // Puedes implementar otros métodos específicos para SeatRepository si es necesario

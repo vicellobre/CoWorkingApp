@@ -16,7 +16,7 @@ namespace CoWorkingApp.Core.Application.Services
         /// Constructor de la clase SeatService.
         /// </summary>
         /// <param name="seatRepository">El repositorio de asientos asociado al servicio.</param>
-        public SeatService(ISeatRepository seatRepository, IMapperAdapter mapper) : base(seatRepository, mapper) { }
+        public SeatService(ISeatRepository? seatRepository, IMapperAdapter? mapper) : base(seatRepository, mapper) { }
 
         // Implementación de métodos específicos de ISeatService
 

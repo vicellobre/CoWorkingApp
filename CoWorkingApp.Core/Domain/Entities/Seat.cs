@@ -25,7 +25,7 @@ namespace CoWorkingApp.Core.Domain.Entities
         /// <summary>
         /// Obtiene o establece la lista de reservas asociadas al asiento.
         /// </summary>
-        public List<Reservation> Reservations { get; set; } = new List<Reservation>();
+        public List<Reservation> Reservations { get; set; } = new();
 
         /// <summary>
         /// Determina si el objeto actual es igual a otro objeto.

@@ -28,16 +28,18 @@ namespace CoWorkingApp.API.Infrastructure.Adapters
             CreateMap<Reservation, ReservationResponse>()
                 // Mapea la fecha de la reserva
                 .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date))
-                // Mapea el nombre del usuario
-                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.Name))
-                // Mapea el apellido del usuario
-                .ForMember(dest => dest.UserLastName, opt => opt.MapFrom(src => src.User.LastName))
-                // Mapea el correo electrónico del usuario
-                .ForMember(dest => dest.UserEmail, opt => opt.MapFrom(src => src.User.Email))
-                // Mapea el nombre del asiento
-                .ForMember(dest => dest.SeatName, opt => opt.MapFrom(src => src.Seat.Name))
-                // Mapea la descripción del asiento
-                .ForMember(dest => dest.SeatDescription, opt => opt.MapFrom(src => src.Seat.Description));
+                // Mapea el nombre del usuario, verifica que User no sea null
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User != null ? src.User.Name : "Unkonw"))
+                // Mapea el apellido del usuario, verifica que User no sea null
+                .ForMember(dest => dest.UserLastName, opt => opt.MapFrom(src => src.User != null ? src.User.LastName : "Unkonw"))
+                // Mapea el correo electrónico del usuario, verifica que User no sea null
+                .ForMember(dest => dest.UserEmail, opt => opt.MapFrom(src => src.User != null ? src.User.Email : "Unkonw"))
+                // Mapea el nombre del asiento, verifica que Seat no sea null
+                .ForMember(dest => dest.SeatName, opt => opt.MapFrom(src => src.Seat != null ? src.Seat.Name : "Unkonw"))
+                // Mapea la descripción del asiento, verifica que Seat no sea null
+                .ForMember(dest => dest.SeatDescription, opt => opt.MapFrom(src => src.Seat != null ? src.Seat.Description : "Unkonw"));
+
+
 
             // Configura el mapeo entre el DTO ReservationRequest y su correspondiente entidad Reservation
             CreateMap<ReservationRequest, Reservation>()

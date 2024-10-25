@@ -27,7 +27,7 @@ namespace CoWorkingApp.Core.Application.Abstracts
         /// </summary>
         /// <param name="repository">El repositorio asociado al servicio.</param>
         /// <param name="mapper">El adaptador de mapeo utilizado para mapear entre tipos de entidades y DTO.</param>
-        protected ServiceGeneric(TRepository repository, IMapperAdapter mapper)
+        protected ServiceGeneric(TRepository? repository, IMapperAdapter? mapper)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));

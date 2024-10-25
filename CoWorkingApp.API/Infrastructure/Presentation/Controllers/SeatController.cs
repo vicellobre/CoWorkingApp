@@ -17,7 +17,7 @@ namespace CoWorkingApp.API.Infrastructure.Presentation.Controllers
         /// </summary>
         /// <param name="service">Instancia del servicio de asientos.</param>
         /// <param name="logger">Instancia del logger.</param>
-        public SeatController(ISeatService service, ILogger<ControllerGeneric<ISeatService, SeatRequest, SeatResponse>> logger) : base(service, logger) { }
+        public SeatController(ISeatService? service, ILogger<ControllerGeneric<ISeatService, SeatRequest, SeatResponse>>? logger) : base(service, logger) { }
 
         /// <summary>
         /// Obtiene los asientos disponibles.

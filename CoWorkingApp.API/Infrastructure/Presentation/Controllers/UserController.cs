@@ -17,7 +17,7 @@ namespace CoWorkingApp.API.Infrastructure.Presentation.Controllers
         /// </summary>
         /// <param name="service">Instancia del servicio de usuarios.</param>
         /// <param name="logger">Instancia del logger.</param>
-        public UserController(IUserService service, ILogger<ControllerGeneric<IUserService, UserRequest, UserResponse>> logger) : base(service, logger) { }
+        public UserController(IUserService? service, ILogger<ControllerGeneric<IUserService, UserRequest, UserResponse>>? logger) : base(service, logger) { }
 
         /// <summary>
         /// Obtiene un usuario por su dirección de correo electrónico.
@@ -51,11 +51,20 @@ namespace CoWorkingApp.API.Infrastructure.Presentation.Controllers
             }
         }
 
+        /// <summary>
+        /// Registra un nuevo usuario.
+        /// </summary>
+        /// <param name="userRequest">Objeto que contiene la información del usuario a registrar.</param>
+        /// <returns>
+        /// Un objeto <see cref="ActionResult{UserResponse}"/> que representa el resultado de la operación.
+        /// <para>Devuelve un estado 201 si el registro es exitoso, 
+        /// o un estado 400 si hay errores de validación. En caso de error inesperado, 
+        /// devuelve un estado 500.</para>
+        /// </returns>
         [HttpPost("register")]
         [AllowAnonymous] // Permite el acceso a este método sin autenticación
         public async Task<ActionResult<UserResponse>> Register([FromBody] UserRequest userRequest)
         {
-            //return await Create(userRequest);
             try
             {
                 // Llama al servicio para crear una nueva entidad

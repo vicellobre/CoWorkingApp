@@ -17,7 +17,7 @@ namespace CoWorkingApp.Core.Application.Services
         /// Constructor de la clase UserService.
         /// </summary>
         /// <param name="repository">El repositorio de usuarios asociado al servicio.</param>
-        public UserService(IUserRepository repository, IMapperAdapter mapper) : base(repository, mapper) { }
+        public UserService(IUserRepository? repository, IMapperAdapter? mapper) : base(repository, mapper) { }
 
         // Implementación de métodos específicos de IUserService
 

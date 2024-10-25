@@ -26,10 +26,10 @@ namespace CoWorkingApp.API.Infrastructure.Persistence.Repositories
         /// Constructor que recibe una instancia de IUnitOfWork para gestionar la conexión con la base de datos.
         /// </summary>
         /// <param name="unitOfWork">Instancia de IUnitOfWork.</param>
-        public RepositoryGeneric(IUnitOfWork unitOfWork)
+        public RepositoryGeneric(IUnitOfWork? unitOfWork)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-            _dbSet = _unitOfWork.Context.Set<T>();
+            _dbSet = _unitOfWork.Context.Set<T>() ?? throw new InvalidOperationException("DbSet could not be initialized.");
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace CoWorkingApp.API.Infrastructure.Persistence.Repositories
         /// </summary>
         /// <param name="id">Identificador único del registro.</param>
         /// <returns>El registro con el identificador único especificado, o null si no se encuentra.</returns>
-        public virtual async Task<T> GetByIdAsync(Guid id)
+        public virtual async Task<T?> GetByIdAsync(Guid id)
         {
             return await _dbSet.FindAsync(id);
         }

@@ -14,7 +14,7 @@ namespace CoWorkingApp.API.Infrastructure.Persistence.Repositories
         /// Constructor de la clase ReservationRepository.
         /// </summary>
         /// <param name="unitOfWork">Unidad de trabajo que gestiona las transacciones de la base de datos.</param>
-        public ReservationRepository(IUnitOfWork unitOfWork) : base(unitOfWork) { }
+        public ReservationRepository(IUnitOfWork? unitOfWork) : base(unitOfWork) { }
 
         /// <summary>
         /// Obtiene todas las reservaciones de manera asincrónica, incluyendo información detallada del usuario y del asiento asociados a cada reserva.
@@ -35,7 +35,7 @@ namespace CoWorkingApp.API.Infrastructure.Persistence.Repositories
         /// </summary>
         /// <param name="id">El identificador único de la reserva.</param>
         /// <returns>La reserva con información detallada del usuario y del asiento asociados, o null si no se encuentra ninguna reserva con el ID especificado.</returns>
-        public override async Task<Reservation> GetByIdAsync(Guid id)
+        public override async Task<Reservation?> GetByIdAsync(Guid id)
         {
             // Incluye información detallada del usuario y del asiento asociados a cada reserva
             return await _dbSet
@@ -99,11 +99,17 @@ namespace CoWorkingApp.API.Infrastructure.Persistence.Repositories
         /// <returns>Una colección de reservaciones asociadas al usuario con el correo electrónico especificado.</returns>
         public async Task<IEnumerable<Reservation>> GetByUserEmailAsync(string email)
         {
+            // Verifica que el email no sea nulo o vacío
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                return []; // O puedes lanzar una excepción según tus requisitos
+            }
+
             // Incluye información detallada del usuario y del asiento asociados a cada reserva
             return await _dbSet
                 .Include(r => r.User) // Incluir información detallada del usuario asociado a la reserva
                 .Include(r => r.Seat) // Incluir información detallada del asiento asociado a la reserva
-                .Where(r => r.User.Email.Equals(email))
+                .Where(r => r.User != null && r.User.Email != null && r.User.Email.Equals(email)) // Verifica que User y Email no sean null
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -119,7 +125,7 @@ namespace CoWorkingApp.API.Infrastructure.Persistence.Repositories
             return await _dbSet
                 .Include(r => r.User) // Incluir información detallada del usuario asociado a la reserva
                 .Include(r => r.Seat) // Incluir información detallada del asiento asociado a la reserva
-                .Where(r => r.Seat.Name.Equals(seatName))
+                .Where(r => r.Seat != null && r.Seat.Name != null && r.Seat.Name.Equals(seatName))
                 .AsNoTracking()
                 .ToListAsync();
         }

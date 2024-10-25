@@ -27,7 +27,7 @@ namespace CoWorkingApp.API.Infrastructure.Presentation.Controllers
         /// </summary>
         /// <param name="service">Instancia del servicio de usuarios.</param>
         /// <param name="configuration">Instancia de IConfiguration para acceder a la configuración de la aplicación.</param>
-        public LoginUserController(IUserService service, IConfiguration configuration)
+        public LoginUserController(IUserService? service, IConfiguration configuration)
         {
             _service = service ?? throw new ArgumentNullException(nameof(service));
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
@@ -78,9 +78,32 @@ namespace CoWorkingApp.API.Infrastructure.Presentation.Controllers
         /// <returns>JsonResult con el token generado.</returns>
         private JsonResult BuildToken(UserResponse user)
         {
+            // Verifica que el usuario no sea nulo
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user), "User cannot be null.");
+            }
+
+            // Verifica que los campos del usuario no sean nulos
+            if (string.IsNullOrEmpty(user.Name))
+            {
+                throw new ArgumentNullException(nameof(user.Name), "User name cannot be null or empty.");
+            }
+
+            if (string.IsNullOrEmpty(user.LastName))
+            {
+                throw new ArgumentNullException(nameof(user.LastName), "User last name cannot be null or empty.");
+            }
+
+            if (string.IsNullOrEmpty(user.Email))
+            {
+                throw new ArgumentNullException(nameof(user.Email), "User email cannot be null or empty.");
+            }
+
             // Obtener el origen del emisor y la audiencia desde la configuración
-            string issuer = _configuration["Auth:Jwt:Issuer"];
-            string audience = _configuration["Auth:Jwt:Audience"];
+            string issuer = _configuration["Auth:Jwt:Issuer"] ?? throw new ArgumentNullException(nameof(issuer), "Issuer cannot be null.");
+            string audience = _configuration["Auth:Jwt:Audience"] ?? throw new ArgumentNullException(nameof(audience), "Audience cannot be null.");
+            string secretKey = _configuration["Auth:Jwt:SecretKey"] ?? throw new ArgumentNullException(nameof(secretKey), "SecretKey cannot be null.");
 
             // Datos a incluir en el token
             var claims = new[]
@@ -91,7 +114,6 @@ namespace CoWorkingApp.API.Infrastructure.Presentation.Controllers
             };
 
             // Generar la clave secreta para firmar el token
-            string secretKey = _configuration["Auth:Jwt:SecretKey"];
             var key = Encoding.UTF8.GetBytes(secretKey);
             var symmetricSecurityKey = new SymmetricSecurityKey(key);
             var creds = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
