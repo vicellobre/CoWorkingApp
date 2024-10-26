@@ -10,7 +10,7 @@ namespace CoWorkingApp.Core.Domain.DTOs
         /// <summary>
         /// Obtiene o establece el nombre del asiento.
         /// </summary>
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// Obtiene o establece un valor que indica si el asiento está bloqueado.

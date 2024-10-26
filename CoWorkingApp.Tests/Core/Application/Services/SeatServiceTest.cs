@@ -46,7 +46,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 // ARRANGE
 
                 // Establecer el repositorio de asientos como nulo
-                ISeatRepository repository = null;
+                ISeatRepository? repository = null;
 
                 // Crear un mock del adaptador IMapperAdapter
                 var mockMapper = new Mock<IMapperAdapter>();
@@ -74,7 +74,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 var mockRepository = new Mock<ISeatRepository>();
 
                 // Establecer el mapeador como nulo
-                IMapperAdapter mapper = null;
+                IMapperAdapter? mapper = null;
 
                 // ACT
 
@@ -104,8 +104,8 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 // Lista de asientos simulada
                 var seats = new List<Seat>
                 {
-                    new Seat { Name = "Q-1", IsBlocked = false, Description = "This seat is located near the window." },
-                    new Seat { Name = "M-2", IsBlocked = true, Description = "This seat is reserved for VIP guests." }
+                    new() { Name = "Q-1", IsBlocked = false, Description = "This seat is located near the window." },
+                    new() { Name = "M-2", IsBlocked = true, Description = "This seat is reserved for VIP guests." }
                 };
 
                 // Configuración del mapeador
@@ -291,7 +291,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 // ARRANGE
 
                 // Crear un asiento nulo para simular un asiento que no existe en el repositorio
-                Seat nullSeat = null;
+                Seat? nullSeat = null;
 
                 // Configurar un mock para el repositorio ISeatRepository y establecer su comportamiento para devolver un asiento nulo cuando se llame a GetByIdAsync con cualquier ID
                 var mockRepository = new Mock<ISeatRepository>();
@@ -435,7 +435,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 var errorMessage = exception.Message;
 
                 // Crear una solicitud de asiento nula
-                SeatRequest seat = null;
+                SeatRequest? seat = null;
 
                 // Configurar un mock para el repositorio ISeatRepository
                 var mockRepository = new Mock<ISeatRepository>();
@@ -734,7 +734,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 // Generar un nuevo ID de asiento
                 var seatId = Guid.NewGuid();
                 // Establecer el asiento como nulo
-                Seat seat = null;
+                Seat? seat = null;
 
                 // Crear una excepción de ArgumentException con el mensaje adecuado
                 var exception = new ArgumentException($"Entity with id {seatId} not found");
@@ -1087,10 +1087,10 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 // Lista de asientos simulada
                 var seats = new List<Seat>
                 {
-                    new Seat { Name = "Q-1", IsBlocked = false, Description = "This seat is located near the window." },
-                    new Seat { Name = "M-2", IsBlocked = true, Description = "This seat is reserved for VIP guests." },
-                    new Seat { Name = "M-1", IsBlocked = false, Description = "This seat is in the back row." },
-                    new Seat { Name = "M-3", IsBlocked = false, Description = "This seat has extra legroom." }
+                    new() { Name = "Q-1", IsBlocked = false, Description = "This seat is located near the window." },
+                    new() { Name = "M-2", IsBlocked = true, Description = "This seat is reserved for VIP guests." },
+                    new() { Name = "M-1", IsBlocked = false, Description = "This seat is in the back row." },
+                    new() { Name = "M-3", IsBlocked = false, Description = "This seat has extra legroom." }
                 };
                 var availableSeats = seats.Where(s => !s.IsBlocked);
 
@@ -1152,7 +1152,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
 
                 // Mock del repositorio ISeatRepository
                 var mockRepository = new Mock<ISeatRepository>();
-                mockRepository.Setup(r => r.GetAvailablesAsync()).ReturnsAsync(new List<Seat>());
+                mockRepository.Setup(r => r.GetAvailablesAsync()).ReturnsAsync([]);
 
                 // Crear una instancia del servicio de asiento con los mocks configurados
                 var service = new SeatService(mockRepository.Object, mockMapper.Object);
@@ -1274,7 +1274,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 // ARRANGE
 
                 // Crear una excepción simulada de ArgumentNullException
-                var exception = new ArgumentNullException("The name cannot be null or empty");
+                var exception = new ArgumentNullException(nameof(name), "The name cannot be null or empty");
                 var errorMessage = exception.Message;
 
                 // Configurar un mock para el repositorio ISeatRepository
@@ -1320,7 +1320,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 var errorMessage = exception.Message;
 
                 // Establecer el asiento como nulo
-                Seat seat = null;
+                Seat? seat = null;
 
                 // Configurar un mock para el repositorio ISeatRepository y establecer su comportamiento para devolver un asiento nulo cuando se llame a GetByNameAsync con cualquier nombre
                 var mockRepository = new Mock<ISeatRepository>();

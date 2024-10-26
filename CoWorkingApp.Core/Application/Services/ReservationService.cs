@@ -16,7 +16,7 @@ namespace CoWorkingApp.Core.Application.Services
         /// Constructor de la clase ReservationService.
         /// </summary>
         /// <param name="reservationRepository">El repositorio de reservas asociado al servicio.</param>
-        public ReservationService(IReservationRepository reservationRepository, IMapperAdapter mapper) : base(reservationRepository, mapper) { }
+        public ReservationService(IReservationRepository? reservationRepository, IMapperAdapter? mapper) : base(reservationRepository, mapper) { }
 
         // Implementación de métodos específicos de IReservationService
 

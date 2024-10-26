@@ -18,7 +18,7 @@ namespace CoWorkingApp.API.Infrastructure.UnitOfWorks
         /// Constructor que inicializa una nueva instancia de UnitOfWork con el contexto de la base de datos proporcionado.
         /// </summary>
         /// <param name="dbContext">Contexto de la base de datos (CoWorkingContext).</param>
-        public UnitOfWork(CoWorkingContext dbContext)
+        public UnitOfWork(CoWorkingContext? dbContext)
         {
             Context = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }

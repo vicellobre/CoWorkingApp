@@ -128,9 +128,9 @@ namespace CoWorkingApp.Tests.Core.Domain.Entities
         {
             // ARRANGE
             // Se crea un nuevo asiento
-            Seat seat_1 = new Seat();
+            Seat seat_1 = new();
             // Se asigna null a seat_2
-            Seat seat_2 = null;
+            Seat? seat_2 = null;
 
             // ACT
             // Se compara el primer asiento con null utilizando el método Equals

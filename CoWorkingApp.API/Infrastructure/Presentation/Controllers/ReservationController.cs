@@ -16,7 +16,7 @@ namespace CoWorkingApp.API.Infrastructure.Presentation.Controllers
         /// </summary>
         /// <param name="service">Instancia del servicio de reservaciones.</param>
         /// <param name="logger">Instancia del logger.</param>
-        public ReservationController(IReservationService service, ILogger<ControllerGeneric<IReservationService, ReservationRequest, ReservationResponse>> logger) : base(service, logger) { }
+        public ReservationController(IReservationService? service, ILogger<ControllerGeneric<IReservationService, ReservationRequest, ReservationResponse>>? logger) : base(service, logger) { }
 
         /// <summary>
         /// Obtiene reservaciones por fecha.

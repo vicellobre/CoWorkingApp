@@ -12,7 +12,7 @@ namespace CoWorkingApp.Core.Application.Contracts.Repositories
         /// </summary>
         /// <param name="email">Dirección de correo electrónico del usuario.</param>
         /// <returns>El usuario encontrado con la dirección de correo electrónico especificada, o null si no se encuentra.</returns>
-        Task<User> GetByEmailAsync(string email);
+        Task<User?> GetByEmailAsync(string email);
 
         /// <summary>
         /// Autentica a un usuario por su dirección de correo electrónico y contraseña de manera asincrónica.
@@ -20,7 +20,7 @@ namespace CoWorkingApp.Core.Application.Contracts.Repositories
         /// <param name="email">Dirección de correo electrónico del usuario.</param>
         /// <param name="password">Contraseña del usuario.</param>
         /// <returns>El usuario autenticado si las credenciales son válidas, o null si las credenciales son incorrectas.</returns>
-        Task<User> AuthenticateAsync(string email, string password);
+        Task<User?> AuthenticateAsync(string email, string password);
 
         // Otros métodos específicos para UserRepository
     }

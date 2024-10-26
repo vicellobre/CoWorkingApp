@@ -1,4 +1,6 @@
 ﻿using CoWorkingApp.Core.Application.Abstracts;
+using System.Drawing;
+using System.Runtime.InteropServices;
 
 namespace CoWorkingApp.Core.Domain.Entities
 {
@@ -10,22 +12,22 @@ namespace CoWorkingApp.Core.Domain.Entities
         /// <summary>
         /// Obtiene o establece el nombre del usuario.
         /// </summary>
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// Obtiene o establece el apellido del usuario.
         /// </summary>
-        public string LastName { get; set; }
+        public string? LastName { get; set; }
 
         /// <summary>
         /// Obtiene o establece el correo electrónico del usuario.
         /// </summary>
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         /// <summary>
         /// Obtiene o establece la contraseña del usuario.
         /// </summary>
-        public string Password { get; set; }
+        public string? Password { get; set; }
 
         /// <summary>
         /// Obtiene o establece la lista de reservas asociadas al usuario.
@@ -37,7 +39,7 @@ namespace CoWorkingApp.Core.Domain.Entities
         /// </summary>
         /// <param name="obj">El objeto a comparar con el usuario actual.</param>
         /// <returns>True si los objetos son iguales, de lo contrario, false.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             // Verifica si el objeto proporcionado no es nulo y es del mismo tipo que User
             if (obj is null || GetType() != obj.GetType())

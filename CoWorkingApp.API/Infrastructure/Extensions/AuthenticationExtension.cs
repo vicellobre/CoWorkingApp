@@ -20,7 +20,8 @@ namespace CoWorkingApp.API.Infrastructure.Extensions
         public static IServiceCollection AddTokenAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
             // Clave secreta para firmar y validar el token
-            var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["Auth:Jwt:SecretKey"]));
+            var secretKey = configuration["Auth:Jwt:SecretKey"] ?? throw new ArgumentNullException();
+            var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey));
 
             // Configuración de la autenticación mediante token
             services

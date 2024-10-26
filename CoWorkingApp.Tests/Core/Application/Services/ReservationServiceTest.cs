@@ -41,7 +41,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
             {
                 // ARRANGE
                 // Se establece el repositorio como nulo
-                IReservationRepository repository = null;
+                IReservationRepository? repository = null;
                 var mockMapper = new Mock<IMapperAdapter>();
 
                 // ACT
@@ -65,7 +65,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 // Se crea un mock del repositorio
                 var mockRepository = new Mock<IReservationRepository>();
                 // Se establece el adaptador de mapeo como nulo
-                IMapperAdapter mapper = null;
+                IMapperAdapter? mapper = null;
 
                 // ACT
                 // Se intenta crear una nueva instancia de ReservationService con el adaptador de mapeo nulo
@@ -119,9 +119,21 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 // Se verifica que todas las reservaciones en el resultado tengan éxito
                 Assert.True(result.All(p => p.Success));
                 // Se verifica que las propiedades Date, UserEmail y SeatName de cada reserva en el resultado coincidan con las propiedades correspondientes en el contexto de prueba
-                Assert.Equal(
-                    reservations.Select(u => new { u.Date, u.User.Email, u.Seat.Name }),
-                    result.Select(u => new { u.Date, Email = u.UserEmail, Name = u.SeatName })
+                Assert.Equal(reservations
+                                .Select(u => new
+                                {
+                                    u.Date,
+                                    Email = u.User != null ? u.User.Email : null,
+                                    SeatName = u.Seat != null ? u.Seat.Name : null
+                                })
+                                .Where(x => x.Email != null && x.SeatName != null),
+                             result
+                                .Select(u => new
+                                {
+                                    u.Date,
+                                    Email = u.UserEmail,
+                                    SeatName = u.SeatName
+                                })
                 );
             }
 
@@ -236,6 +248,14 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 Assert.NotNull(result);
                 // Verifica que la operación haya tenido éxito
                 Assert.True(result.Success);
+
+                // Verifica que la reservación existente no sea nula
+                Assert.NotNull(existingReservation);
+
+                // Verifica que el usuario y el asiento no sean nulos
+                Assert.NotNull(existingReservation.User);
+                Assert.NotNull(existingReservation.Seat);
+
                 // Verifica que los datos de la reservación devuelta sean consistentes con los de la reservación existente
                 Assert.Equal((existingReservation.Date, existingReservation.User.Email, existingReservation.Seat.Name),
                              (result.Date, result.UserEmail, result.SeatName));
@@ -249,7 +269,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
             {
                 // ARRANGE
                 // Se crea una reservación nula
-                Reservation nullReservation = null;
+                Reservation? nullReservation = null;
 
                 // Se configura el mock del repositorio para devolver la reservación nula cuando se llama al método GetByIdAsync
                 var mockRepository = new Mock<IReservationRepository>();
@@ -380,7 +400,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 var errorMessage = exception.Message;
 
                 // Se establece la solicitud de reserva como nula
-                ReservationRequest reservation = null;
+                ReservationRequest? reservation = null;
 
                 // Se configura el mock del repositorio y del adaptador de mapeo
                 var mockRepository = new Mock<IReservationRepository>();
@@ -558,11 +578,19 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 var existingReservation = context.Reservations.First();
 
                 // Se crea una solicitud de reservación con la fecha proporcionada por los datos de la clase de datos
+                // Verifica que el usuario y el asiento existen
+                var existingUser = context.Users.Find(existingReservation.UserId);
+                var existingSeat = context.Seats.Find(existingReservation.SeatId);
+
+                Assert.NotNull(existingUser);
+                Assert.NotNull(existingSeat);
+
+                // Se crea una solicitud de reservación con la fecha proporcionada por los datos de la clase de datos
                 var reservationRequest = new ReservationRequest
                 {
                     Date = dateTime,
-                    UserId = context.Users.Find(existingReservation.UserId).Id,
-                    SeatId = context.Seats.Find(existingReservation.SeatId).Id
+                    UserId = existingUser.Id,  // Se usa existingUser.Id
+                    SeatId = existingSeat.Id     // Se usa existingSeat.Id
                 };
 
                 // Se configura la respuesta de la reservación para compararla con la respuesta esperada después de la actualización
@@ -642,7 +670,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 // Se genera un identificador de reservación único
                 var reservationId = Guid.NewGuid();
                 // Se inicializa la reserva como nula
-                Reservation reservation = null;
+                Reservation? reservation = null;
 
                 // Se crea una excepción de argumento con el mensaje apropiado
                 var exception = new ArgumentException($"Entity with id {reservationId} not found");

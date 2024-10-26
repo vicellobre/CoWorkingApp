@@ -5,22 +5,31 @@ using Microsoft.EntityFrameworkCore;
 namespace CoWorkingApp.API.Infrastructure.Persistence.Repositories
 {
     /// <summary>
-    /// Clase genérica que implementa la interfaz IRepository y proporciona operaciones básicas de acceso a datos.
+    /// Clase genérica que implementa la interfaz <see cref="IRepository{T}"/> 
+    /// y proporciona operaciones básicas de acceso a datos para entidades del tipo <typeparamref name="T"/>.
     /// </summary>
-    /// <typeparam name="T">Tipo de entidad.</typeparam>
+    /// <typeparam name="T">Tipo de entidad gestionada por el repositorio.</typeparam>
     public abstract class RepositoryGeneric<T> : IRepository<T> where T : class
     {
+        /// <summary>
+        /// Unidad de trabajo utilizada para gestionar la transacción de operaciones de datos.
+        /// </summary>
         private readonly IUnitOfWork _unitOfWork;
+
+        /// <summary>
+        /// Conjunto de datos que representa la colección de entidades <typeparamref name="T"/> en el contexto de datos.
+        /// Proporciona métodos para consultar y realizar operaciones CRUD en la base de datos.
+        /// </summary>
         protected readonly DbSet<T> _dbSet;
 
         /// <summary>
         /// Constructor que recibe una instancia de IUnitOfWork para gestionar la conexión con la base de datos.
         /// </summary>
         /// <param name="unitOfWork">Instancia de IUnitOfWork.</param>
-        public RepositoryGeneric(IUnitOfWork unitOfWork)
+        public RepositoryGeneric(IUnitOfWork? unitOfWork)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-            _dbSet = _unitOfWork.Context.Set<T>();
+            _dbSet = _unitOfWork.Context.Set<T>() ?? throw new InvalidOperationException("DbSet could not be initialized.");
         }
 
         /// <summary>
@@ -39,7 +48,7 @@ namespace CoWorkingApp.API.Infrastructure.Persistence.Repositories
         /// </summary>
         /// <param name="id">Identificador único del registro.</param>
         /// <returns>El registro con el identificador único especificado, o null si no se encuentra.</returns>
-        public virtual async Task<T> GetByIdAsync(Guid id)
+        public virtual async Task<T?> GetByIdAsync(Guid id)
         {
             return await _dbSet.FindAsync(id);
         }

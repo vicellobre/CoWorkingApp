@@ -41,7 +41,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Adapters
         {
             // ARRANGE
             // Se establece IMapper como nulo
-            IMapper mapper = null;
+            IMapper? mapper = null;
 
             // ACT
             // Se intenta crear una instancia de AutoMapperAdapter con IMapper nulo
