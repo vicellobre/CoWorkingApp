@@ -5,7 +5,7 @@
 namespace CoWorkingApp.API.Migrations
 {
     /// <inheritdoc />
-    public partial class mssqlazure_migration_352 : Migration
+    public partial class mssqlazure_migration_595 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

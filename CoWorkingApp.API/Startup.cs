@@ -61,7 +61,7 @@ namespace CoWorkingApp.API
             // Configuración del contexto de la base de datos
             services.AddDbContext<CoWorkingContext>(options =>
             {
-                options.UseSqlServer(_configuration.GetConnectionString(connectionString));
+                options.UseSqlServer(connectionString);
             });
 
             // Agrega dependencias adicionales

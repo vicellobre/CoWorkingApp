@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CoWorkingApp.API.Migrations
 {
     [DbContext(typeof(CoWorkingContext))]
-    [Migration("20241020162027_mssql.azure_migration_352")]
-    partial class mssqlazure_migration_352
+    [Migration("20241026142316_mssql.azure_migration_595")]
+    partial class mssqlazure_migration_595
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
