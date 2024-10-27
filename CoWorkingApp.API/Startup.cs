@@ -54,10 +54,7 @@ namespace CoWorkingApp.API
             {
                 throw new InvalidOperationException("The connection string is not configured correctly.");
             }
-            else
-            {
-                Console.WriteLine(connectionString);
-            }
+
             // Configuración del contexto de la base de datos
             services.AddDbContext<CoWorkingContext>(options =>
             {
@@ -109,6 +106,8 @@ namespace CoWorkingApp.API
 
             // Configuración de Swagger/OpenAPI (documentación de la API)
             services.AddEndpointsApiExplorer();
+
+            // Obtener la sección Swagger desde appsettings
             services.AddSwaggerGen(options =>
             {
                 // Información del archivo XML de documentación
@@ -116,36 +115,35 @@ namespace CoWorkingApp.API
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 options.IncludeXmlComments(xmlPath);
 
-                // Obtener la sección Swagger desde appsettings
-                var swaggerConfig = _configuration.GetSection("Swagger").Get<SwaggerConfig>();
-
                 // Configurar Swagger usando los valores desde appsettings
-                services.AddSwaggerGen(options =>
+                var swaggerConfig = _configuration.GetSection("Swagger").Get<SwaggerConfig>();
+                if (swaggerConfig is null)
                 {
-                    //// Documentación para la versión 1
-                    //options.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+                    throw new ArgumentNullException(nameof(swaggerConfig));
+                }
 
-                    //// Documentación para la versión 2
-                    //options.SwaggerDoc("v2", new OpenApiInfo { Title = "My API", Version = "v2" });
-
-                    options.SwaggerDoc("v1", new OpenApiInfo
+                // Documentación para la versión 1
+                options.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = swaggerConfig.Version,  // Ahora usará el valor desde el appsettings
+                    Title = swaggerConfig.Title,
+                    Description = swaggerConfig.Description,
+                    Contact = new OpenApiContact
                     {
-                        Version = "v1",
-                        Title = swaggerConfig!.Title,
-                        Description = swaggerConfig.Description,
-                        Contact = new OpenApiContact
-                        {
-                            Name = swaggerConfig.Contact.Name,
-                            Email = swaggerConfig.Contact.Email,
-                            Url = new Uri(swaggerConfig.Contact.Url!)
-                        },
-                        License = new OpenApiLicense
-                        {
-                            Name = swaggerConfig.License.Name,
-                            Url = new Uri(swaggerConfig.License.Url!)
-                        }
-                    });
+                        Name = swaggerConfig.Contact.Name,
+                        Email = swaggerConfig.Contact.Email,
+                        Url = new Uri(swaggerConfig.Contact.Url!)
+                    },
+                    License = new OpenApiLicense
+                    {
+                        Name = swaggerConfig.License.Name,
+                        Url = new Uri(swaggerConfig.License.Url!)
+                    }
                 });
+
+                // Documentación para la versión 2
+                options.SwaggerDoc("v2", new OpenApiInfo { Title = "CoWorkng API 2", Version = "v2" });
+                options.SwaggerDoc("lastest", new OpenApiInfo { Title = "CoWorkng API full", Version = "lastest neto" });
             });
 
             // Configuración para OData
@@ -196,11 +194,10 @@ namespace CoWorkingApp.API
             app.UseSwaggerUI(options =>
             {
                 //// Endpoint para la versión 1 de la API
-                //options.SwaggerEndpoint("/swagger/v1/swagger.json", "My API v1");
-
-                //// Endpoint para la versión 2 de la API
-                //options.SwaggerEndpoint("/swagger/v2/swagger.json", "My API v2");
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Services v1.0");
+                // Endpoint para la versión 2 de la API
+                options.SwaggerEndpoint("/swagger/v2/swagger.json", "Services v2.0");
+                options.SwaggerEndpoint("/swagger/lastest/swagger.json", "Services ultimate");
             });
 
             // Redirige el tráfico HTTP a HTTPS

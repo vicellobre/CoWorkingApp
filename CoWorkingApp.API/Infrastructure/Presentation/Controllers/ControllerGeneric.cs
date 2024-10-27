@@ -149,7 +149,7 @@ namespace CoWorkingApp.API.Infrastructure.Presentation.Controllers
         }
 
         /// <summary>
-        /// ACTualiza una entidad existente de manera asincrónica.
+        /// Actualiza una entidad existente de manera asincrónica.
         /// </summary>
         /// <param name="id">ID de la entidad a actualizar.</param>
         /// <param name="entityRequest">Datos actualizados de la entidad.</param>

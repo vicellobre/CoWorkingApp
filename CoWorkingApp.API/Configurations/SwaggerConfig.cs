@@ -31,6 +31,20 @@
         public required LicenseConfig License { get; set; }
 
         /// <summary>
+        /// Retorna una cadena que representa la configuración general de Swagger.
+        /// </summary>
+        /// <returns>Una cadena con los valores de Version, Title, Description, Contact y License.</returns>
+        public override string ToString()
+        {
+            return $"SwaggerConfig:\n" +
+                   $"Version: {Version}\n" +
+                   $"Title: {Title}\n" +
+                   $"Description: {Description}\n" +
+                   $"Contact: {Contact}\n" +
+                   $"License: {License}\n";
+        }
+
+        /// <summary>
         /// Clase que representa la configuración de contacto para Swagger.
         /// </summary>
         public class ContactConfig
@@ -49,6 +63,18 @@
             /// URL del sitio web o perfil de la persona o entidad de contacto.
             /// </summary>
             public string? Url { get; set; }
+
+            /// <summary>
+            /// Retorna una cadena que representa la configuración de contacto.
+            /// </summary>
+            /// <returns>Una cadena con los valores de Name, Email y Url.</returns>
+            public override string ToString()
+            {
+                return $"ContactConfig:\n" +
+                       $"Name: {Name}\n" +
+                       $"Email: {Email}\n" +
+                       $"Url: {Url}\n";
+            }
         }
 
         /// <summary>
@@ -65,6 +91,17 @@
             /// URL donde se puede encontrar información sobre la licencia.
             /// </summary>
             public string? Url { get; set; }
+
+            /// <summary>
+            /// Retorna una cadena que representa la configuración de licencia.
+            /// </summary>
+            /// <returns>Una cadena con los valores de Name y Url.</returns>
+            public override string ToString()
+            {
+                return $"LicenseConfig:\n" +
+                       $"Name: {Name}\n" +
+                       $"Url: {Url}\n";
+            }
         }
     }
 
