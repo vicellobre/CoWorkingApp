@@ -53,7 +53,7 @@ namespace CoWorkingApp.Tests.Infrastructure.UnitOfWorks
             var unitOfWork = new UnitOfWork(dbContextMock.Object);
 
             // ACT
-            await unitOfWork.Commit();
+            await unitOfWork.CommitAsync();
 
             // ASSERT
             dbContextMock.Verify(db => db.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);

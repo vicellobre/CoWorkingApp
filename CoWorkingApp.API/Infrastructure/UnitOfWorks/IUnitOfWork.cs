@@ -15,6 +15,6 @@ namespace CoWorkingApp.API.Infrastructure.UnitOfWorks
         /// <summary>
         /// Guarda los cambios en la base de datos de manera asincrónica.
         /// </summary>
-        Task Commit();
+        Task CommitAsync();
     }
 }

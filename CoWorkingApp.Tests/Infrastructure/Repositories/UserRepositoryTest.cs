@@ -276,7 +276,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
                 // y lanzar una excepción al intentar guardar cambios en la base de datos
                 var mockUnitOfWork = new Mock<IUnitOfWork>();
                 mockUnitOfWork.Setup(u => u.Context).Returns(context);
-                mockUnitOfWork.Setup(u => u.Commit()).ThrowsAsync(new Exception());
+                mockUnitOfWork.Setup(u => u.CommitAsync()).ThrowsAsync(new Exception());
 
                 // Crear un repositorio de usuarios (UserRepository) utilizando el contexto de prueba y la unidad de trabajo simulada
                 var repository = new UserRepository(mockUnitOfWork.Object);

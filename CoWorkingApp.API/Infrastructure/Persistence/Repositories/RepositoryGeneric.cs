@@ -66,14 +66,15 @@ namespace CoWorkingApp.API.Infrastructure.Persistence.Repositories
                 _dbSet.Add(entity);
 
                 // Guarda los cambios en la base de datos
-                await _unitOfWork.Commit();
+                await _unitOfWork.CommitAsync();
 
                 // Retorna true indicando que la operación fue exitosa
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 // Retorna false si ocurre alguna excepción al agregar la entidad
+                Console.WriteLine(ex.Message);
                 return false;
             }
         }
@@ -92,7 +93,7 @@ namespace CoWorkingApp.API.Infrastructure.Persistence.Repositories
                 _unitOfWork.Context.Entry(entity).State = EntityState.Modified;
 
                 // Guarda los cambios en la base de datos
-                await _unitOfWork.Commit();
+                await _unitOfWork.CommitAsync();
 
                 // Retorna true indicando que la operación fue exitosa
                 return true;
@@ -117,7 +118,7 @@ namespace CoWorkingApp.API.Infrastructure.Persistence.Repositories
                 _dbSet.Remove(entity);
 
                 // Guarda los cambios en la base de datos
-                await _unitOfWork.Commit();
+                await _unitOfWork.CommitAsync();
 
                 // Retorna true indicando que la operación fue exitosa
                 return true;

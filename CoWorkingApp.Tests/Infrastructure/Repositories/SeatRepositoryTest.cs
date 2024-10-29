@@ -249,7 +249,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
                 var mockUnitOfWork = new Mock<IUnitOfWork>();
                 // Se configura el mock para lanzar una excepción al intentar confirmar los cambios en la base de datos
                 mockUnitOfWork.Setup(u => u.Context).Returns(context);
-                mockUnitOfWork.Setup(u => u.Commit()).ThrowsAsync(new Exception());
+                mockUnitOfWork.Setup(u => u.CommitAsync()).ThrowsAsync(new Exception());
 
                 // Se crea una instancia de SeatRepository con el mock de IUnitOfWork
                 var repository = new SeatRepository(mockUnitOfWork.Object);

@@ -27,7 +27,7 @@ namespace CoWorkingApp.API.Infrastructure.UnitOfWorks
         /// Confirma los cambios realizados en el contexto de la base de datos.
         /// </summary>
         /// <returns>Una tarea asincrónica que representa la operación de confirmación.</returns>
-        public async Task Commit()
+        public async Task CommitAsync()
         {
             await Context.SaveChangesAsync();
         }
