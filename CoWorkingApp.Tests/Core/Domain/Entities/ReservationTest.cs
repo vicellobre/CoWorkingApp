@@ -84,8 +84,8 @@ namespace CoWorkingApp.Tests.Core.Domain.Entities
         {
             // ARRANGE
             // Crear un objeto Reservation y asignarle un valor, mientras que el otro se deja como nulo
-            Reservation reservation_1 = new Reservation();
-            Reservation reservation_2 = null;
+            Reservation reservation_1 = new();
+            Reservation? reservation_2 = null;
 
             // ACT
             // Comprobar si el objeto Reservation es igual a nulo

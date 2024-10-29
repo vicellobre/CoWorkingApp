@@ -41,7 +41,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Controllers
             {
                 // ARRANGE
                 // Se establece el servicio como nulo y se crea un mock de IConfiguration
-                IUserService service = null;
+                IUserService? service = null;
                 var mockConfiguration = new Mock<IConfiguration>();
 
                 // ACT
@@ -63,7 +63,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Controllers
                 // ARRANGE
                 // Se crea un mock de IUserService y se establece la configuración como nula
                 var mockService = new Mock<IUserService>();
-                IConfiguration configuration = null;
+                IConfiguration? configuration = null;
 
                 // ACT
                 // Se intenta llamar al constructor de LoginUserController con la configuración nula
@@ -86,7 +86,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Controllers
             {
                 // ARRANGE
                 // Se crean los valores de configuración necesarios para la generación del token
-                var configValues = new Dictionary<string, string>
+                var configValues = new Dictionary<string, string?>
                 {
                     { "Auth:Jwt:Issuer", "" },
                     { "Auth:Jwt:Audience", "" },
@@ -156,7 +156,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Controllers
             {
                 // ARRANGE
                 // Se crean los valores de configuración necesarios para la generación del token
-                var configValues = new Dictionary<string, string>
+                var configValues = new Dictionary<string, string?>
                 {
                     { "Auth:Jwt:Issuer", "" },
                     { "Auth:Jwt:Audience", "" },

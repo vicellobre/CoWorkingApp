@@ -27,7 +27,7 @@ namespace CoWorkingApp.Core.Application.Abstracts
         /// </summary>
         /// <param name="repository">El repositorio asociado al servicio.</param>
         /// <param name="mapper">El adaptador de mapeo utilizado para mapear entre tipos de entidades y DTO.</param>
-        protected ServiceGeneric(TRepository repository, IMapperAdapter mapper)
+        protected ServiceGeneric(TRepository? repository, IMapperAdapter? mapper)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
@@ -102,7 +102,7 @@ namespace CoWorkingApp.Core.Application.Abstracts
         /// </summary>
         /// <param name="request">El objeto de solicitud.</param>
         /// <returns>Un objeto de respuesta.</returns>
-        public virtual async Task<TResponse> CreateAsync(TRequest request)
+        public virtual async Task<TResponse> CreateAsync(TRequest? request)
         {
             try
             {
@@ -166,7 +166,7 @@ namespace CoWorkingApp.Core.Application.Abstracts
         /// <param name="id">El ID de la entidad.</param>
         /// <param name="request">El objeto de solicitud.</param>
         /// <returns>Un objeto de respuesta.</returns>
-        public virtual async Task<TResponse> UpdateAsync(Guid id, TRequest request)
+        public virtual async Task<TResponse> UpdateAsync(Guid id, TRequest? request)
         {
             try
             {

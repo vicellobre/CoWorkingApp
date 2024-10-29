@@ -33,7 +33,7 @@ namespace CoWorkingApp.Tests.Infrastructure.UnitOfWorks
         public void UnitOfWorkConstructor_Throws_ArgumentNullException_When_ContextIsNull()
         {
             // ARRANGE
-            CoWorkingContext context = null;
+            CoWorkingContext? context = null;
 
             // ACT
             var result = () => new UnitOfWork(context);

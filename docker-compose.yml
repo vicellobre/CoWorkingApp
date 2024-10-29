@@ -1,0 +1,49 @@
+services:
+    db:
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        container_name: coworking-db
+        environment:
+            - ACCEPT_EULA=Y
+            - SA_PASSWORD=Your_password123
+            - MSSQL_PID=Express
+        ports:
+            - "1433:1433"  # Puerto del SQL Server en el contenedor mapeado al host
+        volumes:
+            - sqlserver-data:/var/opt/mssql  # Persistir datos de la base de datos
+        networks:
+            - coworking-network
+        healthcheck:
+            test: /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "Your_password123" -C -Q "SELECT 1" -b -o /dev/null
+            interval: 10s  # Espera 30 segundos entre verificaciones
+            timeout: 3s   # Tiempo máximo de espera por cada verificación
+            retries: 10     # Número de intentos antes de marcar como fallido
+            start_period: 10s
+
+    api:
+        # build:
+        #     context: .
+        #     dockerfile: Dockerfile
+        image: vicellobre/coworking-app:latest  # Reemplaza con tu imagen de Docker Hub
+        container_name: coworking-api
+        ports:
+            - "8080:8080"  # Mapea el puerto del contenedor al puerto de tu host
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Development
+            - ConnectionStrings__ConnectionCoWorking=Server=db;Database=CoWorkingDb;User=sa;Password=Your_password123;MultipleActiveResultSets=True;TrustServerCertificate=True;
+            - RUNNING_IN_CONTAINER=true
+        depends_on:
+            db:
+                condition: service_healthy
+                restart: true
+        volumes:
+            - dataprotection-keys:/app/DataProtectionKeys
+        networks:
+            - coworking-network
+
+networks:
+    coworking-network:
+        driver: bridge
+
+volumes:
+    sqlserver-data:
+    dataprotection-keys:

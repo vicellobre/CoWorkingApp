@@ -20,7 +20,7 @@ namespace CoWorkingApp.Core.Domain.Entities
         /// <summary>
         /// Obtiene o establece el usuario asociado a la reserva.
         /// </summary>
-        public User User { get; set; }
+        public User? User { get; set; }
 
         /// <summary>
         /// Obtiene o establece el identificador único del asiento asociado a la reserva.
@@ -30,14 +30,14 @@ namespace CoWorkingApp.Core.Domain.Entities
         /// <summary>
         /// Obtiene o establece el asiento asociado a la reserva.
         /// </summary>
-        public Seat Seat { get; set; }
+        public Seat? Seat { get; set; }
 
         /// <summary>
         /// Sobrecarga del método Equals para comparar objetos Reservation por su identificador único.
         /// </summary>
         /// <param name="obj">El objeto a comparar con la reserva actual.</param>
         /// <returns>True si los objetos son iguales, de lo contrario, false.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             // Verifica si el objeto proporcionado no es nulo y es del mismo tipo que Reservation
             if (obj is null || GetType() != obj.GetType())

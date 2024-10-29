@@ -39,7 +39,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
             {
                 // ARRANGE
                 // Se inicializa unitOfWork como null
-                IUnitOfWork unitOfWork = null;
+                IUnitOfWork? unitOfWork = null;
 
                 // ACT
                 // Se intenta crear una instancia de SeatRepository con unitOfWork como null

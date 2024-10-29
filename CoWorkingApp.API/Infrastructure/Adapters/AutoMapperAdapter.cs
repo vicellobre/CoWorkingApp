@@ -14,9 +14,9 @@ namespace CoWorkingApp.API.Infrastructure.Adapters
         /// Constructor de la clase AutoMapperAdapter.
         /// </summary>
         /// <param name="mapper">Instancia de IMapper proporcionada por AutoMapper.</param>
-        public AutoMapperAdapter(IMapper mapper)
+        public AutoMapperAdapter(IMapper? mapper)
         {
-            _mapper = mapper ?? throw new ArgumentNullException();
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         /// <summary>

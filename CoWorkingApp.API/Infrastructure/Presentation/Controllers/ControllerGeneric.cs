@@ -6,29 +6,36 @@ using Microsoft.AspNetCore.Mvc;
 namespace CoWorkingApp.API.Infrastructure.Presentation.Controllers
 {
     /// <summary>
-    /// Controlador genérico para operaciones CRUD básicas en entidades.
+    /// Clase base genérica para controladores API que utiliza servicios genéricos.
     /// </summary>
-    /// <typeparam name="TService">Tipo de servicio que maneja las operaciones.</typeparam>
-    /// <typeparam name="TRequest">Tipo de solicitud.</typeparam>
-    /// <typeparam name="TResponse">Tipo de respuesta.</typeparam>
+    /// <typeparam name="TService">Tipo del servicio que implementa la interfaz <see cref="IService{TRequest, TResponse}"/>.</typeparam>
+    /// <typeparam name="TRequest">Tipo de la solicitud que implementa la interfaz <see cref="IRequest"/>.</typeparam>
+    /// <typeparam name="TResponse">Tipo de la respuesta que hereda de <see cref="ResponseMessage"/>.</typeparam>
     [ApiController]
     public class ControllerGeneric<TService, TRequest, TResponse> : ControllerBase
         where TService : IService<TRequest, TResponse>  // Restricción para el tipo de servicio
         where TRequest : IRequest                       // Restricción para el tipo de solicitud
         where TResponse : ResponseMessage, new()        // Restricción para el tipo de respuesta
     {
-        protected readonly TService _service;    // Instancia del servicio
-        protected readonly ILogger _logger;      // Instancia del logger
+        /// <summary>
+        /// Instancia del servicio utilizada por el controlador.
+        /// </summary>
+        protected readonly TService _service;
+
+        /// <summary>
+        /// Instancia del logger utilizada para el registro de eventos y errores.
+        /// </summary>
+        protected readonly ILogger _logger;
 
         /// <summary>
         /// Constructor del controlador genérico.
         /// </summary>
         /// <param name="service">Instancia del servicio.</param>
         /// <param name="logger">Instancia del logger.</param>
-        public ControllerGeneric(TService service, ILogger logger)
+        public ControllerGeneric(TService? service, ILogger? logger)
         {
-            _service = service ?? throw new ArgumentNullException();
-            _logger = logger ?? throw new ArgumentNullException();
+            _service = service ?? throw new ArgumentNullException(nameof(service));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         /// <summary>
@@ -142,7 +149,7 @@ namespace CoWorkingApp.API.Infrastructure.Presentation.Controllers
         }
 
         /// <summary>
-        /// ACTualiza una entidad existente de manera asincrónica.
+        /// Actualiza una entidad existente de manera asincrónica.
         /// </summary>
         /// <param name="id">ID de la entidad a actualizar.</param>
         /// <param name="entityRequest">Datos actualizados de la entidad.</param>

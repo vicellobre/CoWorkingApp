@@ -9,6 +9,7 @@ namespace CoWorkingApp.API.Infrastructure.Presentation.Controllers
     /// Controlador para las operaciones relacionadas con la entidad Seat.
     /// </summary>
     [ApiController]
+    //[ApiExplorerSettings(GroupName = "v2")]
     [Route("api/[controller]s")] // Se utiliza el plural "seats" en la ruta para seguir convenciones RESTful
     public class SeatController : ControllerGeneric<ISeatService, SeatRequest, SeatResponse>
     {
@@ -17,7 +18,7 @@ namespace CoWorkingApp.API.Infrastructure.Presentation.Controllers
         /// </summary>
         /// <param name="service">Instancia del servicio de asientos.</param>
         /// <param name="logger">Instancia del logger.</param>
-        public SeatController(ISeatService service, ILogger<ControllerGeneric<ISeatService, SeatRequest, SeatResponse>> logger) : base(service, logger) { }
+        public SeatController(ISeatService? service, ILogger<ControllerGeneric<ISeatService, SeatRequest, SeatResponse>>? logger) : base(service, logger) { }
 
         /// <summary>
         /// Obtiene los asientos disponibles.

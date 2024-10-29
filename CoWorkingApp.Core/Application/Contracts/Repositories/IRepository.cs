@@ -17,7 +17,7 @@
         /// </summary>
         /// <param name="id">Identificador del elemento.</param>
         /// <returns>El elemento con el identificador especificado.</returns>
-        Task<T> GetByIdAsync(Guid id);
+        Task<T?> GetByIdAsync(Guid id);
 
         /// <summary>
         /// Agrega un nuevo elemento de la entidad de manera asincrónica.

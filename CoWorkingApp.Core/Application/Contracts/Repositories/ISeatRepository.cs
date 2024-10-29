@@ -18,7 +18,7 @@ namespace CoWorkingApp.Core.Application.Contracts.Repositories
         /// </summary>
         /// <param name="name">Nombre del asiento.</param>
         /// <returns>El asiento con el nombre especificado, o null si no se encuentra.</returns>
-        Task<Seat> GetByNameAsync(string name);
+        Task<Seat?> GetByNameAsync(string name);
 
         // Otros métodos específicos para SeatRepository
     }
