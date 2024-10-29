@@ -14,8 +14,4 @@
     <Folder Include="Domain\DTOs\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Result Project\Result\Results.csproj" />
-  </ItemGroup>
-
 </Project>
