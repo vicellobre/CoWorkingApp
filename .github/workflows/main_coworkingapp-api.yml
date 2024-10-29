@@ -20,7 +20,7 @@ jobs:
           echo "Contents of CoWorkingApp:"
           ls CoWorkingApp
           echo "Contents of CoWorkingApp/CoWorkingApp.API:"
-          ls CoWorkingApp/CoWorkingApp.API
+          ls /CoWorkingApp.API
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
