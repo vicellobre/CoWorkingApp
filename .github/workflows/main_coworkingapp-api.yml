@@ -1,6 +1,3 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
 name: Build and deploy ASP.Net Core app to Azure Web App - CoWorkingApp-API
 
 on:
@@ -12,7 +9,7 @@ on:
 jobs:
   build:
     runs-on: windows-latest
-
+      
     steps:
       - uses: actions/checkout@v4
 
@@ -22,12 +19,19 @@ jobs:
           dotnet-version: '8.x'
           include-prerelease: true
 
+      # Restaurar dependencias
+      - name: Restore dependencies
+        run: dotnet restore CoWorkingApp/CoWorkingApp.API/CoWorkingApp.API.sln
+
+      # Construir el proyecto con dotnet
       - name: Build with dotnet
-        run: dotnet build --configuration Release
+        run: dotnet build CoWorkingApp/CoWorkingApp.API/CoWorkingApp.API.sln --configuration Release
 
+      # Publicar la aplicación en modo Release en una carpeta para despliegue
       - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish CoWorkingApp/CoWorkingApp.API/CoWorkingApp.API.sln -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
+      # Subir el artefacto para el job de despliegue
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
