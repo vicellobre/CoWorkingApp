@@ -71,11 +71,11 @@ namespace CoWorkingApp.API.Infrastructure.Persistence.Repositories
                 // Retorna true indicando que la operación fue exitosa
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Retorna false si ocurre alguna excepción al agregar la entidad
-                Console.WriteLine(ex.Message);
-                return false;
+                throw;
+                //return false;
             }
         }
 
