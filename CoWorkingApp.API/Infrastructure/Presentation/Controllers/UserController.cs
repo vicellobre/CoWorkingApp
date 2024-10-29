@@ -9,6 +9,7 @@ namespace CoWorkingApp.API.Infrastructure.Presentation.Controllers
     /// Controlador para las operaciones relacionadas con la entidad User.
     /// </summary>
     [ApiController]
+    //[ApiExplorerSettings(GroupName = "v1")]
     [Route("api/[controller]s")] // Se utiliza el plural "users" en la ruta para seguir convenciones RESTful
     public class UserController : ControllerGeneric<IUserService, UserRequest, UserResponse>
     {

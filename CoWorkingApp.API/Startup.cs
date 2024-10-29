@@ -142,8 +142,8 @@ namespace CoWorkingApp.API
                 });
 
                 // Documentación para la versión 2
-                options.SwaggerDoc("v2", new OpenApiInfo { Title = "CoWorkng API 2", Version = "v2" });
-                options.SwaggerDoc("lastest", new OpenApiInfo { Title = "CoWorkng API full", Version = "lastest neto" });
+                //options.SwaggerDoc("v2", new OpenApiInfo { Title = "CoWorkng API 2", Version = "v2" });
+                //options.SwaggerDoc("lastest", new OpenApiInfo { Title = "CoWorkng API full", Version = "lastest neto" });
             });
 
             // Configuración para OData
@@ -196,8 +196,8 @@ namespace CoWorkingApp.API
                 //// Endpoint para la versión 1 de la API
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Services v1.0");
                 // Endpoint para la versión 2 de la API
-                options.SwaggerEndpoint("/swagger/v2/swagger.json", "Services v2.0");
-                options.SwaggerEndpoint("/swagger/lastest/swagger.json", "Services ultimate");
+                //options.SwaggerEndpoint("/swagger/v2/swagger.json", "Services v2.0");
+                //options.SwaggerEndpoint("/swagger/lastest/swagger.json", "Services ultimate");
             });
 
             // Redirige el tráfico HTTP a HTTPS

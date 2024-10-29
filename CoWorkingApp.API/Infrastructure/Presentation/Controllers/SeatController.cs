@@ -9,6 +9,7 @@ namespace CoWorkingApp.API.Infrastructure.Presentation.Controllers
     /// Controlador para las operaciones relacionadas con la entidad Seat.
     /// </summary>
     [ApiController]
+    //[ApiExplorerSettings(GroupName = "v2")]
     [Route("api/[controller]s")] // Se utiliza el plural "seats" en la ruta para seguir convenciones RESTful
     public class SeatController : ControllerGeneric<ISeatService, SeatRequest, SeatResponse>
     {
