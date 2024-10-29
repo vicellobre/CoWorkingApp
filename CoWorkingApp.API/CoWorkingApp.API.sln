@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoWorkingApp.Core", "..\CoW
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoWorkingApp.Tests", "..\CoWorkingApp.Tests\CoWorkingApp.Tests.csproj", "{33FFF97C-339A-4E84-B41D-C701E71088E8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Results", "..\..\..\Result Project\Result\Results.csproj", "{89DDFCF5-E3A0-412A-90CE-09F8E21BFFF3}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{33FFF97C-339A-4E84-B41D-C701E71088E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{33FFF97C-339A-4E84-B41D-C701E71088E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{33FFF97C-339A-4E84-B41D-C701E71088E8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{89DDFCF5-E3A0-412A-90CE-09F8E21BFFF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{89DDFCF5-E3A0-412A-90CE-09F8E21BFFF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{89DDFCF5-E3A0-412A-90CE-09F8E21BFFF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{89DDFCF5-E3A0-412A-90CE-09F8E21BFFF3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
