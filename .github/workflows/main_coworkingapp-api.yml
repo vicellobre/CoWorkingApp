@@ -13,15 +13,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: List directory contents
-        run: |
-          echo "Root directory:"
-          ls
-          echo "Contents of CoWorkingApp:"
-          ls CoWorkingApp
-          echo "Contents of CoWorkingApp/CoWorkingApp.API:"
-          ls /CoWorkingApp.API
-
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
         with:
