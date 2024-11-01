@@ -2,6 +2,7 @@
 using CoWorkingApp.Core.Application.Contracts.Requests;
 using CoWorkingApp.Core.Application.Contracts.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
 
 namespace CoWorkingApp.API.Infrastructure.Presentation.Controllers
 {
@@ -50,6 +51,7 @@ namespace CoWorkingApp.API.Infrastructure.Presentation.Controllers
         /// Obtiene todos los elementos y devuelve una lista de entidades o un mensaje de error si ocurre un error.
         /// </summary>
         [HttpGet]
+        [EnableQuery]
         public async Task<ActionResult<IEnumerable<TResponse>>> GetAll()
         {
             try
@@ -209,7 +211,5 @@ namespace CoWorkingApp.API.Infrastructure.Presentation.Controllers
                 return StatusCode(500, HandleException(exception));
             }
         }
-
-
     }
 }

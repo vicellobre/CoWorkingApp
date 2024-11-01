@@ -151,7 +151,13 @@ namespace CoWorkingApp.API
             services.AddControllers().AddOData(options =>
             {
                 // Configuración de rutas y opciones de OData
-                options.AddRouteComponents("odata", GetEdmModel()).Select().Filter().OrderBy().Count().Expand().SetMaxTop(100);
+                options.AddRouteComponents("api/odata", GetEdmModel())
+                    .Select()
+                    .Filter()
+                    .OrderBy()
+                    .Count()
+                    .Expand()
+                    .SetMaxTop(100);
             });
         }
 
