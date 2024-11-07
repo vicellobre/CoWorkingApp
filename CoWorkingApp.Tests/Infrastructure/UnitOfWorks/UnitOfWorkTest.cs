@@ -1,5 +1,7 @@
 ﻿using CoWorkingApp.API.Infrastructure.Context;
+using CoWorkingApp.API.Infrastructure.Persistence.Repositories;
 using CoWorkingApp.API.Infrastructure.UnitOfWorks;
+using CoWorkingApp.Core.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 
@@ -74,6 +76,34 @@ namespace CoWorkingApp.Tests.Infrastructure.UnitOfWorks
 
             // ASSERT
             dbContextMock.Verify(db => db.Dispose(), Times.Once);
+        }
+
+        /// <summary>
+        /// Verifica que el método Dispose maneja excepciones lanzadas al desechar el contexto.
+        /// </summary>
+        [Fact]
+        public void Dispose_CatchesException_When_ContextDisposeThrowsException()
+        {
+            // ARRANGE
+            var dbContextMock = new Mock<CoWorkingContext>(new DbContextOptions<CoWorkingContext>());
+            dbContextMock.Setup(db => db.Dispose()).Throws(new Exception());
+
+            var unitOfWork = new UnitOfWork(dbContextMock.Object);
+
+            var originalConsoleOut = Console.Out; // Guarda la salida de consola original para restaurarla más adelante
+            using (var consoleOutput = new StringWriter())
+            {
+                Console.SetOut(consoleOutput); // Redirige la salida de consola
+
+                // ACT
+                unitOfWork.Dispose();
+
+                // ASSERT
+                var output = consoleOutput.ToString();
+                Assert.Contains("Error disposing context", output);
+            }
+
+            Console.SetOut(originalConsoleOut); // Restaura la salida de consola original
         }
     }
 }

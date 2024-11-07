@@ -79,25 +79,25 @@ namespace CoWorkingApp.API.Infrastructure.Presentation.Controllers
         private JsonResult BuildToken(UserResponse user)
         {
             // Verifica que el usuario no sea nulo
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user), "User cannot be null.");
-            }
+            //if (user is null)
+            //{
+            //    throw new ArgumentNullException(nameof(user), "User cannot be null.");
+            //}
 
             // Verifica que los campos del usuario no sean nulos
-            if (string.IsNullOrEmpty(user.Name))
+            if (string.IsNullOrWhiteSpace(user.Name))
             {
-                throw new ArgumentNullException(nameof(user.Name), "User name cannot be null or empty.");
+                throw new ArgumentNullException(nameof(user), "User name cannot be null or empty.");
             }
 
-            if (string.IsNullOrEmpty(user.LastName))
+            if (string.IsNullOrWhiteSpace(user.LastName))
             {
-                throw new ArgumentNullException(nameof(user.LastName), "User last name cannot be null or empty.");
+                throw new ArgumentNullException(nameof(user), "User last name cannot be null or empty.");
             }
 
-            if (string.IsNullOrEmpty(user.Email))
+            if (string.IsNullOrWhiteSpace(user.Email))
             {
-                throw new ArgumentNullException(nameof(user.Email), "User email cannot be null or empty.");
+                throw new ArgumentNullException(nameof(user), "User email cannot be null or empty.");
             }
 
             // Obtener el origen del emisor y la audiencia desde la configuración

@@ -1,10 +1,12 @@
 ﻿using CoWorkingApp.API.Infrastructure.Presentation.Controllers;
 using CoWorkingApp.Core.Application.Contracts.Services;
 using CoWorkingApp.Core.Domain.DTOs;
+using CoWorkingApp.Core.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Moq;
+using Xunit.Sdk;
 
 namespace CoWorkingApp.Tests.Infrastructure.Controllers
 {
@@ -260,7 +262,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Controllers
             /// Verifica que el método Login retorne un código de estado 500 cuando se produce una excepción.
             /// </summary>
             [Fact]
-            public void Login_Returns_StatusCode500_When_ExceptionCaught()
+            public void Login_Returns_StatusCode500_When_ExceptionCaught_BecauseService()
             {
                 // ARRANGE
                 // Se crea una excepción simulada con un mensaje de error
@@ -273,6 +275,113 @@ namespace CoWorkingApp.Tests.Infrastructure.Controllers
                 // Se crea un mock de IUserService y se configura para que lance una excepción cuando se llame al método AuthenticateUserAsync
                 var mockService = new Mock<IUserService>();
                 mockService.Setup(s => s.AuthenticateAsync(It.IsAny<UserRequest>())).ThrowsAsync(new Exception());
+
+                // Se crea una instancia del controlador LoginUserController con los mocks configurados
+                var controller = new LoginUserController(mockService.Object, mockConfiguration.Object);
+
+                // ACT
+                // Se llama al método Login del controlador
+                var result_Task = controller.Login(new UserRequest());
+                var result_ActionResult = result_Task?.Result;
+                var result_ObjectResult = result_ActionResult as ObjectResult;
+                var result = result_ObjectResult?.Value as UserResponse;
+
+                // ASSERT
+                // Se verifica que el resultado no sea nulo y que corresponda a una respuesta de fallo con el mensaje de error de la excepción y el código de estado 500
+                Assert.NotNull(result);
+                Assert.False(result.Success);
+                Assert.Equal(errorMessage, result.Message);
+                Assert.Equal(StatusCodes.Status500InternalServerError, result_ObjectResult?.StatusCode);
+            }
+
+            [Theory]
+            [InlineData(null, "Doe", "john@example.com")]
+            [InlineData("", "Doe", "john@example.com")]
+            [InlineData("   ", "Doe", "john@example.com")]
+            [InlineData("John", null, "john@example.com")]
+            [InlineData("John", "", "john@example.com")]
+            [InlineData("John", "   ", "john@example.com")]
+            [InlineData("John", "Doe", null)]
+            [InlineData("John", "Doe", "")]
+            [InlineData("John", "Doe", " ")]
+            public void Login_Returns_StatusCode500_When_ExceptionCaught_With_IncorrectUserProperties(string? name, string? lastname, string? email)
+            {
+                // ARRANGE
+                var user = new UserResponse
+                { 
+                    Name = name,
+                    LastName = lastname,
+                    Email = email,
+                    Success = true
+                };
+
+                // Se crea una excepción simulada con un mensaje de error
+                var exception = new Exception("An unexpected error occurred while retrieving all entities");
+                var errorMessage = exception.Message;
+
+                // Se crea un mock de IConfiguration
+                var mockConfiguration = new Mock<IConfiguration>();
+
+                // Se crea un mock de IUserService y se configura para que lance una excepción cuando se llame al método AuthenticateUserAsync
+                var mockService = new Mock<IUserService>();
+                mockService.Setup(s => s.AuthenticateAsync(It.IsAny<UserRequest>())).ReturnsAsync(user);
+
+                // Se crea una instancia del controlador LoginUserController con los mocks configurados
+                var controller = new LoginUserController(mockService.Object, mockConfiguration.Object);
+
+                // ACT
+                // Se llama al método Login del controlador
+                var result_Task = controller.Login(new UserRequest());
+                var result_ActionResult = result_Task?.Result;
+                var result_ObjectResult = result_ActionResult as ObjectResult;
+                var result = result_ObjectResult?.Value as UserResponse;
+
+                // ASSERT
+                // Se verifica que el resultado no sea nulo y que corresponda a una respuesta de fallo con el mensaje de error de la excepción y el código de estado 500
+                Assert.NotNull(result);
+                Assert.False(result.Success);
+                Assert.Equal(errorMessage, result.Message);
+                Assert.Equal(StatusCodes.Status500InternalServerError, result_ObjectResult?.StatusCode);
+            }
+
+            [Theory]
+            [InlineData(null, "", "")]
+            [InlineData("", null, "")]
+            [InlineData("", "", null)]
+            public void Login_Returns_StatusCode500_When_ExceptionCaught_With_BadConfigurations(string? issuer, string? audience, string? secretKey)
+            {
+                // ARRANGE
+                var user = new UserResponse
+                {
+                    Name = "John",
+                    LastName = "Doe",
+                    Email = "john@example.com",
+                    Success = true
+                };
+
+                // Se crean los valores de configuración necesarios para la generación del token
+                var configValues = new Dictionary<string, string?>
+                {
+                    { "Auth:Jwt:Issuer", issuer },
+                    { "Auth:Jwt:Audience", audience },
+                    { "Auth:Jwt:SecretKey", secretKey },
+                    // Se pueden agregar otros valores de configuración simulados si es necesario
+                };
+
+                // Se crea una configuración de prueba utilizando los valores de configuración simulados
+                var configuration = TestConfigurationFactory.CreateConfiguration(configValues);
+
+                // Se crea una excepción simulada con un mensaje de error
+                var exception = new Exception("An unexpected error occurred while retrieving all entities");
+                var errorMessage = exception.Message;
+
+                // Se crea un mock de IConfiguration que devuelve la configuración simulada
+                var mockConfiguration = new Mock<IConfiguration>();
+                mockConfiguration.Setup(c => c[It.IsAny<string>()]).Returns((string key) => configuration[key]);
+
+                // Se crea un mock de IUserService y se configura para que lance una excepción cuando se llame al método AuthenticateUserAsync
+                var mockService = new Mock<IUserService>();
+                mockService.Setup(s => s.AuthenticateAsync(It.IsAny<UserRequest>())).ReturnsAsync(user);
 
                 // Se crea una instancia del controlador LoginUserController con los mocks configurados
                 var controller = new LoginUserController(mockService.Object, mockConfiguration.Object);

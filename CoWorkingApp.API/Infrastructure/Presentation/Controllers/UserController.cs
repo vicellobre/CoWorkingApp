@@ -64,7 +64,7 @@ namespace CoWorkingApp.API.Infrastructure.Presentation.Controllers
         /// </returns>
         [HttpPost("register")]
         [AllowAnonymous] // Permite el acceso a este método sin autenticación
-        public async Task<ActionResult<UserResponse>> Register([FromBody] UserRequest userRequest)
+        public override async Task<ActionResult<UserResponse>> Create([FromBody] UserRequest userRequest)
         {
             try
             {

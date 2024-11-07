@@ -1359,6 +1359,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
             }
         }
 
+
         public class Authenticate
         {
             /// <summary>

@@ -1,8 +1,12 @@
-﻿namespace CoWorkingApp.API.Configurations
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace CoWorkingApp.API.Configurations
 {
+
     /// <summary>
     /// Clase que representa la configuración de Swagger obtenida desde el archivo de configuración.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class SwaggerConfig
     {
         /// <summary>

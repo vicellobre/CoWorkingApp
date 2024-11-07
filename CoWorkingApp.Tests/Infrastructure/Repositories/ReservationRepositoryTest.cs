@@ -1,5 +1,7 @@
-﻿using CoWorkingApp.API.Infrastructure.Persistence.Repositories;
+﻿using CoWorkingApp.API.Infrastructure.Context;
+using CoWorkingApp.API.Infrastructure.Persistence.Repositories;
 using CoWorkingApp.API.Infrastructure.UnitOfWorks;
+using CoWorkingApp.Core.Domain.DTOs;
 using CoWorkingApp.Core.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Moq;
@@ -29,6 +31,45 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
                 Assert.NotNull(result);
             }
 
+            [Fact]
+            public void Constructor_ShouldNotThrowException_WhenDbSetIsNotNull()
+            {
+                // Arrange
+                var mockDbSet = new Mock<DbSet<Reservation>>();
+
+                // Configura el mock para que Set<Reservation>() devuelva un DbSet válido (simula que la base de datos está correctamente configurada)
+                var mockContext = new Mock<CoWorkingContext>(new DbContextOptions<CoWorkingContext>());
+                mockContext.Setup(c => c.Set<Reservation>()).Returns(mockDbSet.Object);
+
+                // Crear el mock para IUnitOfWork
+                var unitOfWork = new UnitOfWork(mockContext.Object);
+
+                //Act
+                var repository = new ReservationRepository(unitOfWork);
+
+
+                // Assert
+                Assert.NotNull(repository);
+            }
+
+            [Fact]
+            public void Constructor_ShouldThrowException_WhenDbSetIsNull()
+            {
+                // Arrange
+                // Configura el mock para que Set<Reservation>() devuelva un DbSet válido (simula que la base de datos está correctamente configurada)
+                var mockContext = new Mock<CoWorkingContext>(new DbContextOptions<CoWorkingContext>());
+
+                // Crear el mock para IUnitOfWork
+                var unitOfWork = new UnitOfWork(mockContext.Object);
+
+                //Act
+                var result = () => new ReservationRepository(unitOfWork);
+
+                // Assert
+                var exception = Assert.Throws<InvalidOperationException>(result);
+                Assert.Equal("DbSet could not be initialized.", exception.Message);  // Verifica el mensaje de la excepción
+            }
+
             /// <summary>
             /// Verifica que el constructor de la clase ReservationRepository lance una excepción
             /// cuando se le pasa un parámetro nulo (unitOfWork).
@@ -47,6 +88,25 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
                 // ASSERT
                 // Se verifica que la creación de la instancia lance una excepción del tipo ArgumentNullException
                 Assert.Throws<ArgumentNullException>(result);
+            }
+
+            [Fact]
+            public void Constructor_ShouldThrowInvalidOperationException_WhenDbSetIsNull()
+            {
+                // Arrange
+                var mockContext = new Mock<CoWorkingContext>(new DbContextOptions<CoWorkingContext>());
+                // Configura el mock para lanzar la InvalidOperationException cuando se llame a Set<Reservation>()
+                mockContext.Setup(u => u.Set<Reservation>())
+                              .Throws(new InvalidOperationException("DbSet could not be initialized."));
+
+                var unitOfWork = new UnitOfWork(mockContext.Object);
+
+                //Act
+                var result = () => new ReservationRepository(unitOfWork);
+
+                // Assert
+                var exception = Assert.Throws<InvalidOperationException>(result);
+                Assert.Equal("DbSet could not be initialized.", exception.Message);  // Verifica el mensaje de la excepción
             }
         }
 

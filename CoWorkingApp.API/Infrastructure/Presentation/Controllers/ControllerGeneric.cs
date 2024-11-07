@@ -124,7 +124,7 @@ namespace CoWorkingApp.API.Infrastructure.Presentation.Controllers
         /// </summary>
         /// <param name="entityRequest">Entidad a crear.</param>
         [HttpPost]
-        public async Task<ActionResult<TResponse>> Create([FromBody] TRequest entityRequest)
+        public virtual async Task<ActionResult<TResponse>> Create([FromBody] TRequest entityRequest)
         {
             try
             {

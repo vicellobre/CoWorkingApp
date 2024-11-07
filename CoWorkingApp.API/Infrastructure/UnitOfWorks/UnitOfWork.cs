@@ -48,7 +48,7 @@ namespace CoWorkingApp.API.Infrastructure.UnitOfWorks
                 {
                     try
                     {
-                        Context?.Dispose();
+                        Context.Dispose();
                     }
                     catch (Exception ex)
                     {

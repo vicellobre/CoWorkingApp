@@ -1,4 +1,5 @@
-﻿using CoWorkingApp.API.Infrastructure.Persistence.Repositories;
+﻿using CoWorkingApp.API.Infrastructure.Context;
+using CoWorkingApp.API.Infrastructure.Persistence.Repositories;
 using CoWorkingApp.API.Infrastructure.UnitOfWorks;
 using CoWorkingApp.Core.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -48,6 +49,64 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
                 // ASSERT
                 // Se verifica que la creación de la instancia arroje una excepción del tipo ArgumentNullException
                 Assert.Throws<ArgumentNullException>(result);
+            }
+
+            [Fact]
+            public void Constructor_ShouldThrowInvalidOperationException_WhenDbSetIsNull()
+            {
+                // Arrange
+                var mockContext = new Mock<CoWorkingContext>(new DbContextOptions<CoWorkingContext>());
+                // Configura el mock para lanzar la InvalidOperationException cuando se llame a Set<Seat>()
+                mockContext.Setup(u => u.Set<Seat>())
+                              .Throws(new InvalidOperationException("DbSet could not be initialized."));
+
+                var unitOfWork = new UnitOfWork(mockContext.Object);
+
+                //Act
+                var result = () => new SeatRepository(unitOfWork);
+
+                // Assert
+                var exception = Assert.Throws<InvalidOperationException>(result);
+                Assert.Equal("DbSet could not be initialized.", exception.Message);  // Verifica el mensaje de la excepción
+            }
+
+            [Fact]
+            public void Constructor_ShouldNotThrowException_WhenDbSetIsNotNull()
+            {
+                // Arrange
+                var mockDbSet = new Mock<DbSet<Seat>>();
+
+                // Configura el mock para que Set<Seat>() devuelva un DbSet válido (simula que la base de datos está correctamente configurada)
+                var mockContext = new Mock<CoWorkingContext>(new DbContextOptions<CoWorkingContext>());
+                mockContext.Setup(c => c.Set<Seat>()).Returns(mockDbSet.Object);
+
+                // Crear el mock para IUnitOfWork
+                var unitOfWork = new UnitOfWork(mockContext.Object);
+
+                //Act
+                var repository = new SeatRepository(unitOfWork);
+
+
+                // Assert
+                Assert.NotNull(repository);
+            }
+
+            [Fact]
+            public void Constructor_ShouldThrowException_WhenDbSetIsNull()
+            {
+                // Arrange
+                // Configura el mock para que Set<Seat>() devuelva un DbSet válido (simula que la base de datos está correctamente configurada)
+                var mockContext = new Mock<CoWorkingContext>(new DbContextOptions<CoWorkingContext>());
+
+                // Crear el mock para IUnitOfWork
+                var unitOfWork = new UnitOfWork(mockContext.Object);
+
+                //Act
+                var result = () => new SeatRepository(unitOfWork);
+
+                // Assert
+                var exception = Assert.Throws<InvalidOperationException>(result);
+                Assert.Equal("DbSet could not be initialized.", exception.Message);  // Verifica el mensaje de la excepción
             }
         }
 
