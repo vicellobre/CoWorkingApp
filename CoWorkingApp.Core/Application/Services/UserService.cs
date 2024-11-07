@@ -145,13 +145,28 @@ namespace CoWorkingApp.Core.Application.Services
         protected override User UpdateProperties(User existingEntity, UserRequest request)
         {
             // ACTualizar las propiedades del usuario existente con los valores de la solicitud
-            return new User
+            if (!string.IsNullOrEmpty(request.Name))
             {
-                Name = string.IsNullOrEmpty(request.Name) ? existingEntity.Name : request.Name,
-                LastName = string.IsNullOrEmpty(request.LastName) ? existingEntity.LastName : request.LastName,
-                Email = string.IsNullOrEmpty(request.Email) ? existingEntity.Email : request.Email,
-                Password = string.IsNullOrEmpty(request.Password) ? existingEntity.Password : request.Password,
-            };
+                existingEntity.Name = request.Name;
+            }
+
+            if (!string.IsNullOrEmpty(request.LastName))
+            {
+                existingEntity.LastName = request.LastName;
+            }
+
+            if (!string.IsNullOrEmpty(request.Email))
+            {
+                existingEntity.Email = request.Email;
+            }
+
+            if (!string.IsNullOrEmpty(request.Password))
+            {
+                existingEntity.Password = request.Password;
+            }
+
+            // Retornar la entidad existente que ahora está actualizada
+            return existingEntity;
         }
 
         /// <summary>

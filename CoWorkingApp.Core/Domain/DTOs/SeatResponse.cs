@@ -8,6 +8,11 @@ namespace CoWorkingApp.Core.Domain.DTOs
     public record SeatResponse : ResponseMessage
     {
         /// <summary>
+        /// Obtiene o establece el identificador único del asiento.
+        /// </summary>
+        public Guid Id { get; set; }
+
+        /// <summary>
         /// Obtiene o establece el nombre del asiento.
         /// </summary>
         public string? Name { get; set; }

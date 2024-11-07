@@ -95,13 +95,21 @@ namespace CoWorkingApp.Core.Application.Services
         /// <returns>El asiento actualizado.</returns>
         protected override Seat UpdateProperties(Seat existingEntity, SeatRequest request)
         {
-            // ACTualizar las propiedades del asiento existente con los valores de la solicitud
-            return new Seat
+            // Actualizar las propiedades del asiento existente con los valores de la solicitud
+            if (!string.IsNullOrEmpty(request.Name))
             {
-                Name = string.IsNullOrEmpty(request.Name) ? existingEntity.Name : request.Name,
-                IsBlocked = request.IsBlocked,
-                Description = string.IsNullOrEmpty(request.Description) ? existingEntity.Description : request.Description,
-            };
+                existingEntity.Name = request.Name;
+            }
+
+            if (!string.IsNullOrEmpty(request.Description))
+            {
+                existingEntity.Description = request.Description;
+            }
+
+            existingEntity.IsBlocked = request.IsBlocked;
+
+            // Retornar la entidad existente que ahora está actualizada
+            return existingEntity;
         }
 
         /// <summary>

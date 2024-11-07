@@ -1,9 +1,11 @@
 ﻿using CoWorkingApp.Core.Application.Abstracts;
 using CoWorkingApp.Core.Application.Contracts.Adapters;
 using CoWorkingApp.Core.Application.Contracts.Repositories;
+using CoWorkingApp.Core.Application.Contracts.Requests;
 using CoWorkingApp.Core.Application.Contracts.Services;
 using CoWorkingApp.Core.Domain.DTOs;
 using CoWorkingApp.Core.Domain.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace CoWorkingApp.Core.Application.Services
 {
@@ -19,6 +21,81 @@ namespace CoWorkingApp.Core.Application.Services
         public ReservationService(IReservationRepository? reservationRepository, IMapperAdapter? mapper) : base(reservationRepository, mapper) { }
 
         // Implementación de métodos específicos de IReservationService
+
+        /// <summary>
+        /// Crea una nueva reservación de manera asincrónica.
+        /// </summary>
+        /// <param name="request">El objeto de solicitud.</param>
+        /// <returns>Un objeto de respuesta.</returns>
+        public override async Task<ReservationResponse> CreateAsync(ReservationRequest? request)
+        {
+            try
+            {
+                // Verificar si la solicitud es nula
+                if (request is null)
+                {
+                    // Si la solicitud es nula, lanzar una excepción
+                    throw new ArgumentNullException("The request object cannot be null");
+                }
+
+                // Mapear la solicitud a una reservación
+                var reservation = _mapper.Map<ReservationRequest, Reservation>(request);
+
+                // Validar la reservación
+                if (!IsValid(reservation))
+                {
+                    // Si la reservación no es válida, lanzar una excepción
+                    throw new ValidationException("Argument is invalid.");
+                }
+
+                // Obetner la información completa sobre la reservación
+                var responseComplete = await _repository.GetByIdAsync(reservation.Id);
+                if (responseComplete is null)
+                {
+                    throw new ArgumentException("The request contains inconsistent details");
+                }
+
+                // Agregar la reservación al repositorio
+                var added = await _repository.AddAsync(reservation);
+
+                // Verificar si la reservación fue agregada correctamente
+                if (!added)
+                {
+                    // Si la reservación no fue agregada, lanzar una excepción
+                    throw new InvalidOperationException("The reservation could not be added.");
+                }
+
+                // Mapear la reservación a un objeto de respuesta y retornarlo
+                var response = _mapper.Map<Reservation, ReservationResponse>(responseComplete);
+                response.Success = true;
+                return response;
+            }
+            catch (ArgumentNullException ex)
+            {
+                // Manejar la excepción de argumento nulo y generar una respuesta de error
+                return HandleException(ex);
+            }
+            catch (ValidationException ex)
+            {
+                // Manejar la excepción de argumentos inválidos y generar una respuesta de error
+                return HandleException(ex);
+            }
+            catch (ArgumentException ex)
+            {
+                // Manejar la excepción de argumento nulo y generar una respuesta de error
+                return HandleException(ex);
+            }
+            catch (InvalidOperationException ex)
+            {
+                // Manejar la excepción de operación no válida y generar una respuesta de error
+                return HandleException(ex);
+            }
+            catch (Exception ex)
+            {
+                // Manejar excepciones inesperadas y generar una respuesta de error
+                return HandleException(ex);
+            }
+        }
 
         /// <summary>
         /// Obtiene las reservaciones realizadas en una fecha específica de manera asincrónica.
@@ -98,6 +175,97 @@ namespace CoWorkingApp.Core.Application.Services
             {
                 // Maneja cualquier excepción y devuelve una lista con una sola respuesta de error
                 return new List<ReservationResponse> { HandleException(ex) };
+            }
+        }
+
+        /// <summary>
+        /// Actualiza una reservación existente de manera asincrónica.
+        /// </summary>
+        /// <param name="id">El ID de la reservación.</param>
+        /// <param name="request">El objeto de solicitud.</param>
+        /// <returns>Un objeto de respuesta.</returns>
+        public override async Task<ReservationResponse> UpdateAsync(Guid id, ReservationRequest? request)
+        {
+            try
+            {
+                // Verificar si la solicitud es nula
+                if (request is null)
+                {
+                    // Si la solicitud es nula, lanzar una excepción
+                    throw new ArgumentNullException("The request object cannot be null");
+                }
+
+                // Obtener la reservación existente por su ID. Si no, lanzar una excepción
+                var existingReservation = await _repository.GetByIdAsync(id) ?? throw new ArgumentException($"Reservation with id {id} not found");
+
+                // Verifica que el usuario sea el propietario
+                if (existingReservation.UserId != request.UserId)
+                {
+                    // Lanzar una excepción si el UserId de la solicitud no coincide con el de la reservación existente
+                    throw new UnauthorizedAccessException("The User ID does not match the existing reservation's User ID.");
+                }
+
+                // Verifica que se mantenga el mismo asiento
+                if (existingReservation.SeatId != request.SeatId)
+                {
+                    // Lanzar una excepción si el SeatId de la solicitud no coincide con el de la reservación existente
+                    throw new InvalidOperationException("The Seat ID does not match the existing reservation's Seat ID.");
+                }
+
+                // Actualizar las propiedades de la reservación existente con los valores de la solicitud
+                var updatedReservation = UpdateProperties(existingReservation, request);
+
+                // Validar la reservación actualizada
+                if (!IsValid(updatedReservation))
+                {
+                    // Si la reservación no es válida, lanzar una excepción
+                    throw new ValidationException("Argument is invalid.");
+                }
+
+                // Actualizar la reservación en el repositorio
+                bool updated = await _repository.UpdateAsync(updatedReservation);
+
+                // Verificar si la reservación fue actualizada correctamente
+                if (!updated)
+                {
+                    // Si la reservación no fue actualizada, lanzar una excepción
+                    throw new InvalidOperationException($"The reservation could not be updated.");
+                }
+
+                // Mapear la reservación actualizada a un objeto de respuesta y retornarlo
+                var response = _mapper.Map<Reservation, ReservationResponse>(updatedReservation);
+                response.Success = true;
+                return response;
+            }
+            catch (ArgumentNullException ex)
+            {
+                // Manejar la excepción de argumento nulo y generar una respuesta de error
+                return HandleException(ex);
+            }
+            catch (ArgumentException ex)
+            {
+                // Manejar la excepción de argumento inválido y generar una respuesta de error
+                return HandleException(ex);
+            }
+            catch (ValidationException ex)
+            {
+                // Manejar la excepción de validación y generar una respuesta de error
+                return HandleException(ex);
+            }
+            catch (InvalidOperationException ex)
+            {
+                // Manejar la excepción de operación no válida y generar una respuesta de error
+                return HandleException(ex);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                // Manejar la excepción de acceso no autorizado y generar una respuesta de error
+                return HandleException(ex);
+            }
+            catch (Exception ex)
+            {
+                // Manejar excepciones inesperadas y generar una respuesta de error
+                return HandleException(ex);
             }
         }
 

@@ -1,4 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.Identity.Web;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace CoWorkingApp.API
 {

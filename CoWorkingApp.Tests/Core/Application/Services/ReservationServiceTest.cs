@@ -371,6 +371,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 // Se configura el mock del repositorio para devolver true al agregar una reserva
                 var mockRepository = new Mock<IReservationRepository>();
                 mockRepository.Setup(r => r.AddAsync(It.IsAny<Reservation>())).ReturnsAsync(true);
+                mockRepository.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(reservation);
 
                 // Se crea una instancia de ReservationService con los mocks del repositorio y del adaptador de mapeo
                 var service = new ReservationService(mockRepository.Object, mockMapper.Object);
@@ -473,24 +474,24 @@ namespace CoWorkingApp.Tests.Core.Application.Services
             }
 
             /// <summary>
-            /// Verifica que el método CreateAsync de la clase ReservationService lance una excepción de InvalidOperationException cuando el repositorio no puede agregar la entidad.
+            /// Verifica que el método CreateAsync de la clase ReservationService lance una excepción de argumentos cuando se proporciona una entrada con Id del usuario inconsistente.
             /// </summary>
             [Fact]
-            public async void CreateAsync_Returns_NegativeResponse_When_RepositoryFailsToAdd()
+            public async void CreateAsync_Returns_NegativeResponse_When_InvalidRequest_UserIdIncorrect()
             {
                 // ARRANGE
-                // Se crea una excepción de InvalidOperationException con un mensaje personalizado
-                var exception = new InvalidOperationException("The entity could not be added.");
+                // Se crea una excepción de argumentos con un mensaje personalizado
+                var exception = new ArgumentException("The request contains inconsistent details");
                 var errorMessage = exception.Message;
 
                 // Se inicializa el contexto de prueba con datos de reservas
                 var context = await TestContextFactory.InitializeDataRerservationsAsync();
 
-                // Se crea una solicitud de reserva con datos válidos
-                var reservation = new ReservationRequest
+                // Se crea una solicitud de reserva con datos no válidos
+                var reservationRequest = new ReservationRequest
                 {
                     Date = DateTime.Now,
-                    UserId = context.Users.First().Id,
+                    UserId = new Guid(),
                     SeatId = context.Seats.First().Id
                 };
 
@@ -499,11 +500,113 @@ namespace CoWorkingApp.Tests.Core.Application.Services
 
                 // Se configura el mock del adaptador de mapeo para devolver los resultados esperados
                 var mockMapper = new Mock<IMapperAdapter>();
-                mockMapper.Setup(m => m.Map<ReservationRequest, Reservation>(reservation))
-                    .Returns(mapper.Map<ReservationRequest, Reservation>(reservation));
+                mockMapper.Setup(m => m.Map<ReservationRequest, Reservation>(reservationRequest))
+                    .Returns(mapper.Map<ReservationRequest, Reservation>(reservationRequest));
+
+                // Se crea un mock del repositorio que no se utilizará en este caso
+                var mockRepository = new Mock<IReservationRepository>();
+
+                // Se crea una instancia de ReservationService con el mock del repositorio y el mock del adaptador de mapeo
+                var service = new ReservationService(mockRepository.Object, mockMapper.Object);
+
+                // ACT
+                // Se llama al método CreateAsync con la solicitud de reserva y se espera que lance una excepción de validación
+                var result = await service.CreateAsync(reservationRequest);
+
+                // ASSERT
+                // Se verifica que el resultado no sea nulo
+                Assert.NotNull(result);
+                // Se verifica que la operación no haya tenido éxito
+                Assert.False(result.Success);
+                // Se verifica que el mensaje de error sea el mismo que el esperado
+                Assert.Equal(errorMessage, result.Message);
+            }
+
+            /// <summary>
+            /// Verifica que el método CreateAsync de la clase ReservationService lance una excepción de argumentos cuando se proporciona una entrada con Id del asiento inconsistente.
+            /// </summary>
+            [Fact]
+            public async void CreateAsync_Returns_NegativeResponse_When_InvalidRequest_SeatIdIncorrect()
+            {
+                // ARRANGE
+                // Se crea una excepción de argumentos con un mensaje personalizado
+                var exception = new ArgumentException("The request contains inconsistent details");
+                var errorMessage = exception.Message;
+
+                // Se inicializa el contexto de prueba con datos de reservas
+                var context = await TestContextFactory.InitializeDataRerservationsAsync();
+
+                // Se crea una solicitud de reserva con datos no válidos
+                var reservationRequest = new ReservationRequest
+                {
+                    Date = DateTime.Now,
+                    UserId = context.Users.First().Id,
+                    SeatId = new Guid()
+                };
+
+                // Se crea un mapeador AutoMapper para el proceso de mapeo
+                var mapper = TestAutoMapperFactory.CreateMapper();
+
+                // Se configura el mock del adaptador de mapeo para devolver los resultados esperados
+                var mockMapper = new Mock<IMapperAdapter>();
+                mockMapper.Setup(m => m.Map<ReservationRequest, Reservation>(reservationRequest))
+                    .Returns(mapper.Map<ReservationRequest, Reservation>(reservationRequest));
+
+                // Se crea un mock del repositorio que no se utilizará en este caso
+                var mockRepository = new Mock<IReservationRepository>();
+
+                // Se crea una instancia de ReservationService con el mock del repositorio y el mock del adaptador de mapeo
+                var service = new ReservationService(mockRepository.Object, mockMapper.Object);
+
+                // ACT
+                // Se llama al método CreateAsync con la solicitud de reserva y se espera que lance una excepción de validación
+                var result = await service.CreateAsync(reservationRequest);
+
+                // ASSERT
+                // Se verifica que el resultado no sea nulo
+                Assert.NotNull(result);
+                // Se verifica que la operación no haya tenido éxito
+                Assert.False(result.Success);
+                // Se verifica que el mensaje de error sea el mismo que el esperado
+                Assert.Equal(errorMessage, result.Message);
+            }
+
+            /// <summary>
+            /// Verifica que el método CreateAsync de la clase ReservationService lance una excepción de InvalidOperationException cuando el repositorio no puede agregar la entidad.
+            /// </summary>
+            [Fact]
+            public async void CreateAsync_Returns_NegativeResponse_When_RepositoryFailsToAdd()
+            {
+                // ARRANGE
+                // Se crea una excepción de InvalidOperationException con un mensaje personalizado
+                var exception = new InvalidOperationException("The reservation could not be added.");
+                var errorMessage = exception.Message;
+
+                // Se inicializa el contexto de prueba con datos de reservas
+                var context = await TestContextFactory.InitializeDataRerservationsAsync();
+
+                // Se crea una solicitud de reserva con datos válidos
+                var reservationRequest = new ReservationRequest
+                {
+                    Date = DateTime.Now,
+                    UserId = context.Users.First().Id,
+                    SeatId = context.Seats.First().Id
+                };
+
+                var reservation = context.Reservations.First();
+
+
+                // Se crea un mapeador AutoMapper para el proceso de mapeo
+                var mapper = TestAutoMapperFactory.CreateMapper();
+
+                // Se configura el mock del adaptador de mapeo para devolver los resultados esperados
+                var mockMapper = new Mock<IMapperAdapter>();
+                mockMapper.Setup(m => m.Map<ReservationRequest, Reservation>(reservationRequest))
+                    .Returns(mapper.Map<ReservationRequest, Reservation>(reservationRequest));
 
                 // Se configura el mock del repositorio para simular un fallo al agregar la entidad
                 var mockRepository = new Mock<IReservationRepository>();
+                mockRepository.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(reservation);
                 mockRepository.Setup(r => r.AddAsync(It.IsAny<Reservation>())).ReturnsAsync(false);
 
                 // Se crea una instancia de ReservationService con el mock del repositorio y el mock del adaptador de mapeo
@@ -511,7 +614,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
 
                 // ACT
                 // Se llama al método CreateAsync con la solicitud de reserva y se espera que lance una excepción de InvalidOperationException
-                var result = await service.CreateAsync(reservation);
+                var result = await service.CreateAsync(reservationRequest);
 
                 // ASSERT
                 // Se verifica que el resultado no sea nulo
@@ -569,7 +672,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
             {
                 // ARRANGE
                 // Se genera un nuevo identificador de reservación
-                var reservationId = Guid.NewGuid();
+                //var reservationId = Guid.NewGuid();
 
                 // Se inicializa el contexto de prueba con datos de reservaciones
                 var context = await TestContextFactory.InitializeDataRerservationsAsync();
@@ -673,7 +776,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 Reservation? reservation = null;
 
                 // Se crea una excepción de argumento con el mensaje apropiado
-                var exception = new ArgumentException($"Entity with id {reservationId} not found");
+                var exception = new ArgumentException($"Reservation with id {reservationId} not found");
                 var errorMessage = exception.Message;
 
                 // Se configura un mock del adaptador de mapeo
@@ -704,7 +807,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
             /// </summary>
             [Theory]
             [ClassData(typeof(InvalidReservationRequestClassData))]
-            public async void UpdateAsync_Returns_NegativeResponse_When_InvalidRequest(DateTime dateTime)
+            public async void UpdateAsync_Returns_NegativeResponse_When_InvalidRequest_OldDate(DateTime dateTime)
             {
                 // ARRANGE
                 // Se crea una excepción de validación con el mensaje apropiado
@@ -741,6 +844,95 @@ namespace CoWorkingApp.Tests.Core.Application.Services
             }
 
             /// <summary>
+            /// Verifica que el método UpdateAsync de la clase ReservationService lance ValidationException cuando la solicitud de reserva no es válida.
+            /// </summary>
+            [Fact]
+            public async void UpdateAsync_Returns_NegativeResponse_When_InvalidRequest_UserIdDifferent()
+            {
+                // ARRANGE
+                // Se crea una excepción de validación con el mensaje apropiado
+                var exception = new UnauthorizedAccessException("The User ID does not match the existing reservation's User ID.");
+                var errorMessage = exception.Message;
+
+                // Se inicializa el contexto de prueba con datos de reservaciones
+                var context = await TestContextFactory.InitializeDataRerservationsAsync();
+
+                // Se obtiene la primera reservación existente en el contexto de prueba
+                var existingReservation = context.Reservations.First();
+
+                var reservationRequest = new ReservationRequest
+                {
+                    UserId = Guid.NewGuid(),
+                    SeatId = existingReservation.SeatId
+                };
+
+                // Se configura un mock del adaptador de mapeo
+                var mockMapper = new Mock<IMapperAdapter>();
+
+                // Se configura un mock del repositorio con la reserva actualizada para cualquier identificador de reserva
+                var mockRepository = new Mock<IReservationRepository>();
+                mockRepository.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(existingReservation);
+
+                // Se crea una instancia de ReservationService con los mocks configurados
+                var service = new ReservationService(mockRepository.Object, mockMapper.Object);
+
+                // ACT
+                // Se llama al método UpdateAsync con un identificador de reserva aleatorio y una solicitud de reserva vacía
+                var result = await service.UpdateAsync(Guid.NewGuid(), reservationRequest);
+
+                // ASSERT
+                // Se verifica que el resultado no sea nulo
+                Assert.NotNull(result);
+                // Se verifica que la operación haya fallado
+                Assert.False(result.Success);
+                // Se verifica que el mensaje de la excepción sea igual al mensaje esperado
+                Assert.Equal(errorMessage, result.Message);
+            }
+
+            [Fact]
+            public async void UpdateAsync_Returns_NegativeResponse_When_InvalidRequest_SeatIdDifferent()
+            {
+                // ARRANGE
+                // Se crea una excepción de validación con el mensaje apropiado
+                var exception = new InvalidOperationException("The Seat ID does not match the existing reservation's Seat ID.");
+                var errorMessage = exception.Message;
+
+                // Se inicializa el contexto de prueba con datos de reservaciones
+                var context = await TestContextFactory.InitializeDataRerservationsAsync();
+
+                // Se obtiene la primera reservación existente en el contexto de prueba
+                var existingReservation = context.Reservations.First();
+
+                var reservationRequest = new ReservationRequest
+                { 
+                    UserId = existingReservation.UserId,
+                    SeatId = Guid.NewGuid()
+                };
+
+                // Se configura un mock del adaptador de mapeo
+                var mockMapper = new Mock<IMapperAdapter>();
+
+                // Se configura un mock del repositorio con la reserva actualizada para cualquier identificador de reserva
+                var mockRepository = new Mock<IReservationRepository>();
+                mockRepository.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(existingReservation);
+
+                // Se crea una instancia de ReservationService con los mocks configurados
+                var service = new ReservationService(mockRepository.Object, mockMapper.Object);
+
+                // ACT
+                // Se llama al método UpdateAsync con un identificador de reserva aleatorio y una solicitud de reserva vacía
+                var result = await service.UpdateAsync(Guid.NewGuid(), reservationRequest);
+
+                // ASSERT
+                // Se verifica que el resultado no sea nulo
+                Assert.NotNull(result);
+                // Se verifica que la operación haya fallado
+                Assert.False(result.Success);
+                // Se verifica que el mensaje de la excepción sea igual al mensaje esperado
+                Assert.Equal(errorMessage, result.Message);
+            }
+
+            /// <summary>
             /// Verifica que el método UpdateAsync de la clase ReservationService lance InvalidOperationException cuando el repositorio no puede actualizar la reserva.
             /// </summary>
             [Theory]
@@ -749,7 +941,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
             {
                 // ARRANGE
                 // Se crea una excepción de operación no válida con el mensaje apropiado
-                var exception = new InvalidOperationException("The entity could not be updated.");
+                var exception = new InvalidOperationException("The reservation could not be updated.");
                 var errorMessage = exception.Message;
 
                 // Se crea una solicitud de reserva con la fecha proporcionada

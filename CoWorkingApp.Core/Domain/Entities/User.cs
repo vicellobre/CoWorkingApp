@@ -1,6 +1,4 @@
 ﻿using CoWorkingApp.Core.Application.Abstracts;
-using System.Drawing;
-using System.Runtime.InteropServices;
 
 namespace CoWorkingApp.Core.Domain.Entities
 {

@@ -56,8 +56,8 @@ namespace CoWorkingApp.Tests
             // Crear una lista de reservas simuladas
             var reservations = new List<Reservation>
             {
-                new Reservation { Date = DateTime.Now, UserId = users[0].Id, SeatId = seats[0].Id },
-                new Reservation { Date = DateTime.Now, UserId = users[1].Id, SeatId = seats[1].Id },
+                new Reservation { Id = Guid.NewGuid(), Date = DateTime.Now, UserId = users[0].Id, SeatId = seats[0].Id },
+                new Reservation { Id = Guid.NewGuid(), Date = DateTime.Now, UserId = users[1].Id, SeatId = seats[1].Id },
             };
 
             // Crear el contexto de base de datos en memoria

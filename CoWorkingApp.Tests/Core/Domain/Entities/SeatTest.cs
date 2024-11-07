@@ -20,7 +20,7 @@ namespace CoWorkingApp.Tests.Core.Domain.Entities
         public void Seat_Properties_Returns_CorrectValues_When_Initialized(string name, bool isBlocked, string description)
         {
             // ARRANGE: Prepara el entorno de prueba creando una instancia de Seat y estableciendo sus propiedades
-            Seat seat = new Seat();
+            Seat seat = new();
 
             // ACT: Asigna los valores de las propiedades del asiento
             seat.Name = name;

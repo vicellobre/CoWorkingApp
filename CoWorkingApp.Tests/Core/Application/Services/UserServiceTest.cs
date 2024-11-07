@@ -148,8 +148,8 @@ namespace CoWorkingApp.Tests.Core.Application.Services
 
                 // Verificar que las propiedades Name, LastName y Email de cada usuario en el resultado sean iguales a las de la lista de usuarios de prueba
                 Assert.Equal(
-                    users.Select(u => new { u.Name, u.LastName, u.Email }),
-                    result.Select(u => new { u.Name, u.LastName, u.Email })
+                    users.Select(u => new { u.Id, u.Name, u.LastName, u.Email }),
+                    result.Select(u => new { u.Id, u.Name, u.LastName, u.Email })
                 );
             }
 
@@ -283,8 +283,8 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 Assert.True(result.Success);
 
                 // Verificar que las propiedades Name, LastName y Email en la respuesta sean iguales a las del usuario existente
-                Assert.Equal((existingUser.Name, existingUser.LastName, existingUser.Email),
-                             (result.Name, result.LastName, result.Email));
+                Assert.Equal((existingUser.Id, existingUser.Name, existingUser.LastName, existingUser.Email),
+                             (result.Id, result.Name, result.LastName, result.Email));
             }
 
             /// <summary>
@@ -335,7 +335,6 @@ namespace CoWorkingApp.Tests.Core.Application.Services
             public void GetByIdAsync_Returns_NegativeResponse_When_ExceptionThrown()
             {
                 // ARRANGE
-
                 // Crear una excepción simulada y obtener su mensaje de error
                 var exception = new Exception();
                 var errorMessage = exception.Message;
@@ -351,12 +350,10 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 var service = new UserService(mockRepository.Object, mockMapper.Object);
 
                 // ACT
-
                 // Llamar al método GetByIdAsync con un ID de usuario y obtener el resultado
                 var result = service.GetByIdAsync(Guid.NewGuid())?.Result;
 
                 // ASSERT
-
                 // Verificar que el resultado no sea nulo
                 Assert.NotNull(result);
 
@@ -377,7 +374,6 @@ namespace CoWorkingApp.Tests.Core.Application.Services
             public void CreateAsync_Returns_SuccessfulResponse_When_ValidRequest()
             {
                 // ARRANGE
-
                 // Crear un mapeador AutoMapper para simular el mapeo de una solicitud de usuario a un usuario y de un usuario a una respuesta de usuario
                 var mapper = TestAutoMapperFactory.CreateMapper();
 
@@ -411,12 +407,10 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 var service = new UserService(mockRepository.Object, mockMapper.Object);
 
                 // ACT
-
                 // Llamar al método CreateAsync con la solicitud de usuario y obtener el resultado
                 var result = service.CreateAsync(userRequest)?.Result;
 
                 // ASSERT
-
                 // Verificar que el resultado no sea nulo
                 Assert.NotNull(result);
 
@@ -424,8 +418,8 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 Assert.True(result.Success);
 
                 // Verificar que las propiedades Name, LastName y Email en la respuesta sean iguales a las de la solicitud de usuario
-                Assert.Equal((userRequest.Name, userRequest.LastName, userRequest.Email),
-                    (result.Name, result.LastName, result.Email));
+                Assert.Equal((user.Id, userRequest.Name, userRequest.LastName, userRequest.Email),
+                    (result.Id, result.Name, result.LastName, result.Email));
             }
 
             /// <summary>
@@ -716,6 +710,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 // Respuesta de usuario esperada después de la actualización
                 var userResponse = new UserResponse
                 {
+                    Id = existingUser.Id,
                     // Se asigna el nombre del usuario existente si el nombre en la solicitud es nulo o vacío
                     Name = string.IsNullOrEmpty(userRequest.Name) ? existingUser.Name : userRequest.Name,
                     // Se asigna el apellido del usuario existente si el apellido en la solicitud es nulo o vacío

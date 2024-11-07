@@ -8,6 +8,11 @@ namespace CoWorkingApp.Core.Domain.DTOs
     public record ReservationResponse : ResponseMessage
     {
         /// <summary>
+        /// Obtiene o establece el identificador único de la reservación.
+        /// </summary>
+        public Guid Id { get; set; }
+
+        /// <summary>
         /// Obtiene o establece la fecha de la reserva.
         /// </summary>
         public DateTime Date { get; set; }

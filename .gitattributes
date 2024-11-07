@@ -1,0 +1,17 @@
+# For all shell scripts, ensure LF line endings
+*.sh text eol=lf
+
+# Optionally, enforce LF for other common Unix-based script files
+*.bash text eol=lf
+*.zsh text eol=lf
+*.env text eol=lf
+
+# Enforce LF for Docker-related files
+Dockerfile text eol=lf
+*.dockerignore text eol=lf
+
+# Apply LF to other configuration files often shared across systems
+*.yaml text eol=lf
+*.yml text eol=lf
+*.json text eol=lf
+*.md text eol=lf

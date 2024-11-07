@@ -180,7 +180,7 @@ namespace CoWorkingApp.Core.Application.Abstracts
                 // Obtener la entidad existente por su ID. Si no, lanzar una excepción
                 var existingEntity = await _repository.GetByIdAsync(id) ?? throw new ArgumentException($"Entity with id {id} not found");
 
-                // ACTualizar las propiedades de la entidad existente con los valores de la solicitud
+                // Actualizar las propiedades de la entidad existente con los valores de la solicitud
                 var updatedEntity = UpdateProperties(existingEntity, request);
 
                 // Validar la entidad actualizada
@@ -190,14 +190,14 @@ namespace CoWorkingApp.Core.Application.Abstracts
                     throw new ValidationException("Argument is invalid.");
                 }
 
-                // ACTualizar la entidad en el repositorio
+                // Actualizar la entidad en el repositorio
                 bool updated = await _repository.UpdateAsync(updatedEntity);
 
                 // Verificar si la entidad fue actualizada correctamente
                 if (!updated)
                 {
                     // Si la entidad no fue actualizada, lanzar una excepción
-                    throw new InvalidOperationException("The entity could not be updated.");
+                    throw new InvalidOperationException($"The entity could not be updated.");
                 }
 
                 // Mapear la entidad actualizada a un objeto de respuesta y retornarlo

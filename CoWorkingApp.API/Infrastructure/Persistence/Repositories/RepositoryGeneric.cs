@@ -14,7 +14,7 @@ namespace CoWorkingApp.API.Infrastructure.Persistence.Repositories
         /// <summary>
         /// Unidad de trabajo utilizada para gestionar la transacción de operaciones de datos.
         /// </summary>
-        private readonly IUnitOfWork _unitOfWork;
+        protected readonly IUnitOfWork _unitOfWork;
 
         /// <summary>
         /// Conjunto de datos que representa la colección de entidades <typeparamref name="T"/> en el contexto de datos.
@@ -74,8 +74,7 @@ namespace CoWorkingApp.API.Infrastructure.Persistence.Repositories
             catch (Exception)
             {
                 // Retorna false si ocurre alguna excepción al agregar la entidad
-                throw;
-                //return false;
+                return false;
             }
         }
 
@@ -98,8 +97,9 @@ namespace CoWorkingApp.API.Infrastructure.Persistence.Repositories
                 // Retorna true indicando que la operación fue exitosa
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 // Retorna false si ocurre alguna excepción al actualizar la entidad
                 return false;
             }

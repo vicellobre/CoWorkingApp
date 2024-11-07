@@ -8,6 +8,11 @@ namespace CoWorkingApp.Core.Domain.DTOs
     public record UserResponse : ResponseMessage
     {
         /// <summary>
+        /// Obtiene o establece el identificador único del usuario.
+        /// </summary>
+        public Guid Id { get; set; }
+
+        /// <summary>
         /// Obtiene o establece el nombre del usuario.
         /// </summary>
         public string? Name { get; set; }
