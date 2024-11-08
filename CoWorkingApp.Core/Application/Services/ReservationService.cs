@@ -48,15 +48,15 @@ namespace CoWorkingApp.Core.Application.Services
                     throw new ValidationException("Argument is invalid.");
                 }
 
+                // Agregar la reservación al repositorio
+                var added = await _repository.AddAsync(reservation);
+
                 // Obetner la información completa sobre la reservación
                 var responseComplete = await _repository.GetByIdAsync(reservation.Id);
                 if (responseComplete is null)
                 {
                     throw new ArgumentException("The request contains inconsistent details");
                 }
-
-                // Agregar la reservación al repositorio
-                var added = await _repository.AddAsync(reservation);
 
                 // Verificar si la reservación fue agregada correctamente
                 if (!added)
