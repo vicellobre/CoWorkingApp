@@ -32,7 +32,7 @@ namespace CoWorkingApp.API
         /// <param name="configuration">Instancia de <see cref="IConfiguration"/> que contiene la configuración de la aplicación.</param>
         public Startup(IConfiguration configuration)
         {
-            _configuration = configuration;
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
         /// <summary>

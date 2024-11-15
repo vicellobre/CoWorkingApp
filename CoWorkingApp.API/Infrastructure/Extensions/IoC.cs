@@ -24,7 +24,6 @@ namespace CoWorkingApp.API.Infrastructure.Extensions
         /// <returns>Colección de servicios con las nuevas dependencias agregadas.</returns>
         public static IServiceCollection AddDependency(this IServiceCollection services)
         {
-
             // Inyectar UnitOfWork
             services.AddScoped<IUnitOfWork>(p => new UnitOfWork(p.GetRequiredService<CoWorkingContext>()));
 

@@ -78,12 +78,6 @@ namespace CoWorkingApp.API.Infrastructure.Presentation.Controllers
         /// <returns>JsonResult con el token generado.</returns>
         private JsonResult BuildToken(UserResponse user)
         {
-            // Verifica que el usuario no sea nulo
-            //if (user is null)
-            //{
-            //    throw new ArgumentNullException(nameof(user), "User cannot be null.");
-            //}
-
             // Verifica que los campos del usuario no sean nulos
             if (string.IsNullOrWhiteSpace(user.Name))
             {

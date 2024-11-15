@@ -1,6 +1,7 @@
 ﻿using CoWorkingApp.Core.Application.Abstracts;
 using CoWorkingApp.Core.Application.Contracts.Requests;
 using CoWorkingApp.Core.Application.Contracts.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 
@@ -52,6 +53,7 @@ namespace CoWorkingApp.API.Infrastructure.Presentation.Controllers
         /// </summary>
         [HttpGet]
         [EnableQuery]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<TResponse>>> GetAll()
         {
             try

@@ -1,4 +1,5 @@
-﻿using CoWorkingApp.Core.Application.Contracts.Services;
+﻿using CoWorkingApp.API.Infrastructure.Persistence.Repositories;
+using CoWorkingApp.Core.Application.Contracts.Services;
 using CoWorkingApp.Core.Domain.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
