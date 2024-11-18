@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   Test:
-    if: github.event_name == 'pull_request' && github.base_ref == 'refs/heads/Dev' # Solo para PRs a Dev
+    if: github.event_name == 'pull_request' && contains(github.event.pull_request.base.ref, 'Dev')
     name: 🧪 Unit Tests 🧪
     runs-on: ubuntu-latest
     steps:
@@ -30,6 +30,12 @@ jobs:
       - name: 📦 Restore dependencies 📦
         run: dotnet restore CoWorkingApp.API/CoWorkingApp.API.sln
 
+      - name: 🛠️ Install Report Generator Tool
+        run: dotnet tool install -g dotnet-reportgenerator-globaltool
+
+      - name: 🔧 Build
+        run: dotnet build --no-restore CoWorkingApp.API/CoWorkingApp.API.sln
+        
       - name: 🧪 Run Tests with Code Coverage 🧪
         run: dotnet test CoWorkingApp.API/CoWorkingApp.API.sln --no-build --collect:"XPlat Code Coverage" --results-directory TestResults --verbosity normal
 
@@ -42,7 +48,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
 
   CoverageReportAndDeploy:
-    if: github.ref == 'refs/heads/Dev' && github.event_name == 'push' # Solo para pushes a Dev
+    if: github.ref == 'refs/heads/Dev' && github.event_name == 'push'
     needs: Test
     runs-on: ubuntu-latest
     steps:
@@ -94,7 +100,7 @@ jobs:
         run: rm -rf coverage-report || true
 
   Deploy:
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push' # Solo para merges a main
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: windows-latest
     steps:
       - name: 🛠️ Checkout Code 🛠️
