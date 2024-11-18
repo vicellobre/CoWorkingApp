@@ -1,57 +1,126 @@
-name: Build and deploy ASP.Net Core app to Azure Web App - CoWorkingApp-API
+name: Build, Test, and Deploy ASP.Net Core App - CoWorkingApp-API
 
 on:
   push:
     branches:
       - main
-  workflow_dispatch:
+      - Dev
+  pull_request:
+    branches:
+      - Dev
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  build:
-    runs-on: windows-latest
-      
+  Test:
+    if: github.event_name == 'pull_request' && github.base_ref == 'refs/heads/Dev' # Solo para PRs a Dev
+    name: 🧪 Unit Tests 🧪
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: 🛠️ Checkout Code 🛠️
+        uses: actions/checkout@v4
+      
+      - name: 🚀 Setup .NET 🚀
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+        
+      - name: 📦 Restore dependencies 📦
+        run: dotnet restore CoWorkingApp.API/CoWorkingApp.API.sln
 
-      - name: Set up .NET Core
+      - name: 🧪 Run Tests with Code Coverage 🧪
+        run: dotnet test CoWorkingApp.API/CoWorkingApp.API.sln --no-build --collect:"XPlat Code Coverage" --results-directory TestResults --verbosity normal
+
+      - name: 🖼️ Publish Coverage Report to Codecov 🖼️
+        uses: codecov/codecov-action@v3
+        with:
+          files: "TestResults/**/coverage.cobertura.xml"
+          flags: unittests
+          fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  CoverageReportAndDeploy:
+    if: github.ref == 'refs/heads/Dev' && github.event_name == 'push' # Solo para pushes a Dev
+    needs: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛠️ Checkout Code 🛠️
+        uses: actions/checkout@v4
+
+      - name: 📦 Restore dependencies 📦
+        run: dotnet restore CoWorkingApp.API/CoWorkingApp.API.sln
+
+      - name: 🛠️ Install Report Generator Tool 🛠️
+        run: dotnet tool install -g dotnet-reportgenerator-globaltool
+      
+      - name: 🔧 Build 🔧
+        run: dotnet build --no-restore CoWorkingApp.API/CoWorkingApp.API.sln
+
+      - name: 🧪 Run Tests with Code Coverage 🧪
+        run: dotnet test CoWorkingApp.API/CoWorkingApp.API.sln --no-build --collect:"XPlat Code Coverage" --results-directory TestResults --verbosity normal
+
+      - name: 🧹 Clean coverage report folder 🧹
+        run: rm -rf coverage-report || true
+
+      - name: 📜 Generate HTML Coverage Report 📜
+        run: reportgenerator -reports:TestResults/**/coverage.cobertura.xml -targetdir:coverage-report -reporttypes:Html
+        env:
+          PATH: ${{ runner.tool_cache }}/.dotnet/tools:${{ env.PATH }}
+
+      - name: 📄 Setup Pages 📄
+        uses: actions/configure-pages@v2
+
+      - name: 🚀 Deploy to GitHub Pages 🚀
+        uses: actions/deploy-pages@v2
+        with:
+          branch: gh-pages
+          folder: coverage-report
+
+      - name: 🐳 Log in to DockerHub 🐳
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: 🐳 Build Docker image 🐳
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/coworkingapp:latest .
+
+      - name: 🐳 Push Docker image 🐳
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/coworkingapp:latest
+
+      - name: 🧹 Clean up coverage report folder after deploy 🧹
+        run: rm -rf coverage-report || true
+
+  Deploy:
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push' # Solo para merges a main
+    runs-on: windows-latest
+    steps:
+      - name: 🛠️ Checkout Code 🛠️
+        uses: actions/checkout@v4
+
+      - name: 🚀 Setup .NET Core 🚀
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '8.x'
           include-prerelease: true
 
-      # Restaurar dependencias
-      - name: Restore dependencies
+      - name: 📦 Restore dependencies 📦
         run: dotnet restore CoWorkingApp.API/CoWorkingApp.API.sln
 
-      # Construir el proyecto con dotnet
-      - name: Build with dotnet
+      - name: 🔧 Build with dotnet 🔧
         run: dotnet build CoWorkingApp.API/CoWorkingApp.API.sln --configuration Release
 
-      # Publicar la aplicación en modo Release en una carpeta para despliegue
-      - name: dotnet publish
+      - name: 📜 dotnet publish 📜
         run: dotnet publish CoWorkingApp.API/CoWorkingApp.API.sln -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
-      # Subir el artefacto para el job de despliegue
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v3
-        with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
-
-  deploy:
-    runs-on: windows-latest
-    needs: build
-    environment:
-      name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
-    steps:
-      - name: Download artifact from build job
+      - name: 📦 Download artifact from build job 📦
         uses: actions/download-artifact@v3
         with:
           name: .net-app
 
-      - name: Deploy to Azure Web App
+      - name: 🚀 Deploy to Azure Web App 🚀
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
