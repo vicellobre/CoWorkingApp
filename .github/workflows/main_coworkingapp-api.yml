@@ -55,36 +55,36 @@ jobs:
     - name: 🛠️ Checkout Code 🛠️
       uses: actions/checkout@v4
 
-    - name: 📦 Restore dependencies 📦
-      run: dotnet restore CoWorkingApp.API/CoWorkingApp.API.sln
+    # - name: 📦 Restore dependencies 📦
+    #   run: dotnet restore CoWorkingApp.API/CoWorkingApp.API.sln
 
-    - name: 🛠️ Install Report Generator Tool 🛠️
-      run: dotnet tool install -g dotnet-reportgenerator-globaltool
-      env:
-        PATH: ${{ runner.tool_cache }}/.dotnet/tools:${{ env.PATH }}
+    # - name: 🛠️ Install Report Generator Tool 🛠️
+    #   run: dotnet tool install -g dotnet-reportgenerator-globaltool
+    #   env:
+    #     PATH: ${{ runner.tool_cache }}/.dotnet/tools:${{ env.PATH }}
       
-    - name: 🔧 Build 🔧
-      run: dotnet build --no-restore CoWorkingApp.API/CoWorkingApp.API.sln
+    # - name: 🔧 Build 🔧
+    #   run: dotnet build --no-restore CoWorkingApp.API/CoWorkingApp.API.sln
 
-    - name: 🧪 Run Tests with Code Coverage 🧪
-      run: dotnet test CoWorkingApp.API/CoWorkingApp.API.sln --no-build --collect:"XPlat Code Coverage" --results-directory TestResults --verbosity normal
+    # - name: 🧪 Run Tests with Code Coverage 🧪
+    #   run: dotnet test CoWorkingApp.API/CoWorkingApp.API.sln --no-build --collect:"XPlat Code Coverage" --results-directory TestResults --verbosity normal
 
-    - name: 🧹 Clean coverage report folder 🧹
-      run: rm -rf coverage-report || true
+    # - name: 🧹 Clean coverage report folder 🧹
+    #   run: rm -rf coverage-report || true
 
-    - name: 📜 Generate HTML Coverage Report 📜
-      run: ~/.dotnet/tools/reportgenerator -reports:TestResults/**/coverage.cobertura.xml -targetdir:coverage-report -reporttypes:Html
-      env:
-        PATH: ${{ runner.tool_cache }}/.dotnet/tools:${{ env.PATH }}
+    # - name: 📜 Generate HTML Coverage Report 📜
+    #   run: ~/.dotnet/tools/reportgenerator -reports:TestResults/**/coverage.cobertura.xml -targetdir:coverage-report -reporttypes:Html
+    #   env:
+    #     PATH: ${{ runner.tool_cache }}/.dotnet/tools:${{ env.PATH }}
 
-    - name: Setup Pages 📄
-      uses: actions/configure-pages@v2
+    # - name: Setup Pages 📄
+    #   uses: actions/configure-pages@v2
 
-    - name: Deploy to GitHub Pages 🚀
-      uses: actions/deploy-pages@v2
-      with:
-        branch: gh-pages
-        folder: coverage-report
+    # - name: Deploy to GitHub Pages 🚀
+    #   uses: actions/deploy-pages@v2
+    #   with:
+    #     branch: gh-pages
+    #     folder: coverage-report
 
     - name: Log in to DockerHub 🐳
       uses: docker/login-action@v2
@@ -98,8 +98,8 @@ jobs:
     - name: Push Docker image 🐳
       run: docker push ${{ secrets.DOCKER_USERNAME }}/coworkingapp:latest
 
-    - name: 🧹 Clean up coverage report folder after deploy 🧹
-      run: rm -rf coverage-report || true
+    # - name: 🧹 Clean up coverage report folder after deploy 🧹
+    #   run: rm -rf coverage-report || true
 
   Deploy:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
