@@ -1,0 +1,59 @@
+name: 🚀 Deploy to Azure 🚀
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛠️ Checkout Code 🛠️
+        uses: actions/checkout@v4
+
+      - name: 🚀 Setup .NET Core 🚀
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '8.x'
+          include-prerelease: true
+
+      - name: 📦 Restore dependencies 📦
+        run: dotnet restore CoWorkingApp.API/CoWorkingApp.API.sln
+
+      - name: 🔧 Build with dotnet 🔧
+        run: dotnet build CoWorkingApp.API/CoWorkingApp.API.sln --configuration Release
+
+      - name: 📜 dotnet publish 📜
+        run: dotnet publish CoWorkingApp.API/CoWorkingApp.API.sln -c Release -o ${{env.DOTNET_ROOT}}/myapp
+
+      - name: 📦 Download artifact from build job 📦
+        uses: actions/download-artifact@v3
+        with:
+          name: .net-app
+          path: ${{env.DOTNET_ROOT}}/myapp
+
+  Deploy:
+    runs-on: ubuntu-latest
+    needs: Build
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    steps:
+      - name: 📦 Download artifact from build job 📦
+        uses: actions/download-artifact@v3
+        with:
+          name: .net-app
+          
+      - name: 🚀 Deploy to Azure Web App 🚀
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'CoWorkingApp-API'
+          slot-name: 'Production'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4422BF228C5A4785B4D5BECD0FBF1527 }}
+          package: .
