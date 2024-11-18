@@ -1,0 +1,43 @@
+name: 🧪 Test to Dev 🧪
+
+on:
+  pull_request:
+    branches:
+      - Dev
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  Test:
+    name: 🧪 Unit Tests 🧪
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛠️ Checkout Code 🛠️
+        uses: actions/checkout@v4
+      
+      - name: 🚀 Setup .NET 🚀
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+        
+      - name: 📦 Restore dependencies 📦
+        run: dotnet restore CoWorkingApp.API/CoWorkingApp.API.sln
+
+      - name: 🛠️ Install Report Generator Tool 🛠️
+        run: dotnet tool install -g dotnet-reportgenerator-globaltool
+      
+      - name: 🔧 Build 🔧
+        run: dotnet build --no-restore CoWorkingApp.API/CoWorkingApp.API.sln
+
+      - name: 🧪 Run Tests with Code Coverage 🧪
+        run: dotnet test CoWorkingApp.API/CoWorkingApp.API.sln --no-build --collect:"XPlat Code Coverage" --results-directory TestResults --verbosity normal
+
+      - name: 🖼️ Publish Coverage Report to Codecov 🖼️
+        uses: codecov/codecov-action@v3
+        with:
+          files: "TestResults/**/coverage.cobertura.xml"
+          flags: unittests
+          fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}

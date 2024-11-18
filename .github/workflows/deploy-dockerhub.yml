@@ -1,0 +1,29 @@
+name: 🐳 Deploy Image to Docker Hub 🐳
+
+on:
+  push:
+    branches:
+      - Dev
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  DeployDockerHub:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛠️ Checkout Code 🛠️
+        uses: actions/checkout@v4
+
+      - name: 🐳 Log in to DockerHub 🐳
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: 🐳 Build Docker image 🐳
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/coworking-app:latest .
+
+      - name: 🐳 Push Docker image 🐳
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/coworking-app:latest

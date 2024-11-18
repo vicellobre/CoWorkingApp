@@ -1,57 +1,55 @@
-name: Build and deploy ASP.Net Core app to Azure Web App - CoWorkingApp-API
+name: 🚀 Deploy to Azure 🚀
 
 on:
   push:
     branches:
       - main
-  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  build:
-    runs-on: windows-latest
-      
+  Build:
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: 🛠️ Checkout Code 🛠️
+        uses: actions/checkout@v4
 
-      - name: Set up .NET Core
+      - name: 🚀 Setup .NET Core 🚀
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '8.x'
           include-prerelease: true
 
-      # Restaurar dependencias
-      - name: Restore dependencies
+      - name: 📦 Restore dependencies 📦
         run: dotnet restore CoWorkingApp.API/CoWorkingApp.API.sln
 
-      # Construir el proyecto con dotnet
-      - name: Build with dotnet
+      - name: 🔧 Build with dotnet 🔧
         run: dotnet build CoWorkingApp.API/CoWorkingApp.API.sln --configuration Release
 
-      # Publicar la aplicación en modo Release en una carpeta para despliegue
-      - name: dotnet publish
+      - name: 📜 dotnet publish 📜
         run: dotnet publish CoWorkingApp.API/CoWorkingApp.API.sln -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
-      # Subir el artefacto para el job de despliegue
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v3
+      - name: 📦 Download artifact from build job 📦
+        uses: actions/download-artifact@v3
         with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
 
-  deploy:
-    runs-on: windows-latest
-    needs: build
+  Deploy:
+    runs-on: ubuntu-latest
+    needs: Build
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
     steps:
-      - name: Download artifact from build job
+      - name: 📦 Download artifact from build job 📦
         uses: actions/download-artifact@v3
         with:
           name: .net-app
-
-      - name: Deploy to Azure Web App
+          
+      - name: 🚀 Deploy to Azure Web App 🚀
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
