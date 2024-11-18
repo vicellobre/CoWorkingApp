@@ -30,6 +30,12 @@ jobs:
       - name: 📦 Restore dependencies 📦
         run: dotnet restore CoWorkingApp.API/CoWorkingApp.API.sln
 
+      - name: 🛠️ Install Report Generator Tool
+        run: dotnet tool install -g dotnet-reportgenerator-globaltool
+
+      - name: 🔧 Build
+        run: dotnet build --no-restore CoWorkingApp.API/CoWorkingApp.API.sln
+      
       - name: 🧪 Run Tests with Code Coverage 🧪
         run: dotnet test CoWorkingApp.API/CoWorkingApp.API.sln --no-build --collect:"XPlat Code Coverage" --results-directory TestResults --verbosity normal
 
