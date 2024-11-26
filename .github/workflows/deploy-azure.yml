@@ -31,7 +31,7 @@ jobs:
       - name: 📜 dotnet publish 📜
         run: dotnet publish CoWorkingApp.API/CoWorkingApp.API.sln -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
-      - name: 📦 Uoload artifact 📦
+      - name: 📦 Upload artifact 📦
         uses: actions/upload-artifact@v3
         with:
           name: .net-app
