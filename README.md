@@ -91,6 +91,12 @@ Puedes encontrar la documentación de la colección de Postman para esta API en 
 
 [Postman Documentation](https://www.postman.com/security-astronaut-59724338/coworking/documentation/edqfgq0/coworkingapp-api?workspaceId=dd97358b-9dc6-4838-ac9e-109e6948aee8)
 
+### Variables de Entorno para Postman
+
+Para probar la colección de Postman, asegúrate de configurar las siguientes variables de entorno. Puedes importar las variables desde el siguiente enlace:
+
+[Variables de Entorno Postman](https://www.postman.com/security-astronaut-59724338/workspace/coworking/environment/19677587-0a2cdcd9-ebc1-4dfd-8960-7c99cfcd2b05?action=share&creator=19677587&active-environment=19677587-0a2cdcd9-ebc1-4dfd-8960-7c99cfcd2b05)
+
 ### Reporte de Cobertura
 
 El reporte de cobertura para el proyecto está disponible en el siguiente enlace:
