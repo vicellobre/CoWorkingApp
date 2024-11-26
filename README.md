@@ -11,9 +11,7 @@ El propósito principal de este proyecto es brindar a los desarrolladores una re
 El sistema de coworking es una plataforma diseñada para gestionar los espacios de trabajo compartidos, donde los usuarios pueden reservar asientos para trabajar temporalmente. Los principales componentes del sistema son:
 
 - **User (Usuario)**: Los usuarios son individuos que utilizan el espacio de coworking para trabajar. Cada usuario tiene información personal, como nombre, dirección de correo electrónico y detalles de contacto.
-
 - **Seat (Asiento)**: Los asientos representan los lugares físicos disponibles en el espacio de coworking. Cada asiento tiene un identificador único, una ubicación física y puede estar asociado con un usuario que lo haya reservado.
-
 - **Reservation (Reserva)**: Las reservas son solicitudes realizadas por los usuarios para reservar un asiento en un momento específico. Cada reserva tiene una fecha y hora de inicio, así como una referencia al usuario que realizó la reserva y al asiento reservado.
 
 ## Características Principales
@@ -31,7 +29,6 @@ Este proyecto está dirigido a desarrolladores que deseen aprender a desarrollar
 ## Requisitos Previos
 
 - Conocimientos básicos de programación y desarrollo web.
-- Instalación de .NET Core SDK y un entorno de desarrollo compatible.
 - Configuración de una base de datos SQL Server local para ejecutar el proyecto.
 
 ## Instalación y Ejecución
@@ -70,6 +67,36 @@ El proyecto está organizado en las siguientes capas y componentes principales:
   - **Controllers**: Define los controladores de la API que exponen los puntos de acceso a la funcionalidad del sistema.
 - **UnitOfWork**: Implementa el patrón Unit of Work para coordinar las transacciones y el acceso a datos.
 
+## Despliegue en Azure
+
+La API está desplegada en Azure, conectada a una base de datos SQL Server gratuita. Esto permite probar la funcionalidad de la API en un entorno de producción real.
+
+- **API URL**: [https://coworkingapp-api-d0h6cmefabaudrgx.eastus2-01.azurewebsites.net](https://coworkingapp-api-d0h6cmefabaudrgx.eastus2-01.azurewebsites.net)
+
+## Docker
+
+El proyecto contiene un archivo `DockerFile` en la raíz, lo que permite probar la API utilizando una base de datos SQL Server en un contenedor Docker sin necesidad de instalar nada adicional. Esta configuración simplifica la puesta en marcha del entorno de desarrollo y asegura la consistencia entre diferentes entornos.
+
+## Documentación
+
+### Swagger Documentation
+
+La documentación de la API generada automáticamente con Swagger está disponible en:
+
+[Swagger Documentation](https://coworkingapp-api-d0h6cmefabaudrgx.eastus2-01.azurewebsites.net/swagger/index.html)
+
+### Postman Documentation
+
+Puedes encontrar la documentación de la colección de Postman para esta API en el siguiente enlace:
+
+[Postman Documentation](https://www.postman.com/security-astronaut-59724338/coworking/documentation/edqfgq0/coworkingapp-api?workspaceId=dd97358b-9dc6-4838-ac9e-109e6948aee8)
+
+### Reporte de Cobertura
+
+El reporte de cobertura para el proyecto está disponible en el siguiente enlace:
+
+[Ver Reporte de Cobertura](https://vicellobre.github.io/CoWorkingApp/)
+
 ## Contribución
 
 ¡Todas las contribuciones son bienvenidas! Si deseas contribuir al proyecto, por favor sigue estos pasos:
@@ -83,10 +110,6 @@ El proyecto está organizado en las siguientes capas y componentes principales:
 
 Si encuentras algún error o tienes una idea para una nueva característica, por favor crea un issue en el repositorio. Estaremos encantados de revisarlo y trabajar en su resolución.
 
-## Documentación Adicional
+## Nota del Autor
 
-Para obtener más información sobre cómo utilizar el proyecto, consulta la documentación incluida en el repositorio. También estamos trabajando en la creación de tutoriales y ejemplos prácticos para ayudarte a comprender mejor el proyecto y sus componentes.
-
-### Reporte de Cobertura
-
-[Ver Reporte de Cobertura](https://vicellobre.github.io/CoWorkingApp/)
+Este es mi primer proyecto con ASP.NET Core y he intentado aplicar arquitecturas modernas de la mejor manera posible. Espero que sirva de apoyo a otros desarrolladores en su camino de aprendizaje y aplicación de buenas prácticas en el desarrollo de software.
