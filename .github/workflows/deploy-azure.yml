@@ -31,8 +31,8 @@ jobs:
       - name: 📜 dotnet publish 📜
         run: dotnet publish CoWorkingApp.API/CoWorkingApp.API.sln -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
-      - name: 📦 Download artifact from build job 📦
-        uses: actions/download-artifact@v3
+      - name: 📦 Uoload artifact 📦
+        uses: actions/upload-artifact@v3
         with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
@@ -48,6 +48,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: .net-app
+          path: .
           
       - name: 🚀 Deploy to Azure Web App 🚀
         id: deploy-to-webapp
