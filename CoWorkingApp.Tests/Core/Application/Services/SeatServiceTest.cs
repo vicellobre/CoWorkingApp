@@ -1,8 +1,8 @@
-﻿using CoWorkingApp.Core.Application.Contracts.Adapters;
-using CoWorkingApp.Core.Application.Contracts.Repositories;
-using CoWorkingApp.Core.Application.Services;
-using CoWorkingApp.Core.Domain.DTOs;
-using CoWorkingApp.Core.Domain.Entities;
+﻿using CoWorkingApp.Application.Contracts.Adapters;
+using CoWorkingApp.Application.DTOs;
+using CoWorkingApp.Core.Contracts.Repositories;
+using CoWorkingApp.Core.Entities;
+using CoWorkingApp.Infrastructure.Services;
 using Moq;
 using System.ComponentModel.DataAnnotations;
 

@@ -1,6 +1,7 @@
-﻿using CoWorkingApp.API.Infrastructure.Presentation.Controllers;
-using CoWorkingApp.Core.Application.Contracts.Services;
-using CoWorkingApp.Core.Domain.DTOs;
+﻿using CoWorkingApp.Application.Contracts.Services;
+using CoWorkingApp.Application.DTOs;
+using CoWorkingApp.Presentation.Abstracts;
+using CoWorkingApp.Presentation.Controllers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;

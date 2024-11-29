@@ -1,4 +1,4 @@
-﻿using CoWorkingApp.Core.Domain.Entities; // Importa el espacio de nombres donde se encuentra la clase Seat
+﻿using CoWorkingApp.Core.Entities; // Importa el espacio de nombres donde se encuentra la clase Seat
 
 namespace CoWorkingApp.Tests.Core.Domain.Entities
 {

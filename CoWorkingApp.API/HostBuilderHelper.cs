@@ -3,24 +3,23 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.Identity.Web;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
-namespace CoWorkingApp.API
+namespace CoWorkingApp.API;
+
+/// <summary>
+/// Clase de ayuda para crear y configurar el host de la aplicación.
+/// </summary>
+[ExcludeFromCodeCoverage]
+public static class HostBuilderHelper
 {
     /// <summary>
-    /// Clase de ayuda para crear y configurar el host de la aplicación.
+    /// Crea y configura un <see cref="IHostBuilder"/> para la aplicación.
     /// </summary>
-    [ExcludeFromCodeCoverage]
-    public static class HostBuilderHelper
-    {
-        /// <summary>
-        /// Crea y configura un <see cref="IHostBuilder"/> para la aplicación.
-        /// </summary>
-        /// <param name="args">Argumentos de la línea de comandos.</param>
-        /// <returns>Un <see cref="IHostBuilder"/> configurado para usar <see cref="Startup"/>.</returns>
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-    }
+    /// <param name="args">Argumentos de la línea de comandos.</param>
+    /// <returns>Un <see cref="IHostBuilder"/> configurado para usar <see cref="Startup"/>.</returns>
+    public static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>();
+            });
 }

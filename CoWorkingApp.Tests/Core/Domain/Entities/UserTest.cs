@@ -1,4 +1,4 @@
-﻿using CoWorkingApp.Core.Domain.Entities;
+﻿using CoWorkingApp.Core.Entities;
 
 namespace CoWorkingApp.Tests.Core.Domain.Entities
 {

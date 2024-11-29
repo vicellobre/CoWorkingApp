@@ -1,7 +1,7 @@
-﻿using CoWorkingApp.API.Infrastructure.Context;
-using CoWorkingApp.API.Infrastructure.Persistence.Repositories;
-using CoWorkingApp.API.Infrastructure.UnitOfWorks;
-using CoWorkingApp.Core.Domain.Entities;
+﻿using CoWorkingApp.Core.Entities;
+using CoWorkingApp.Persistence.Context;
+using CoWorkingApp.Persistence.Repositories;
+using CoWorkingApp.Persistence.UnitOfWorks;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 

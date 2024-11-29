@@ -37,15 +37,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CoWorkingApp.Application\CoWorkingApp.Application.csproj" />
     <ProjectReference Include="..\CoWorkingApp.Core\CoWorkingApp.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Infrastructure\Context\" />
-    <Folder Include="Infrastructure\Adapters\" />
-    <Folder Include="Infrastructure\Persistence\Repositories\" />
-    <Folder Include="Infrastructure\UnitOfWorks\" />
-    <Folder Include="Infrastructure\Presentation\Controllers\" />
+    <ProjectReference Include="..\CoWorkingApp.Infrastructure\CoWorkingApp.Infrastructure.csproj" />
+    <ProjectReference Include="..\CoWorkingApp.Persistence\CoWorkingApp.Persistence.csproj" />
+    <ProjectReference Include="..\CoWorkingApp.Presentation\CoWorkingApp.Presentation.csproj" />
   </ItemGroup>
 
 </Project>

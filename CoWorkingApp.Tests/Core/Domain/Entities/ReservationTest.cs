@@ -1,4 +1,4 @@
-﻿using CoWorkingApp.Core.Domain.Entities; // Importa el espacio de nombres donde se encuentra la clase Reservation
+﻿using CoWorkingApp.Core.Entities; // Importa el espacio de nombres donde se encuentra la clase Reservation
 
 namespace CoWorkingApp.Tests.Core.Domain.Entities
 {

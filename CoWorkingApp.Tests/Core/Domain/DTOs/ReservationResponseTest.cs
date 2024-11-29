@@ -1,4 +1,4 @@
-﻿using CoWorkingApp.Core.Domain.DTOs; // Importa el espacio de nombres donde se encuentra la clase ReservationResponse
+﻿using CoWorkingApp.Application.DTOs;
 
 namespace CoWorkingApp.Tests.Core.Domain.DTOs
 {

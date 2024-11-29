@@ -26,7 +26,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CoWorkingApp.API\CoWorkingApp.API.csproj" />
+    <ProjectReference Include="..\CoWorkingApp.Application\CoWorkingApp.Application.csproj" />
     <ProjectReference Include="..\CoWorkingApp.Core\CoWorkingApp.Core.csproj" />
+    <ProjectReference Include="..\CoWorkingApp.Infrastructure\CoWorkingApp.Infrastructure.csproj" />
+    <ProjectReference Include="..\CoWorkingApp.Persistence\CoWorkingApp.Persistence.csproj" />
+    <ProjectReference Include="..\CoWorkingApp.Presentation\CoWorkingApp.Presentation.csproj" />
   </ItemGroup>
 
   <ItemGroup>
