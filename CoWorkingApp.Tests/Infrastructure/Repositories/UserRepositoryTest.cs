@@ -1,4 +1,5 @@
-﻿using CoWorkingApp.Core.Entities;
+﻿using CoWorkingApp.Core.Contracts.UnitOfWork;
+using CoWorkingApp.Core.Entities;
 using CoWorkingApp.Persistence.Context;
 using CoWorkingApp.Persistence.Repositories;
 using CoWorkingApp.Persistence.UnitOfWorks;
@@ -148,7 +149,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
                 // ACT
 
                 // invocamos el método GetAllAsync
-                var result = repositoy.GetAllAsync()?.Result;
+                var result = repositoy.GetAllAsNoTrackingAsync()?.Result;
 
                 // ASSERT
                 Assert.NotNull(result);
@@ -177,7 +178,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
                 // ACT
 
                 // Llamar al método GetAllAsync del repositorio y obtener el resultado
-                var result = repository.GetAllAsync()?.Result;
+                var result = repository.GetAllAsNoTrackingAsync()?.Result;
 
                 // ASSERT
 
@@ -311,7 +312,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
                 // ACT
 
                 // Llamar al método AddAsync del repositorio con el nuevo usuario y obtener el resultado
-                var result = repository.AddAsync(user)?.Result;
+                var result = repository.Add(user)?.Result;
 
                 // ASSERT 
 
@@ -343,7 +344,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
                 // ACT
 
                 // Llamar al método AddAsync del repositorio con cualquier usuario y obtener el resultado
-                var result = repository.AddAsync(It.IsAny<User>())?.Result;
+                var result = repository.Add(It.IsAny<User>())?.Result;
 
                 // ASSERT
 
@@ -401,7 +402,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
                 // ACT
 
                 // Llamar al método UpdateAsync del repositorio con el usuario a actualizar y obtener el resultado
-                var result = repository.UpdateAsync(userToUpdate)?.Result;
+                var result = repository.Update(userToUpdate)?.Result;
 
                 // ASSERT
 
@@ -434,7 +435,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
                 // ACT
 
                 // Llamar al método UpdateAsync del repositorio con cualquier usuario y obtener el resultado
-                var result = repository.UpdateAsync(It.IsAny<User>())?.Result;
+                var result = repository.Update(It.IsAny<User>())?.Result;
 
                 // ASSERT
 
@@ -477,7 +478,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
                 // ACT
 
                 // Llamar al método RemoveAsync del repositorio con el usuario existente y obtener el resultado
-                var result = repository.RemoveAsync(existingUser)?.Result;
+                var result = repository.Remove(existingUser)?.Result;
 
                 // ASSERT
 
@@ -507,7 +508,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
                 // ACT
 
                 // Llamar al método RemoveAsync del repositorio con cualquier usuario (utilizando It.IsAny<User>()) y obtener el resultado
-                var result = repository.RemoveAsync(It.IsAny<User>())?.Result;
+                var result = repository.Remove(It.IsAny<User>())?.Result;
 
                 // ASSERT
 
@@ -552,7 +553,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
 
                 // ACT
                 // Llamar al método ExistsAsync con el ID del usuario existente y obtener el resultado
-                var result = repository.ExistsAsync(userId)?.Result;
+                var result = repository.ContainsAsync(userId)?.Result;
 
                 // ASSERT
                 // Verificar que el resultado no sea nulo
@@ -579,7 +580,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
 
                 // ACT
                 // Llamar al método ExistsAsync con un ID aleatorio y obtener el resultado
-                var result = repository.ExistsAsync(Guid.NewGuid())?.Result;
+                var result = repository.ContainsAsync(Guid.NewGuid())?.Result;
 
                 // ASSERT
                 // Verificar que el resultado no sea nulo

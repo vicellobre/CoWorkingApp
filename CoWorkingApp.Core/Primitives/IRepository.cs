@@ -1,49 +1,57 @@
 ﻿namespace CoWorkingApp.Core.Primitives;
 
 /// <summary>
-/// Interfaz para repositorios que manejan operaciones básicas para la entidad genérica.
+/// Interfaz que define las operaciones básicas para un repositorio genérico.
 /// </summary>
-/// <typeparam name="T">Tipo de entidad manejada por el repositorio.</typeparam>
+/// <typeparam name="T">Tipo de la entidad gestionada por el repositorio.</typeparam>
 public interface IRepository<T> where T : class
 {
     /// <summary>
-    /// Obtiene todos los elementos de la entidad de manera asincrónica.
+    /// Recupera todas las entidades de tipo <typeparamref name="T"/> de manera asincrónica sin realizar seguimiento de cambios.
     /// </summary>
-    /// <returns>Una colección de elementos de la entidad.</returns>
-    Task<IEnumerable<T>> GetAllAsync();
+    /// <param name="cancellationToken">Token de cancelación opcional para la operación asincrónica.</param>
+    /// <returns>Una colección de entidades de tipo <typeparamref name="T"/>.</returns>
+    Task<IEnumerable<T>> GetAllAsNoTrackingAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Obtiene un elemento por su identificador de manera asincrónica.
+    /// Recupera una entidad de tipo <typeparamref name="T"/> por su identificador de manera asincrónica.
     /// </summary>
-    /// <param name="id">Identificador del elemento.</param>
-    /// <returns>El elemento con el identificador especificado.</returns>
-    Task<T?> GetByIdAsync(Guid id);
+    /// <param name="id">Identificador de la entidad de tipo <typeparamref name="T"/>.</param>
+    /// <param name="cancellationToken">Token de cancelación opcional para la operación asincrónica.</param>
+    /// <returns>La entidad de tipo <typeparamref name="T"/> con el identificador especificado, o null si no se encuentra.</returns>
+    Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Agrega un nuevo elemento de la entidad de manera asincrónica.
+    /// Recupera una entidad de tipo <typeparamref name="T"/> por su identificador de manera asincrónica sin realizar seguimiento de cambios.
     /// </summary>
-    /// <param name="entity">Elemento a agregar.</param>
-    /// <returns>True si se agregó el elemento correctamente; de lo contrario, false.</returns>
-    Task<bool> AddAsync(T entity);
+    /// <param name="id">Identificador de la entidad de tipo <typeparamref name="T"/>.</param>
+    /// <param name="cancellationToken">Token de cancelación opcional para la operación asincrónica.</param>
+    /// <returns>La entidad de tipo <typeparamref name="T"/> con el identificador especificado, o null si no se encuentra.</returns>
+    Task<T?> GetByIdAsNoTrackingAsync(Guid id, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Actualiza un elemento de la entidad de manera asincrónica.
+    /// Comprueba si contiene una entidad de tipo <typeparamref name="T"/> con el identificador especificado de manera asincrónica.
     /// </summary>
-    /// <param name="entity">Elemento a actualizar.</param>
-    /// <returns>True si se actualizó el elemento correctamente; de lo contrario, false.</returns>
-    Task<bool> UpdateAsync(T entity);
+    /// <param name="id">Identificador de la entidad de tipo <typeparamref name="T"/>.</param>
+    /// <param name="cancellationToken">Token de cancelación opcional para la operación asincrónica.</param>
+    /// <returns>True si la entidad de tipo <typeparamref name="T"/> existe; de lo contrario, false.</returns>
+    Task<bool> ContainsAsync(Guid id, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Elimina un elemento de la entidad de manera asincrónica.
+    /// Añade una nueva entidad de tipo <typeparamref name="T"/> al repositorio.
     /// </summary>
-    /// <param name="entity">Elemento a eliminar.</param>
-    /// <returns>True si se eliminó el elemento correctamente; de lo contrario, false.</returns>
-    Task<bool> RemoveAsync(T entity);
+    /// <param name="entity">La entidad de tipo <typeparamref name="T"/> a añadir.</param>
+    void Add(T entity);
 
     /// <summary>
-    /// Verifica si un elemento existe en la entidad de manera asincrónica.
+    /// Actualiza una entidad existente de tipo <typeparamref name="T"/> en el repositorio.
     /// </summary>
-    /// <param name="id">Identificador del elemento.</param>
-    /// <returns>True si el elemento existe; de lo contrario, false.</returns>
-    Task<bool> ExistsAsync(Guid id);
+    /// <param name="entity">La entidad de tipo <typeparamref name="T"/> a actualizar.</param>
+    void Update(T entity);
+
+    /// <summary>
+    /// Elimina una entidad existente de tipo <typeparamref name="T"/> del repositorio.
+    /// </summary>
+    /// <param name="entity">La entidad de tipo <typeparamref name="T"/> a eliminar.</param>
+    void Remove(T entity);
 }

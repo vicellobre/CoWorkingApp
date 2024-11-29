@@ -9,17 +9,17 @@ namespace CoWorkingApp.Application.Contracts.Services
     public interface IUserService : IService<UserRequest, UserResponse>
     {
         /// <summary>
-        /// Obtiene un usuario por su dirección de correo electrónico de manera asincrónica.
+        /// Obtiene una entidad <see cref="UserResponse"/> por su dirección de correo electrónico de manera asincrónica.
         /// </summary>
         /// <param name="email">Dirección de correo electrónico del usuario.</param>
-        /// <returns>DTO del usuario correspondiente a la dirección de correo electrónico especificada (DTO).</returns>
+        /// <returns>Un objeto de tipo <see cref="UserResponse"/> correspondiente a la dirección de correo electrónico especificada.</returns>
         Task<UserResponse> GetByEmailAsync(string email);
 
         /// <summary>
-        /// Autentica a un usuario por su dirección de correo electrónico y contraseña de manera asincrónica.
+        /// Autentica una entidad <see cref="UserResponse"/> por su dirección de correo electrónico y contraseña de manera asincrónica.
         /// </summary>
         /// <param name="request">Solicitud de autenticación del usuario que contiene la dirección de correo electrónico y la contraseña.</param>
-        /// <returns>DTO del usuario autenticado correspondiente a las credenciales especificadas (DTO).</returns>
+        /// <returns>Un objeto de tipo <see cref="UserResponse"/> correspondiente a las credenciales especificadas.</returns>
         Task<UserResponse> AuthenticateAsync(UserRequest request);
 
         // Otros métodos específicos para IUserService

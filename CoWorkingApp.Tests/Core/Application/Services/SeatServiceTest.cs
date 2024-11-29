@@ -118,7 +118,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
 
                 // Mock del repositorio ISeatRepository
                 var mockRepository = new Mock<ISeatRepository>();
-                mockRepository.Setup(r => r.GetAllAsync()).ReturnsAsync(seats);
+                mockRepository.Setup(r => r.GetAllAsNoTrackingAsync()).ReturnsAsync(seats);
 
                 // Crear una instancia del servicio de asiento con los mocks configurados
                 var service = new SeatService(mockRepository.Object, mockMapper.Object);
@@ -162,7 +162,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
 
                 // Configurar un mock para el repositorio ISeatRepository y establecer su comportamiento para devolver la lista vacía de asientos
                 var mockRepository = new Mock<ISeatRepository>();
-                mockRepository.Setup(r => r.GetAllAsync()).ReturnsAsync(seats);
+                mockRepository.Setup(r => r.GetAllAsNoTrackingAsync()).ReturnsAsync(seats);
 
                 // Crear una instancia del servicio de asiento (SeatService) con el mock del repositorio y del mapeador
                 var service = new SeatService(mockRepository.Object, mockMapper.Object);
@@ -204,7 +204,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
 
                 // Configurar un mock para el repositorio ISeatRepository y establecer su comportamiento para lanzar una excepción al llamar a GetAllAsync
                 var mockRepository = new Mock<ISeatRepository>();
-                mockRepository.Setup(r => r.GetAllAsync()).ThrowsAsync(exception);
+                mockRepository.Setup(r => r.GetAllAsNoTrackingAsync()).ThrowsAsync(exception);
 
                 // Crear una instancia del servicio de asiento (SeatService) con el mock del repositorio y del mapeador
                 var service = new SeatService(mockRepository.Object, mockMapper.Object);
@@ -399,7 +399,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
 
                 // Configurar un mock para el repositorio ISeatRepository y establecer su comportamiento para agregar un asiento correctamente
                 var mockRepository = new Mock<ISeatRepository>();
-                mockRepository.Setup(r => r.AddAsync(It.IsAny<Seat>())).ReturnsAsync(true);
+                mockRepository.Setup(r => r.Add(It.IsAny<Seat>())).ReturnsAsync(true);
 
                 // Crear una instancia del servicio de asiento (SeatService) con los mocks configurados
                 var service = new SeatService(mockRepository.Object, mockMapper.Object);
@@ -550,7 +550,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
 
                 // Configurar un mock para el repositorio ISeatRepository y establecer su comportamiento para devolver false al intentar agregar una entidad
                 var mockRepository = new Mock<ISeatRepository>();
-                mockRepository.Setup(r => r.AddAsync(It.IsAny<Seat>())).ReturnsAsync(false);
+                mockRepository.Setup(r => r.Add(It.IsAny<Seat>())).ReturnsAsync(false);
 
                 // Crear una instancia del servicio de asiento (SeatService) con los mocks del repositorio y del mapeador
                 var service = new SeatService(mockRepository.Object, mockMapper.Object);
@@ -590,7 +590,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
 
                 // Configurar un mock para el repositorio ISeatRepository y establecer su comportamiento para devolver true al intentar agregar una entidad
                 var mockRepository = new Mock<ISeatRepository>();
-                mockRepository.Setup(r => r.AddAsync(It.IsAny<Seat>())).ReturnsAsync(true);
+                mockRepository.Setup(r => r.Add(It.IsAny<Seat>())).ReturnsAsync(true);
 
                 // Crear una instancia del servicio de asiento (SeatService) con los mocks del repositorio y del mapeador
                 var service = new SeatService(mockRepository.Object, mockMapper.Object);
@@ -663,7 +663,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 // Configuración del mock para el repositorio ISeatRepository y establecimiento de su comportamiento para obtener un asiento por su ID y actualizar un asiento correctamente
                 var mockRepository = new Mock<ISeatRepository>();
                 mockRepository.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(existingSeat);
-                mockRepository.Setup(r => r.UpdateAsync(It.IsAny<Seat>())).ReturnsAsync(true);
+                mockRepository.Setup(r => r.Update(It.IsAny<Seat>())).ReturnsAsync(true);
 
                 // Crear un mapeador AutoMapper para mapear un asiento a una respuesta de asiento
                 var mapper = TestAutoMapperFactory.CreateMapper();
@@ -832,7 +832,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 // Configurar un mock para el repositorio ISeatRepository y establecer su comportamiento para devolver un asiento existente cuando se busque por ID y para devolver false cuando se intente actualizar la entidad
                 var mockRepository = new Mock<ISeatRepository>();
                 mockRepository.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(existingSeat);
-                mockRepository.Setup(r => r.UpdateAsync(It.IsAny<Seat>())).ReturnsAsync(false);
+                mockRepository.Setup(r => r.Update(It.IsAny<Seat>())).ReturnsAsync(false);
 
                 // Configurar un mock para el adaptador IMapperAdapter
                 var mockMapper = new Mock<IMapperAdapter>();
@@ -877,7 +877,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 // Configurar mocks para el repositorio ISeatRepository y el adaptador IMapperAdapter
                 var mockRepository = new Mock<ISeatRepository>();
                 mockRepository.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(existingSeat);
-                mockRepository.Setup(r => r.UpdateAsync(It.IsAny<Seat>())).ReturnsAsync(true);
+                mockRepository.Setup(r => r.Update(It.IsAny<Seat>())).ReturnsAsync(true);
 
                 var mockMapper = new Mock<IMapperAdapter>();
                 // Configurar el comportamiento del mapeador para lanzar una excepción al intentar mapear un asiento a una respuesta de asiento
@@ -920,7 +920,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
 
                 var mockRepository = new Mock<ISeatRepository>();
                 mockRepository.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(existingSeat);
-                mockRepository.Setup(r => r.RemoveAsync(It.IsAny<Seat>())).ReturnsAsync(true);
+                mockRepository.Setup(r => r.Remove(It.IsAny<Seat>())).ReturnsAsync(true);
 
                 var mapper = TestAutoMapperFactory.CreateMapper();
                 var mockMapper = new Mock<IMapperAdapter>();
@@ -1003,7 +1003,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 // Configurar un mock para el repositorio ISeatRepository y establecer su comportamiento para devolver un asiento existente cuando se busque por ID y para devolver false cuando se intente eliminar la entidad
                 var mockRepository = new Mock<ISeatRepository>();
                 mockRepository.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(existingSeat);
-                mockRepository.Setup(r => r.RemoveAsync(It.IsAny<Seat>())).ReturnsAsync(false);
+                mockRepository.Setup(r => r.Remove(It.IsAny<Seat>())).ReturnsAsync(false);
 
                 // Configurar un mock para el adaptador IMapperAdapter
                 var mockMapper = new Mock<IMapperAdapter>();
@@ -1048,7 +1048,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 // Configurar un mock para el repositorio ISeatRepository y establecer su comportamiento para devolver un asiento existente cuando se busque por ID y para devolver true cuando se intente eliminar la entidad
                 var mockRepository = new Mock<ISeatRepository>();
                 mockRepository.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(existingSeat);
-                mockRepository.Setup(r => r.RemoveAsync(It.IsAny<Seat>())).ReturnsAsync(true);
+                mockRepository.Setup(r => r.Remove(It.IsAny<Seat>())).ReturnsAsync(true);
 
                 // Crear un mapeador AutoMapper
                 var mapper = TestAutoMapperFactory.CreateMapper();
@@ -1099,7 +1099,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
 
                 // Mock del repositorio ISeatRepository
                 var mockRepository = new Mock<ISeatRepository>();
-                mockRepository.Setup(r => r.GetAvailablesAsync()).ReturnsAsync(availableSeats);
+                mockRepository.Setup(r => r.GetAvailablesAsNoTrackingAsync()).ReturnsAsync(availableSeats);
 
                 // Mock del adaptador IMapperAdapter
                 var mockMapper = new Mock<IMapperAdapter>();
@@ -1152,7 +1152,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
 
                 // Mock del repositorio ISeatRepository
                 var mockRepository = new Mock<ISeatRepository>();
-                mockRepository.Setup(r => r.GetAvailablesAsync()).ReturnsAsync([]);
+                mockRepository.Setup(r => r.GetAvailablesAsNoTrackingAsync()).ReturnsAsync([]);
 
                 // Crear una instancia del servicio de asiento con los mocks configurados
                 var service = new SeatService(mockRepository.Object, mockMapper.Object);
@@ -1185,7 +1185,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
 
                 // Mock del repositorio ISeatRepository
                 var mockRepository = new Mock<ISeatRepository>();
-                mockRepository.Setup(r => r.GetAvailablesAsync()).ThrowsAsync(exception);
+                mockRepository.Setup(r => r.GetAvailablesAsNoTrackingAsync()).ThrowsAsync(exception);
 
                 // Crear una instancia del servicio de asiento con los mocks configurados
                 var service = new SeatService(mockRepository.Object, mockMapper.Object);

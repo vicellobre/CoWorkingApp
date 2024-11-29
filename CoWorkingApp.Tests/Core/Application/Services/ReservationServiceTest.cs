@@ -102,7 +102,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
 
                 // Se establece un mock del repositorio para devolver todas las reservaciones
                 var mockRepository = new Mock<IReservationRepository>();
-                mockRepository.Setup(r => r.GetAllAsync()).ReturnsAsync(reservations);
+                mockRepository.Setup(r => r.GetAllAsNoTrackingAsync()).ReturnsAsync(reservations);
 
                 // Se crea una instancia de ReservationService con el mock del repositorio y el mock del adaptador de mapeo
                 var service = new ReservationService(mockRepository.Object, mockMapper.Object);
@@ -152,7 +152,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
 
                 // Se establece un mock del repositorio para devolver una lista vacía de reservaciones
                 var mockRepository = new Mock<IReservationRepository>();
-                mockRepository.Setup(r => r.GetAllAsync()).ReturnsAsync(reservations);
+                mockRepository.Setup(r => r.GetAllAsNoTrackingAsync()).ReturnsAsync(reservations);
 
                 // Se crea una instancia de ReservationService con el mock del repositorio y el mock del adaptador de mapeo
                 var service = new ReservationService(mockRepository.Object, mockMapper.Object);
@@ -189,7 +189,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
 
                 // Se establece un mock del repositorio para lanzar una excepción al intentar obtener todas las reservaciones
                 var mockRepository = new Mock<IReservationRepository>();
-                mockRepository.Setup(r => r.GetAllAsync()).ThrowsAsync(exception);
+                mockRepository.Setup(r => r.GetAllAsNoTrackingAsync()).ThrowsAsync(exception);
 
                 // Se crea una instancia de ReservationService con el mock del repositorio y el mock del adaptador de mapeo
                 var service = new ReservationService(mockRepository.Object, mockMapper.Object);
@@ -370,7 +370,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
 
                 // Se configura el mock del repositorio para devolver true al agregar una reserva
                 var mockRepository = new Mock<IReservationRepository>();
-                mockRepository.Setup(r => r.AddAsync(It.IsAny<Reservation>())).ReturnsAsync(true);
+                mockRepository.Setup(r => r.Add(It.IsAny<Reservation>())).ReturnsAsync(true);
                 mockRepository.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(reservation);
 
                 // Se crea una instancia de ReservationService con los mocks del repositorio y del adaptador de mapeo
@@ -607,7 +607,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 // Se configura el mock del repositorio para simular un fallo al agregar la entidad
                 var mockRepository = new Mock<IReservationRepository>();
                 mockRepository.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(reservation);
-                mockRepository.Setup(r => r.AddAsync(It.IsAny<Reservation>())).ReturnsAsync(false);
+                mockRepository.Setup(r => r.Add(It.IsAny<Reservation>())).ReturnsAsync(false);
 
                 // Se crea una instancia de ReservationService con el mock del repositorio y el mock del adaptador de mapeo
                 var service = new ReservationService(mockRepository.Object, mockMapper.Object);
@@ -642,7 +642,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
 
                 // Se configura el mock del repositorio para simular una adición exitosa de la entidad
                 var mockRepository = new Mock<IReservationRepository>();
-                mockRepository.Setup(r => r.AddAsync(It.IsAny<Reservation>())).ReturnsAsync(true);
+                mockRepository.Setup(r => r.Add(It.IsAny<Reservation>())).ReturnsAsync(true);
 
                 // Se crea una instancia de ReservationService con el mock del repositorio y el mock del adaptador de mapeo
                 var service = new ReservationService(mockRepository.Object, mockMapper.Object);
@@ -705,7 +705,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 // Se configura el mock del repositorio para devolver la reservación existente al llamar GetByIdAsync y simular una actualización exitosa
                 var mockRepository = new Mock<IReservationRepository>();
                 mockRepository.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(existingReservation);
-                mockRepository.Setup(r => r.UpdateAsync(It.IsAny<Reservation>())).ReturnsAsync(true);
+                mockRepository.Setup(r => r.Update(It.IsAny<Reservation>())).ReturnsAsync(true);
 
                 // Se crea un mapeador de AutoMapper para mapear la reservación a su respuesta
                 var mapper = TestAutoMapperFactory.CreateMapper();
@@ -960,7 +960,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 var mockRepository = new Mock<IReservationRepository>();
                 mockRepository.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(existingReservation);
                 // Se configura el repositorio para que falle al actualizar la reserva
-                mockRepository.Setup(r => r.UpdateAsync(It.IsAny<Reservation>())).ReturnsAsync(false);
+                mockRepository.Setup(r => r.Update(It.IsAny<Reservation>())).ReturnsAsync(false);
 
                 // Se configura un mock del adaptador de mapeo
                 var mockMapper = new Mock<IMapperAdapter>();
@@ -1003,7 +1003,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
 
                 var mockRepository = new Mock<IReservationRepository>();
                 mockRepository.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(existingReservation);
-                mockRepository.Setup(r => r.UpdateAsync(It.IsAny<Reservation>())).ReturnsAsync(true);
+                mockRepository.Setup(r => r.Update(It.IsAny<Reservation>())).ReturnsAsync(true);
 
                 var mockMapper = new Mock<IMapperAdapter>();
                 mockMapper.Setup(m => m.Map<Reservation, ReservationResponse>(It.IsAny<Reservation>())).Throws(new Exception());
@@ -1040,7 +1040,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 var mockRepository = new Mock<IReservationRepository>();
                 mockRepository.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(existingReservation);
                 // Se configura el repositorio para que elimine correctamente la reserva
-                mockRepository.Setup(r => r.RemoveAsync(It.IsAny<Reservation>())).ReturnsAsync(true);
+                mockRepository.Setup(r => r.Remove(It.IsAny<Reservation>())).ReturnsAsync(true);
 
                 // Se crea un mapper para el mapeo de la reserva a su respuesta correspondiente
                 var mapper = TestAutoMapperFactory.CreateMapper();
@@ -1124,7 +1124,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 var mockRepository = new Mock<IReservationRepository>();
                 mockRepository.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(existingReservation);
                 // Se configura el repositorio para que la eliminación de la reserva devuelva false, indicando que no se pudo eliminar
-                mockRepository.Setup(r => r.RemoveAsync(It.IsAny<Reservation>())).ReturnsAsync(false);
+                mockRepository.Setup(r => r.Remove(It.IsAny<Reservation>())).ReturnsAsync(false);
 
                 // Se configura un mock de IMapperAdapter
                 var mockMapper = new Mock<IMapperAdapter>();
@@ -1167,7 +1167,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 var mockRepository = new Mock<IReservationRepository>();
                 mockRepository.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(existingReservation);
                 // Se configura el repositorio para devolver true al intentar eliminar la reserva, indicando que se pudo eliminar
-                mockRepository.Setup(r => r.RemoveAsync(It.IsAny<Reservation>())).ReturnsAsync(true);
+                mockRepository.Setup(r => r.Remove(It.IsAny<Reservation>())).ReturnsAsync(true);
 
                 // Crear un mapeador AutoMapper
                 var mapper = TestAutoMapperFactory.CreateMapper();
@@ -1217,7 +1217,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
 
                 // Se configura el mock del repositorio para devolver las reservas filtradas por la fecha
                 var mockRepository = new Mock<IReservationRepository>();
-                mockRepository.Setup(r => r.GetByDateAsync(It.IsAny<DateTime>())).ReturnsAsync(reservationsByDate);
+                mockRepository.Setup(r => r.GetByDateAsNoTrackingAsync(It.IsAny<DateTime>())).ReturnsAsync(reservationsByDate);
 
                 // Se configura el mock del mapeador para mapear las reservas filtradas
                 var mockMapper = new Mock<IMapperAdapter>();
@@ -1257,7 +1257,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
 
                 // Se configura el mock del repositorio para devolver la lista vacía de reservas al buscar por fecha
                 var mockRepository = new Mock<IReservationRepository>();
-                mockRepository.Setup(r => r.GetByDateAsync(It.IsAny<DateTime>())).ReturnsAsync(reservations);
+                mockRepository.Setup(r => r.GetByDateAsNoTrackingAsync(It.IsAny<DateTime>())).ReturnsAsync(reservations);
 
                 // Se crea una instancia de ReservationService con los mocks configurados
                 var service = new ReservationService(mockRepository.Object, mockMapper.Object);
@@ -1291,7 +1291,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 // Se configura el mock del repositorio para lanzar la excepción al llamar a GetByDateAsync
                 var mockMapper = new Mock<IMapperAdapter>();
                 var mockRepository = new Mock<IReservationRepository>();
-                mockRepository.Setup(r => r.GetByDateAsync(It.IsAny<DateTime>())).ThrowsAsync(exception);
+                mockRepository.Setup(r => r.GetByDateAsNoTrackingAsync(It.IsAny<DateTime>())).ThrowsAsync(exception);
 
                 // Se crea una instancia de ReservationService con el mock del repositorio configurado
                 var service = new ReservationService(mockRepository.Object, mockMapper.Object);
@@ -1336,7 +1336,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
 
                 // Se configura el mock del repositorio para devolver las reservas filtradas por el ID de usuario
                 var mockRepository = new Mock<IReservationRepository>();
-                mockRepository.Setup(r => r.GetByUserIdAsync(It.IsAny<Guid>())).ReturnsAsync(reservationsByUserId);
+                mockRepository.Setup(r => r.GetByUserIdAsNoTrackingAsync(It.IsAny<Guid>())).ReturnsAsync(reservationsByUserId);
 
                 // Se configura el mock del mapeador para devolver las reservas mapeadas a partir de las reservas filtradas
                 var mockMapper = new Mock<IMapperAdapter>();
@@ -1376,7 +1376,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
 
                 // Se configura el mock del repositorio para devolver una lista vacía de reservas
                 var mockRepository = new Mock<IReservationRepository>();
-                mockRepository.Setup(r => r.GetByUserIdAsync(It.IsAny<Guid>())).ReturnsAsync(reservations);
+                mockRepository.Setup(r => r.GetByUserIdAsNoTrackingAsync(It.IsAny<Guid>())).ReturnsAsync(reservations);
 
                 // Se crea una instancia de ReservationService con los mocks configurados
                 var service = new ReservationService(mockRepository.Object, mockMapper.Object);
@@ -1412,7 +1412,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
 
                 // Se configura el mock del repositorio para lanzar una excepción al intentar obtener las reservas por ID de usuario
                 var mockRepository = new Mock<IReservationRepository>();
-                mockRepository.Setup(r => r.GetByUserIdAsync(It.IsAny<Guid>())).ThrowsAsync(exception);
+                mockRepository.Setup(r => r.GetByUserIdAsNoTrackingAsync(It.IsAny<Guid>())).ThrowsAsync(exception);
 
                 // Se crea una instancia de ReservationService con los mocks configurados
                 var service = new ReservationService(mockRepository.Object, mockMapper.Object);
@@ -1457,7 +1457,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
 
                 // Se configura el mock del repositorio para devolver las reservas filtradas por el ID del asiento
                 var mockRepository = new Mock<IReservationRepository>();
-                mockRepository.Setup(r => r.GetBySeatIdAsync(It.IsAny<Guid>())).ReturnsAsync(reservationsBySeatId);
+                mockRepository.Setup(r => r.GetBySeatIdAsNoTrackingAsync(It.IsAny<Guid>())).ReturnsAsync(reservationsBySeatId);
 
                 // Se configura el mock del mapeador para devolver las reservas mapeadas a ReservationResponse
                 var mockMapper = new Mock<IMapperAdapter>();
@@ -1497,7 +1497,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
 
                 // Se configura el mock del repositorio para devolver la lista vacía de reservas
                 var mockRepository = new Mock<IReservationRepository>();
-                mockRepository.Setup(r => r.GetBySeatIdAsync(It.IsAny<Guid>())).ReturnsAsync(reservations);
+                mockRepository.Setup(r => r.GetBySeatIdAsNoTrackingAsync(It.IsAny<Guid>())).ReturnsAsync(reservations);
 
                 // Se crea una instancia de ReservationService con los mocks configurados
                 var service = new ReservationService(mockRepository.Object, mockMapper.Object);
@@ -1533,7 +1533,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
 
                 // Se configura el mock del repositorio para lanzar una excepción al buscar reservas por ID de asiento
                 var mockRepository = new Mock<IReservationRepository>();
-                mockRepository.Setup(r => r.GetBySeatIdAsync(It.IsAny<Guid>())).ThrowsAsync(exception);
+                mockRepository.Setup(r => r.GetBySeatIdAsNoTrackingAsync(It.IsAny<Guid>())).ThrowsAsync(exception);
 
                 // Se crea una instancia de ReservationService con los mocks configurados
                 var service = new ReservationService(mockRepository.Object, mockMapper.Object);

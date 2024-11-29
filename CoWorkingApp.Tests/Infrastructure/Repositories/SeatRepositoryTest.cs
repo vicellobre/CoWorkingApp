@@ -1,4 +1,5 @@
-﻿using CoWorkingApp.Core.Entities;
+﻿using CoWorkingApp.Core.Contracts.UnitOfWork;
+using CoWorkingApp.Core.Entities;
 using CoWorkingApp.Persistence.Context;
 using CoWorkingApp.Persistence.Repositories;
 using CoWorkingApp.Persistence.UnitOfWorks;
@@ -142,7 +143,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
 
                 // ACT
                 // Se llama al método GetAllAsync para obtener todos los asientos
-                var result = await repositoy.GetAllAsync();
+                var result = await repositoy.GetAllAsNoTrackingAsync();
 
                 // ASSERT
                 // Se verifica que el resultado no sea nulo y contenga la misma cantidad de asientos que los asientos de prueba
@@ -171,7 +172,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
 
                 // ACT
                 // Se llama al método GetAllAsync para obtener todos los asientos
-                var result = await repository.GetAllAsync();
+                var result = await repository.GetAllAsNoTrackingAsync();
 
                 // ASSERT
                 // Se verifica que el resultado no sea nulo y esté vacío
@@ -287,7 +288,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
 
                 // ACT
                 // Se llama al método AddAsync para agregar el nuevo asiento a la base de datos
-                var result = await repository.AddAsync(seat);
+                var result = await repository.Add(seat);
 
                 // ASSERT 
                 // Se verifica que el asiento se haya agregado correctamente
@@ -315,7 +316,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
 
                 // ACT
                 // Se llama al método AddAsync para intentar agregar un nuevo asiento a la base de datos, lo que debería provocar una excepción
-                var result = await repository.AddAsync(It.IsAny<Seat>());
+                var result = await repository.Add(It.IsAny<Seat>());
 
                 // ASSERT
                 // Se verifica que la operación haya fallado (retorna false)
@@ -368,7 +369,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
 
                 // ACT
                 // Se llama al método UpdateAsync para actualizar el asiento en la base de datos
-                var result = await repository.UpdateAsync(seatToUpdate);
+                var result = await repository.Update(seatToUpdate);
 
                 // ASSERT
                 // Se verifica que la operación haya tenido éxito (retorna true)
@@ -396,7 +397,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
 
                 // ACT
                 // Se llama al método UpdateAsync con un asiento genérico para provocar una excepción
-                var result = await repository.UpdateAsync(It.IsAny<Seat>());
+                var result = await repository.Update(It.IsAny<Seat>());
 
                 // ASSERT
                 // Se verifica que la operación haya fallado (retorna false)
@@ -434,7 +435,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
 
                 // ACT
                 // Se llama al método RemoveAsync con el asiento existente para eliminarlo de la base de datos
-                var result = await repository.RemoveAsync(existingSeat);
+                var result = await repository.Remove(existingSeat);
 
                 // ASSERT
                 // Se verifica que la operación haya sido exitosa (retorna true)
@@ -460,7 +461,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
 
                 // ACT
                 // Se llama al método RemoveAsync con cualquier asiento para simular una excepción al intentar eliminarlo de la base de datos
-                var result = await repository.RemoveAsync(It.IsAny<Seat>());
+                var result = await repository.Remove(It.IsAny<Seat>());
 
                 // ASSERT
                 // Se verifica que la operación haya fallado (retorna false)
@@ -503,7 +504,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
 
                 // ACT
                 // Se llama al método ExistsAsync con el ID del asiento existente para verificar su existencia en la base de datos
-                var result = await repository.ExistsAsync(seatId);
+                var result = await repository.ContainsAsync(seatId);
 
                 // ASSERT
                 // Se verifica que sea verdadero, lo que indica que el asiento existe en la base de datos
@@ -529,7 +530,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
 
                 // ACT
                 // Se llama al método ExistsAsync con un ID de asiento que no existe en la base de datos para verificar su existencia
-                var result = await repository.ExistsAsync(Guid.NewGuid());
+                var result = await repository.ContainsAsync(Guid.NewGuid());
 
                 // ASSERT
                 // Se verifica que sea falso, lo que indica que el asiento no existe en la base de datos
@@ -572,7 +573,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
 
                 // ACT
                 // Se llama al método GetAvailablesAsync para obtener todos los asientos disponibles
-                var result = await repository.GetAvailablesAsync();
+                var result = await repository.GetAvailablesAsNoTrackingAsync();
 
                 // ASSERT
                 // Se verifica que el resultado no sea nulo, no esté vacío, tenga la cantidad correcta de asientos disponibles y que todos los asientos no estén bloqueados
@@ -613,7 +614,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
 
                 // ACT
                 // Se llama al método GetAvailablesAsync para obtener todos los asientos disponibles
-                var result = await repository.GetAvailablesAsync();
+                var result = await repository.GetAvailablesAsNoTrackingAsync();
 
                 // ASSERT
                 // Se verifica que el resultado no sea nulo y esté vacío

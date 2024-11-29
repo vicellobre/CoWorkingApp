@@ -2,6 +2,7 @@
 using CoWorkingApp.Application.Contracts.Adapters;
 using CoWorkingApp.Application.Contracts.Services;
 using CoWorkingApp.Core.Contracts.Repositories;
+using CoWorkingApp.Core.Contracts.UnitOfWork;
 using CoWorkingApp.Infrastructure.Adapters;
 using CoWorkingApp.Infrastructure.Services;
 using CoWorkingApp.Persistence.Context;
@@ -31,13 +32,13 @@ public static class IoC
         services.AddScoped<IMapperAdapter>(p => new AutoMapperAdapter(p.GetRequiredService<IMapper>()));
 
         // Inyectar los servicios específicos de User, Seat y Reservation
-        services.AddScoped<IUserRepository>(p => new UserRepository(p.GetRequiredService<IUnitOfWork>()));
-        services.AddScoped<ISeatRepository>(p => new SeatRepository(p.GetRequiredService<IUnitOfWork>()));
-        services.AddScoped<IReservationRepository>(p => new ReservationRepository(p.GetRequiredService<IUnitOfWork>()));
+        services.AddScoped<IUserRepository>(p => new UserRepository(p.GetRequiredService<CoWorkingContext>()));
+        services.AddScoped<ISeatRepository>(p => new SeatRepository(p.GetRequiredService<CoWorkingContext>()));
+        services.AddScoped<IReservationRepository>(p => new ReservationRepository(p.GetRequiredService<CoWorkingContext>()));
 
-        services.AddScoped<IUserService>(p => new UserService(p.GetRequiredService<IUserRepository>(), p.GetRequiredService<IMapperAdapter>()));
-        services.AddScoped<ISeatService>(p => new SeatService(p.GetRequiredService<ISeatRepository>(), p.GetRequiredService<IMapperAdapter>()));
-        services.AddScoped<IReservationService>(p => new ReservationService(p.GetRequiredService<IReservationRepository>(), p.GetRequiredService<IMapperAdapter>()));
+        services.AddScoped<IUserService>(p => new UserService(p.GetRequiredService<IUnitOfWork>(), p.GetRequiredService<IUserRepository>(), p.GetRequiredService<IMapperAdapter>()));
+        services.AddScoped<ISeatService>(p => new SeatService(p.GetRequiredService<IUnitOfWork>(), p.GetRequiredService<ISeatRepository>(), p.GetRequiredService<IMapperAdapter>()));
+        services.AddScoped<IReservationService>(p => new ReservationService(p.GetRequiredService<IUnitOfWork>(), p.GetRequiredService<IReservationRepository>(), p.GetRequiredService<IMapperAdapter>()));
 
         return services;
     }

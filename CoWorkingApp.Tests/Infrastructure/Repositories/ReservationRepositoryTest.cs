@@ -1,4 +1,5 @@
-﻿using CoWorkingApp.Core.Entities;
+﻿using CoWorkingApp.Core.Contracts.UnitOfWork;
+using CoWorkingApp.Core.Entities;
 using CoWorkingApp.Persistence.Context;
 using CoWorkingApp.Persistence.Repositories;
 using CoWorkingApp.Persistence.UnitOfWorks;
@@ -130,7 +131,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
 
                 // ACT
                 // Llamar al método GetAllAsync del repositorio y obtener el resultado
-                var result = await repository.GetAllAsync();
+                var result = await repository.GetAllAsNoTrackingAsync();
 
                 // ASSERT
                 // Verificar que el resultado no sea nulo, que no esté vacío y que tenga la misma cantidad de elementos que las reservas simuladas
@@ -160,7 +161,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
                 // ACT
 
                 // Llamar al método GetAllAsync del repositorio y obtener el resultado
-                var result = await repository.GetAllAsync();
+                var result = await repository.GetAllAsNoTrackingAsync();
 
                 // ASSERT
 
@@ -262,7 +263,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
 
                 // ACT
                 // Se llama al método AddAsync para agregar el nuevo reservaciones a la base de datos
-                var result = await repository.AddAsync(reservation);
+                var result = await repository.Add(reservation);
 
                 // ASSERT 
                 // Se verifica que el reservaciones se haya agregado correctamente
@@ -292,7 +293,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
 
                 // ACT
                 // Se llama al método AddAsync para agregar el nuevo reservaciones a la base de datos
-                var result = await repository.AddAsync(reservation);
+                var result = await repository.Add(reservation);
 
                 // ASSERT 
                 // Se verifica que el reservaciones se haya agregado correctamente
@@ -322,7 +323,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
 
                 // ACT
                 // Se llama al método AddAsync para agregar el nuevo reservaciones a la base de datos
-                var result = await repository.AddAsync(reservation);
+                var result = await repository.Add(reservation);
 
                 // ASSERT 
                 // Se verifica que el reservaciones se haya agregado correctamente
@@ -350,7 +351,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
 
                 // ACT
                 // Se llama al método AddAsync para intentar agregar un nuevo reservaciones a la base de datos, lo que debería provocar una excepción
-                var result = await repository.AddAsync(It.IsAny<Reservation>());
+                var result = await repository.Add(It.IsAny<Reservation>());
 
                 // ASSERT
                 // Se verifica que la operación haya fallado (retorna false)
@@ -402,7 +403,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
 
                 // ACT
                 // Se llama al método UpdateAsync para actualizar la reserva en la base de datos
-                var result = await repository.UpdateAsync(reservationToUpdate);
+                var result = await repository.Update(reservationToUpdate);
 
                 // ASSERT
                 // Se verifica que la operación haya tenido éxito (retorna true)
@@ -454,7 +455,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
 
                 // ACT
                 // Se llama al método UpdateAsync para actualizar la reserva en la base de datos
-                var result = await repository.UpdateAsync(reservationToUpdate);
+                var result = await repository.Update(reservationToUpdate);
 
                 // ASSERT
                 // Se verifica que la operación haya tenido éxito (retorna true)
@@ -485,7 +486,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
 
                 // ACT
                 // Se llama al método UpdateAsync con un reservacion genérico para provocar una excepción
-                var result = await repository.UpdateAsync(It.IsAny<Reservation>());
+                var result = await repository.Update(It.IsAny<Reservation>());
 
                 // ASSERT
                 // Se verifica que la operación haya fallado (retorna false)
@@ -517,7 +518,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
 
                 // ACT
                 // Se llama al método RemoveAsync con la reservacion existente para eliminarla de la base de datos
-                var result = await repository.RemoveAsync(existingReservation);
+                var result = await repository.Remove(existingReservation);
 
                 // ASSERT
                 // Se verifica que la operación haya sido exitosa (retorna true)
@@ -543,7 +544,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
 
                 // ACT
                 // Se llama al método RemoveAsync con cualquier reservacion para simular una excepción al 0 eliminarlo de la base de datos
-                var result = await repository.RemoveAsync(It.IsAny<Reservation>());
+                var result = await repository.Remove(It.IsAny<Reservation>());
 
                 // ASSERT
                 // Se verifica que la operación haya fallado (retorna false)
@@ -578,7 +579,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
 
                 // ACT
                 // Se llama al método ExistsAsync con el ID de la reserva existente para verificar su existencia en la base de datos
-                var result = await repository.ExistsAsync(reservationId);
+                var result = await repository.ContainsAsync(reservationId);
 
                 // ASSERT
                 // Se verifica que sea verdadero, lo que indica que la reserva existe en la base de datos
@@ -604,7 +605,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
 
                 // ACT
                 // Se llama al método ExistsAsync con un ID de reservacion que no existe en la base de datos para verificar su existencia
-                var result = await repository.ExistsAsync(Guid.NewGuid());
+                var result = await repository.ContainsAsync(Guid.NewGuid());
 
                 // ASSERT
                 // Se verifica que sea falso, lo que indica que la reservacion no existe en la base de datos
@@ -636,7 +637,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
 
                 // ACT
                 // Llama al método GetByUserIdAsync con el ID de usuario para obtener las reservaciones asociadas
-                var result = await repository.GetByUserIdAsync(userId);
+                var result = await repository.GetByUserIdAsNoTrackingAsync(userId);
 
                 // ASSERT
                 Assert.NotNull(result);
@@ -663,7 +664,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
 
                 // ACT
                 // Llama al método GetByUserIdAsync con un ID de usuario no existente para buscar reservaciones asociadas
-                var result = await repository.GetByUserIdAsync(Guid.NewGuid());
+                var result = await repository.GetByUserIdAsNoTrackingAsync(Guid.NewGuid());
 
                 // ASSERT
                 Assert.NotNull(result);
@@ -695,7 +696,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
 
                 // ACT
                 // Llama al método GetBySeatIdAsync con el ID de asiento para obtener las reservaciones asociadas
-                var result = await repository.GetBySeatIdAsync(seatId);
+                var result = await repository.GetBySeatIdAsNoTrackingAsync(seatId);
 
                 // ASSERT
                 Assert.NotNull(result);
@@ -722,7 +723,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
 
                 // ACT
                 // Llama al método GetBySeatIdAsync con un ID de asiento no existente para obtener las reservaciones asociadas
-                var result = await repository.GetBySeatIdAsync(Guid.NewGuid());
+                var result = await repository.GetBySeatIdAsNoTrackingAsync(Guid.NewGuid());
 
                 // ASSERT
                 Assert.NotNull(result);
@@ -756,7 +757,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
 
                 // ACT
                 // Se llama al método GetByDateAsync con la fecha de la reserva existente para obtener las reservaciones para esa fecha
-                var result = await repository.GetByDateAsync(date);
+                var result = await repository.GetByDateAsNoTrackingAsync(date);
 
                 // ASSERT
                 Assert.NotNull(result);
@@ -783,7 +784,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
 
                 // ACT
                 // Se llama al método GetByDateAsync con la fecha actual para verificar si hay reservaciones para esta fecha
-                var result = await repository.GetByDateAsync(DateTime.Now);
+                var result = await repository.GetByDateAsNoTrackingAsync(DateTime.Now);
 
                 // ASSERT
                 Assert.NotNull(result);
@@ -821,7 +822,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
 
                 // ACT
                 // Llama al método GetByUserEmailAsync con el correo electrónico del usuario para obtener las reservaciones asociadas
-                var result = await repository.GetByUserEmailAsync(email);
+                var result = await repository.GetByUserEmailAsNoTrackingAsync(email);
 
                 // ASSERT
                 Assert.NotNull(result);
@@ -848,7 +849,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
 
                 // ACT
                 // Llama al método GetByUserEmailAsync con una dirección de correo electrónico inexistente para verificar si hay reservaciones asociadas a ella
-                var result = await repository.GetByUserEmailAsync(It.IsAny<string>());
+                var result = await repository.GetByUserEmailAsNoTrackingAsync(It.IsAny<string>());
 
                 // ASSERT
                 Assert.NotNull(result);
@@ -886,7 +887,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
 
                 // ACT
                 // Llama al método GetBySeatNameAsync con el nombre del asiento para obtener las reservaciones asociadas
-                var result = await repository.GetBySeatNameAsync(seatName);
+                var result = await repository.GetBySeatNameAsNoTrackingAsync(seatName);
 
                 // ASSERT
                 Assert.NotNull(result);
@@ -913,7 +914,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Repositories
 
                 // ACT
                 // Llama al método GetBySeatNameAsync con un nombre de asiento inexistente para verificar si hay reservaciones asociadas a ella
-                var result = await repository.GetBySeatNameAsync(It.IsAny<string>());
+                var result = await repository.GetBySeatNameAsNoTrackingAsync(It.IsAny<string>());
 
                 // ASSERT
                 Assert.NotNull(result);

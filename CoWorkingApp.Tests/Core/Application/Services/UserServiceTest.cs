@@ -125,7 +125,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
 
                 // Configurar un mock para el repositorio IUserRepository y establecer su comportamiento
                 var mockRepository = new Mock<IUserRepository>();
-                mockRepository.Setup(r => r.GetAllAsync()).ReturnsAsync(users);
+                mockRepository.Setup(r => r.GetAllAsNoTrackingAsync()).ReturnsAsync(users);
 
                 // Crear una instancia del servicio de usuario (UserService) con los mocks configurados
                 var service = new UserService(mockRepository.Object, mockMapper.Object);
@@ -169,7 +169,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
 
                 // Configurar un mock para el repositorio IUserRepository y establecer su comportamiento para devolver la lista vacía de usuarios
                 var mockRepository = new Mock<IUserRepository>();
-                mockRepository.Setup(r => r.GetAllAsync()).ReturnsAsync(users);
+                mockRepository.Setup(r => r.GetAllAsNoTrackingAsync()).ReturnsAsync(users);
 
                 // Crear una instancia del servicio de usuario (UserService) con el mock del repositorio y del mapeador
                 var service = new UserService(mockRepository.Object, mockMapper.Object);
@@ -208,7 +208,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
 
                 // Configurar un mock para el repositorio IUserRepository y establecer su comportamiento para lanzar una excepción al llamar a GetAllAsync
                 var mockRepository = new Mock<IUserRepository>();
-                mockRepository.Setup(r => r.GetAllAsync()).ThrowsAsync(new Exception());
+                mockRepository.Setup(r => r.GetAllAsNoTrackingAsync()).ThrowsAsync(new Exception());
 
                 // Crear una instancia del servicio de usuario (UserService) con el mock del repositorio y del mapeador
                 var service = new UserService(mockRepository.Object, mockMapper.Object);
@@ -401,7 +401,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
 
                 // Configurar un mock para el repositorio IUserRepository y establecer su comportamiento para agregar un usuario correctamente
                 var mockRepository = new Mock<IUserRepository>();
-                mockRepository.Setup(r => r.AddAsync(It.IsAny<User>())).ReturnsAsync(true);
+                mockRepository.Setup(r => r.Add(It.IsAny<User>())).ReturnsAsync(true);
 
                 // Crear una instancia del servicio de usuario (UserService) con los mocks configurados
                 var service = new UserService(mockRepository.Object, mockMapper.Object);
@@ -610,7 +610,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
 
                 // Configurar un mock para el repositorio IUserRepository y establecer su comportamiento para devolver false al intentar agregar una entidad
                 var mockRepository = new Mock<IUserRepository>();
-                mockRepository.Setup(r => r.AddAsync(It.IsAny<User>())).ReturnsAsync(false);
+                mockRepository.Setup(r => r.Add(It.IsAny<User>())).ReturnsAsync(false);
 
                 // Crear una instancia del servicio de usuario (UserService) con los mocks del repositorio y del mapeador
                 var service = new UserService(mockRepository.Object, mockMapper.Object);
@@ -650,7 +650,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
 
                 // Configurar un mock para el repositorio IUserRepository y establecer su comportamiento para devolver true al intentar agregar una entidad
                 var mockRepository = new Mock<IUserRepository>();
-                mockRepository.Setup(r => r.AddAsync(It.IsAny<User>())).ReturnsAsync(true);
+                mockRepository.Setup(r => r.Add(It.IsAny<User>())).ReturnsAsync(true);
 
                 // Crear una instancia del servicio de usuario (UserService) con los mocks del repositorio y del mapeador
                 var service = new UserService(mockRepository.Object, mockMapper.Object);
@@ -722,7 +722,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 // Configuración del mock para el repositorio IUserRepository y establecimiento de su comportamiento para obtener un usuario por su ID y actualizar un usuario correctamente
                 var mockRepository = new Mock<IUserRepository>();
                 mockRepository.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(existingUser);
-                mockRepository.Setup(r => r.UpdateAsync(It.IsAny<User>())).ReturnsAsync(true);
+                mockRepository.Setup(r => r.Update(It.IsAny<User>())).ReturnsAsync(true);
 
                 // Crear un mapeador AutoMapper para mapear un usuario a una respuesta de usuario
                 var mapper = TestAutoMapperFactory.CreateMapper();
@@ -900,7 +900,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 // Configurar un mock para el repositorio IUserRepository y establecer su comportamiento para devolver un usuario existente cuando se busque por ID y para devolver false cuando se intente actualizar la entidad
                 var mockRepository = new Mock<IUserRepository>();
                 mockRepository.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(existingUser);
-                mockRepository.Setup(r => r.UpdateAsync(It.IsAny<User>())).ReturnsAsync(false);
+                mockRepository.Setup(r => r.Update(It.IsAny<User>())).ReturnsAsync(false);
 
                 // Configurar un mock para el adaptador IMapperAdapter
                 var mockMapper = new Mock<IMapperAdapter>();
@@ -946,7 +946,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 // Configurar mocks para el repositorio IUserRepository y el adaptador IMapperAdapter
                 var mockRepository = new Mock<IUserRepository>();
                 mockRepository.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(existingUser);
-                mockRepository.Setup(r => r.UpdateAsync(It.IsAny<User>())).ReturnsAsync(true);
+                mockRepository.Setup(r => r.Update(It.IsAny<User>())).ReturnsAsync(true);
 
                 var mockMapper = new Mock<IMapperAdapter>();
                 // Configurar el comportamiento del mapeador para lanzar una excepción al intentar mapear un usuario a una respuesta de usuario
@@ -990,7 +990,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
 
                 var mockRepository = new Mock<IUserRepository>();
                 mockRepository.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(existingUser);
-                mockRepository.Setup(r => r.RemoveAsync(It.IsAny<User>())).ReturnsAsync(true);
+                mockRepository.Setup(r => r.Remove(It.IsAny<User>())).ReturnsAsync(true);
 
                 var mapper = TestAutoMapperFactory.CreateMapper();
                 var mockMapper = new Mock<IMapperAdapter>();
@@ -1074,7 +1074,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 // Configurar un mock para el repositorio IUserRepository y establecer su comportamiento para devolver un usuario existente cuando se busque por ID y para devolver false cuando se intente eliminar la entidad
                 var mockRepository = new Mock<IUserRepository>();
                 mockRepository.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(existingUser);
-                mockRepository.Setup(r => r.RemoveAsync(It.IsAny<User>())).ReturnsAsync(false);
+                mockRepository.Setup(r => r.Remove(It.IsAny<User>())).ReturnsAsync(false);
 
                 // Configurar un mock para el adaptador IMapperAdapter
                 var mockMapper = new Mock<IMapperAdapter>();
@@ -1120,7 +1120,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 // Configurar un mock para el repositorio IUserRepository y establecer su comportamiento para devolver un usuario existente cuando se busque por ID y para devolver true cuando se intente eliminar la entidad
                 var mockRepository = new Mock<IUserRepository>();
                 mockRepository.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(existingUser);
-                mockRepository.Setup(r => r.RemoveAsync(It.IsAny<User>())).ReturnsAsync(true);
+                mockRepository.Setup(r => r.Remove(It.IsAny<User>())).ReturnsAsync(true);
 
                 // Crear un mapeador AutoMapper
                 var mapper = TestAutoMapperFactory.CreateMapper();

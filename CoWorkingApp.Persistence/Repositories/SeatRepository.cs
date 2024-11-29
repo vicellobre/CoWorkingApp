@@ -1,45 +1,43 @@
 ﻿using CoWorkingApp.Core.Contracts.Repositories;
 using CoWorkingApp.Core.Entities;
 using CoWorkingApp.Persistence.Abstracts;
-using CoWorkingApp.Persistence.UnitOfWorks;
 using Microsoft.EntityFrameworkCore;
 
 namespace CoWorkingApp.Persistence.Repositories;
 
 /// <summary>
-/// Implementación del repositorio para la entidad Seat.
+/// Implementación del repositorio para la entidad <see cref="Seat"/>.
 /// </summary>
 public class SeatRepository : RepositoryGeneric<Seat>, ISeatRepository
 {
     /// <summary>
-    /// Constructor de la clase SeatRepository.
+    /// Inicializa una nueva instancia de la clase <see cref="SeatRepository"/> utilizando el contexto de datos especificado.
     /// </summary>
-    /// <param name="unitOfWork">Unidad de trabajo que gestiona las transacciones de la base de datos.</param>
-    public SeatRepository(IUnitOfWork? unitOfWork) : base(unitOfWork) { }
+    /// <param name="context">El contexto de datos de Entity Framework.</param>
+    public SeatRepository(DbContext context) : base(context) { }
 
     /// <summary>
-    /// Obtiene los asientos disponibles (no bloqueados) de manera asincrónica.
+    /// Obtiene las entidades <see cref="Seat"/> disponibles (no bloqueadas) de manera asincrónica sin realizar seguimiento de cambios.
     /// </summary>
-    /// <returns>Colección de asientos disponibles.</returns>
-    public async Task<IEnumerable<Seat>> GetAvailablesAsync()
-    {
+    /// <param name="cancellationToken">Token de cancelación opcional para la operación asincrónica.</param>
+    /// <returns>Una colección de entidades <see cref="Seat"/> disponibles.</returns>
+    public async Task<IEnumerable<Seat>> GetAvailablesAsNoTrackingAsync(CancellationToken cancellationToken = default) =>
         // Filtra los asientos que no están bloqueados
-        return await _dbSet
-            .Where(s => !s.IsBlocked)
+        await Set
             .AsNoTracking()
-            .ToListAsync();
-    }
+            .Where(s => !s.IsBlocked)
+            .ToListAsync(cancellationToken);
 
     /// <summary>
-    /// Busca el primer asiento que coincida con el nombre especificado de manera asincrónica.
+    /// Busca la primera entidad <see cref="Seat"/> que coincida con el nombre especificado de manera asincrónica.
     /// </summary>
-    /// <param name="name">Nombre del asiento.</param>
-    /// <returns>Asiento correspondiente al nombre especificado o null si no se encuentra.</returns>
-    public async Task<Seat?> GetByNameAsync(string name)
-    {
+    /// <param name="name">Nombre de la entidad <see cref="Seat"/>.</param>
+    /// <param name="cancellationToken">Token de cancelación opcional para la operación asincrónica.</param>
+    /// <returns>La entidad <see cref="Seat"/> correspondiente al nombre especificado o null si no se encuentra.</returns>
+    public async Task<Seat?> GetByNameAsync(string name, CancellationToken cancellationToken = default) =>
         // Busca el primer asiento que coincida con el nombre
-        return await _dbSet.FirstOrDefaultAsync(s => s != null && s.Name != null && s.Name.Equals(name));
-    }
+        await Set
+            .FirstOrDefaultAsync(s => s != null && s.Name != null && s.Name.Equals(name), cancellationToken);
 
     // Puedes implementar otros métodos específicos para SeatRepository si es necesario
 }
