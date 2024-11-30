@@ -3,12 +3,12 @@ using CoWorkingApp.Persistence.UnitOfWorks;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 
-namespace CoWorkingApp.Tests.Infrastructure.UnitOfWorks
+namespace CoWorkingApp.Tests.Persistence.UnitOfWorks
 {
     /// <summary>
     /// Clase de pruebas para el controlador UnitOfWork.
     /// </summary>
-    public class UnitOfWorkTest
+    public partial class UnitOfWorkTest
     {
         /// <summary>
         /// Verifica que el constructor de UnitOfWork cree una instancia válida cuando el contexto no es nulo.

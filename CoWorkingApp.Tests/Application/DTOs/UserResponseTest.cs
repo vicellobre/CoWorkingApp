@@ -1,6 +1,6 @@
 ﻿using CoWorkingApp.Application.DTOs;
 
-namespace CoWorkingApp.Tests.Core.Domain.DTOs
+namespace CoWorkingApp.Tests.Application.DTOs
 {
     /// <summary>
     /// Clase que contiene pruebas unitarias para la clase UserResponse.

@@ -6,7 +6,7 @@ using CoWorkingApp.Persistence.UnitOfWorks;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 
-namespace CoWorkingApp.Tests.Infrastructure.Repositories
+namespace CoWorkingApp.Tests.Persistence.Repositories
 {
     /// <summary>
     /// Clase de pruebas unitarias para el repositorio UserRepository.

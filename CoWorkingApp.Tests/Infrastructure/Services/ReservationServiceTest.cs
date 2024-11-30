@@ -7,7 +7,7 @@ using CoWorkingApp.Tests.ClassData;
 using Moq;
 using System.ComponentModel.DataAnnotations;
 
-namespace CoWorkingApp.Tests.Core.Application.Services
+namespace CoWorkingApp.Tests.Infrastructure.Services
 {
     public class ReservationServiceTest
     {
@@ -132,7 +132,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                                 {
                                     u.Date,
                                     Email = u.UserEmail,
-                                    SeatName = u.SeatName
+                                    u.SeatName
                                 })
                 );
             }
@@ -904,7 +904,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 var existingReservation = context.Reservations.First();
 
                 var reservationRequest = new ReservationRequest
-                { 
+                {
                     UserId = existingReservation.UserId,
                     SeatId = Guid.NewGuid()
                 };

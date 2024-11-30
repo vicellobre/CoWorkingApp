@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 
-namespace CoWorkingApp.Tests.Infrastructure.Controllers
+namespace CoWorkingApp.Tests.Presentation.Controllers
 {
     /// <summary>
     /// Clase de pruebas para el controlador UserController.

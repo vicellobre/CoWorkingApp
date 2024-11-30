@@ -6,7 +6,7 @@ using CoWorkingApp.Infrastructure.Services;
 using Moq;
 using System.ComponentModel.DataAnnotations;
 
-namespace CoWorkingApp.Tests.Core.Application.Services
+namespace CoWorkingApp.Tests.Infrastructure.Services
 {
     public class SeatServiceTest
     {

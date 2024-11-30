@@ -6,14 +6,14 @@ using CoWorkingApp.Infrastructure.Services;
 using Moq;
 using System.ComponentModel.DataAnnotations;
 
-namespace CoWorkingApp.Tests.Core.Application.Services
+namespace CoWorkingApp.Tests.Infrastructure.Services
 {
     /// <summary>
     /// Clase que contiene pruebas unitarias para la clase UserService.
     /// </summary>
     public class UserServiceTest
     {
-        
+
         public class Constructor
         {
             /// <summary>
@@ -1421,7 +1421,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 // ARRANGE
                 // Establecer la solicitud como nula
                 UserRequest? request = null;
-                
+
                 // Crear una excepción de ArgumentNullException con el mensaje adecuado
                 var exception = new ArgumentNullException(nameof(request), "The request object cannot be null or empty");
                 var errorMessage = exception.Message;
@@ -1471,7 +1471,7 @@ namespace CoWorkingApp.Tests.Core.Application.Services
                 // Crear una excepción de ArgumentNullException con el mensaje adecuado
                 var exception = new ArgumentNullException(nameof(request), "The email or password cannot be null or empty");
                 var errorMessage = exception.Message;
-                
+
 
                 // Configurar mocks para el adaptador IMapperAdapter y el repositorio IUserRepository
                 var mockMapper = new Mock<IMapperAdapter>();

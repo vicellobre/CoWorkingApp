@@ -1,6 +1,6 @@
 ﻿using CoWorkingApp.Core.Entities;
 
-namespace CoWorkingApp.Tests.Core.Domain.Entities
+namespace CoWorkingApp.Tests.Core.Entities
 {
     /// <summary>
     /// Clase de pruebas unitarias para la entidad User.

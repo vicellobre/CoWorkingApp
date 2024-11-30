@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Moq;
 
-namespace CoWorkingApp.Tests.Infrastructure.Controllers
+namespace CoWorkingApp.Tests.Presentation.Controllers
 {
     public class LoginUserControllerTest
     {
@@ -306,7 +306,7 @@ namespace CoWorkingApp.Tests.Infrastructure.Controllers
             {
                 // ARRANGE
                 var user = new UserResponse
-                { 
+                {
                     Name = name,
                     LastName = lastname,
                     Email = email,

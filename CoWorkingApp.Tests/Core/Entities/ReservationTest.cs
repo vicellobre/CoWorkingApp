@@ -1,6 +1,6 @@
-﻿using CoWorkingApp.Core.Entities; // Importa el espacio de nombres donde se encuentra la clase Reservation
+﻿using CoWorkingApp.Core.Entities;
 
-namespace CoWorkingApp.Tests.Core.Domain.Entities
+namespace CoWorkingApp.Tests.Core.Entities
 {
     /// <summary>
     /// Clase que contiene pruebas unitarias para la clase Reservation.
