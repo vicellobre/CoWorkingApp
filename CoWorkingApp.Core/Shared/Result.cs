@@ -47,7 +47,7 @@ public readonly record struct Result<TValue>
     /// <item><description><see cref="Create(TValue?)"/> para crear un resultado dependiendo si el valor es nulo.</description></item>
     /// </list></summary>
     /// <exception cref="InvalidOperationException">Se lanza cuando se intenta usar el constructor sin parámetros.</exception>
-    public Result(int i)
+    public Result()
     {
         throw new InvalidOperationException("Use the static methods Success, Failure or Create to instantiate Result.");
     }

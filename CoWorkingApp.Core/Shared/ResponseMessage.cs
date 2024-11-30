@@ -18,14 +18,14 @@ public abstract record ResponseMessage
     /// <summary>
     /// Obtiene o establece la lista de errores asociados a la operación, si los hay.
     /// </summary>
-    public List<string> Errors { get; set; } = new List<string>();
+    public List<string> Errors { get; set; } = [];
 
     /// <summary>
     /// Maneja las excepciones y construye una respuesta de error coherente.
     /// </summary>
     /// <typeparam name="TResponse">El tipo de respuesta que se va a devolver.</typeparam>
     /// <param name="ex">La excepción que se ha producido.</param>
-    /// <returns>Una instancia de la respuesta de error.</returns>
+    /// <returns>Una instancia de la respuesta de error con la información de la excepción.</returns>
     public static TResponse HandleException<TResponse>(Exception ex) where TResponse : ResponseMessage, new()
     {
         var response = new TResponse { Success = false, Message = ex.Message };

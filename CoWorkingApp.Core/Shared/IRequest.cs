@@ -8,5 +8,5 @@ public interface IRequest { }
 /// <summary>
 /// Interfaz marcadora para representar una solicitud con respuesta.
 /// </summary>
-/// <typeparam name="TResponse">Tipo de respuesta</typeparam>
+/// <typeparam name="TResponse">El tipo de la respuesta de la solicitud.</typeparam>
 public interface IRequest<out TResponse> { }
