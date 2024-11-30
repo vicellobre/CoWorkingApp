@@ -17,8 +17,9 @@ public readonly record struct Error
 
     /// <summary>
     /// Constructor por defecto que lanza una excepción. 
-    /// Use el método estático Create para instanciar <see cref="Error"/>.
+    /// Use el método estático <see cref="Create"/> para instanciar <see cref="Error"/>.
     /// </summary>
+    /// <exception cref="InvalidOperationException">Se lanza siempre para indicar que este constructor no debe ser usado directamente.</exception>
     public Error()
     {
         throw new InvalidOperationException("Use the static Create method to instantiate Error");
@@ -29,7 +30,7 @@ public readonly record struct Error
     /// </summary>
     /// <param name="code">El código del error.</param>
     /// <param name="message">El mensaje descriptivo del error.</param>
-    /// <exception cref="ArgumentNullException">Se produce cuando el código o el mensaje son nulos.</exception>
+    /// <exception cref="ArgumentNullException">Se lanza cuando el código o el mensaje son nulos.</exception>
     private Error(string? code, string? message)
     {
         if (code is null)
