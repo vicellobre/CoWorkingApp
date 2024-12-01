@@ -1,5 +1,5 @@
 ﻿using CoWorkingApp.Core.Extensions;
-using ERRORS = CoWorkingApp.Core.Errors.Errors;
+using ERRORS = CoWorkingApp.Core.DomainErrors.Errors;
 
 namespace CoWorkingApp.Core.Shared;
 

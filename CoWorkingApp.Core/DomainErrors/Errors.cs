@@ -1,6 +1,6 @@
 ﻿using CoWorkingApp.Core.Shared;
 
-namespace CoWorkingApp.Core.Errors;
+namespace CoWorkingApp.Core.DomainErrors;
 
 /// <summary>
 /// Define errores predefinidos comunes utilizados en toda la aplicación.
