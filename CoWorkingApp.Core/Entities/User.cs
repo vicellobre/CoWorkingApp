@@ -1,4 +1,6 @@
 ﻿using CoWorkingApp.Core.Primitives;
+using CoWorkingApp.Core.Shared;
+using CoWorkingApp.Core.ValueObjects.Composite;
 
 namespace CoWorkingApp.Core.Entities;
 
@@ -8,24 +10,14 @@ namespace CoWorkingApp.Core.Entities;
 public class User : EntityBase
 {
     /// <summary>
-    /// Obtiene o establece el nombre del usuario.
+    /// Obtiene o establece el nombre completo del usuario.
     /// </summary>
-    public string? Name { get; set; }
+    public FullName FullName { get; set; }
 
     /// <summary>
-    /// Obtiene o establece el apellido del usuario.
+    /// Obtiene o establece las credenciales del usuario (correo electrónico y contraseña).
     /// </summary>
-    public string? LastName { get; set; }
-
-    /// <summary>
-    /// Obtiene o establece el correo electrónico del usuario.
-    /// </summary>
-    public string? Email { get; set; }
-
-    /// <summary>
-    /// Obtiene o establece la contraseña del usuario.
-    /// </summary>
-    public string? Password { get; set; }
+    public CredentialsWithEmailAndPassword Credentials { get; set; }
 
     /// <summary>
     /// Obtiene o establece la lista de reservas asociadas al usuario.
@@ -33,33 +25,43 @@ public class User : EntityBase
     public List<Reservation> Reservations { get; set; } = new List<Reservation>();
 
     /// <summary>
-    /// Sobrecarga del método Equals para comparar objetos User por su identificador único.
+    /// Constructor para inicializar un usuario.
     /// </summary>
-    /// <param name="obj">El objeto a comparar con el usuario actual.</param>
-    /// <returns>True si los objetos son iguales, de lo contrario, false.</returns>
-    public override bool Equals(object? obj)
+    protected User() : base() { }
+
+    /// <summary>
+    /// Constructor privado para inicializar un usuario.
+    /// </summary>
+    /// <param name="fullName">El nombre completo del usuario.</param>
+    /// <param name="credentials">Las credenciales del usuario.</param>
+    private User(FullName fullName, CredentialsWithEmailAndPassword credentials)
     {
-        // Verifica si el objeto proporcionado no es nulo y es del mismo tipo que User
-        if (obj is null || GetType() != obj.GetType())
-        {
-            return false;
-        }
-
-        // Convierte el objeto a tipo User
-        User other = (User)obj;
-
-        // Compara los identificadores únicos para determinar la igualdad
-        return Id.Equals(other.Id);
+        FullName = fullName;
+        Credentials = credentials;
     }
 
     /// <summary>
-    /// Obtiene un código hash para el objeto actual.
-    /// El código hash se basa en el identificador único (Id) del objeto User.
+    /// Crea una nueva instancia de <see cref="User"/> con los valores especificados.
     /// </summary>
-    /// <returns>Un código hash para el objeto actual.</returns>
-    public override int GetHashCode()
+    /// <param name="firstName">El primer nombre del usuario.</param>
+    /// <param name="lastName">El apellido del usuario.</param>
+    /// <param name="email">El correo electrónico del usuario.</param>
+    /// <param name="password">La contraseña del usuario.</param>
+    /// <returns>Un resultado que contiene una instancia de <see cref="User"/> si es exitoso; de lo contrario, contiene un error.</returns>
+    public static Result<User> Create(string firstName, string lastName, string email, string password)
     {
-        // Retorna el código hash del identificador único (Id)
-        return Id.GetHashCode();
+        var fullNameResult = FullName.Create(firstName, lastName);
+        if (!fullNameResult.IsSuccess)
+        {
+            return Result<User>.Failure(fullNameResult.FirstError);
+        }
+
+        var credentialsResult = CredentialsWithEmailAndPassword.Create(email, password);
+        if (!credentialsResult.IsSuccess)
+        {
+            return Result<User>.Failure(credentialsResult.FirstError);
+        }
+
+        return Result<User>.Success(new User(fullNameResult.Value, credentialsResult.Value));
     }
 }
