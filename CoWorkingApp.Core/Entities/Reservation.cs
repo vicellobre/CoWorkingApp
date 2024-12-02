@@ -1,4 +1,6 @@
 ﻿using CoWorkingApp.Core.Primitives;
+using CoWorkingApp.Core.Shared;
+using CoWorkingApp.Core.ValueObjects.Single;
 
 namespace CoWorkingApp.Core.Entities;
 
@@ -10,7 +12,7 @@ public class Reservation : EntityBase
     /// <summary>
     /// Obtiene o establece la fecha de la reserva.
     /// </summary>
-    public DateTime Date { get; set; }
+    public Date Date { get; set; }
 
     /// <summary>
     /// Obtiene o establece el identificador único del usuario asociado a la reserva.
@@ -33,33 +35,74 @@ public class Reservation : EntityBase
     public Seat? Seat { get; set; }
 
     /// <summary>
-    /// Sobrecarga del método Equals para comparar objetos Reservation por su identificador único.
+    /// Constructor privado para inicializar una reserva con un identificador especificado.
     /// </summary>
-    /// <param name="obj">El objeto a comparar con la reserva actual.</param>
-    /// <returns>True si los objetos son iguales, de lo contrario, false.</returns>
-    public override bool Equals(object? obj)
+    /// <param name="id">El identificador de la reserva.</param>
+    /// <param name="date">La fecha de la reserva.</param>
+    /// <param name="userId">El identificador del usuario asociado a la reserva.</param>
+    /// <param name="seatId">El identificador del asiento asociado a la reserva.</param>
+    private Reservation(Guid id, Date date, Guid userId, Guid seatId) : base(id)
     {
-        // Verifica si el objeto proporcionado no es nulo y es del mismo tipo que Reservation
-        if (obj is null || GetType() != obj.GetType())
-        {
-            return false;
-        }
-
-        // Convierte el objeto a tipo Reservation
-        Reservation other = (Reservation)obj;
-
-        // Compara los identificadores únicos para determinar la igualdad
-        return Id.Equals(other.Id);
+        Date = date;
+        UserId = userId;
+        SeatId = seatId;
     }
 
     /// <summary>
-    /// Obtiene un código hash para el objeto actual.
-    /// El código hash se basa en el identificador único (Id) de la reserva.
+    /// Crea una nueva instancia de <see cref="Reservation"/> con los valores especificados.
     /// </summary>
-    /// <returns>Un código hash para el objeto actual.</returns>
-    public override int GetHashCode()
+    /// <param name="id">El identificador de la reserva.</param>
+    /// <param name="date">La fecha de la reserva.</param>
+    /// <param name="userId">El identificador del usuario asociado a la reserva.</param>
+    /// <param name="seatId">El identificador del asiento asociado a la reserva.</param>
+    /// <returns>Un resultado que contiene una instancia de <see cref="Reservation"/> si es exitoso; de lo contrario, contiene un error.</returns>
+    public static Result<Reservation> Create(Guid id, DateTime date, Guid userId, Guid seatId)
     {
-        // Retorna el código hash del identificador único (Id) de la reserva
-        return Id.GetHashCode();
+        var dateResult = Date.Create(date);
+        if (dateResult.IsFailure)
+        {
+            return Result<Reservation>.Failure(dateResult.FirstError);
+        }
+
+        return Result<Reservation>.Success(new Reservation(id, dateResult.Value, userId, seatId));
+    }
+
+    /// <summary>
+    /// Cambia la fecha de la reserva.
+    /// </summary>
+    /// <param name="newDate">La nueva fecha de la reserva.</param>
+    /// <returns>Un resultado que indica si la operación fue exitosa.</returns>
+    public Result ChangeDate(DateTime newDate)
+    {
+        var dateResult = Date.Create(newDate);
+        if (dateResult.IsFailure)
+        {
+            return Result.Failure(dateResult.FirstError);
+        }
+
+        Date = dateResult.Value;
+        return Result.Success();
+    }
+
+    /// <summary>
+    /// Cambia el usuario asociado a la reserva.
+    /// </summary>
+    /// <param name="userId">El nuevo identificador del usuario.</param>
+    /// <param name="user">El nuevo usuario asociado a la reserva.</param>
+    public void ChangeUser(Guid userId, User user)
+    {
+        UserId = userId;
+        User = user;
+    }
+
+    /// <summary>
+    /// Cambia el asiento asociado a la reserva.
+    /// </summary>
+    /// <param name="seatId">El nuevo identificador del asiento.</param>
+    /// <param name="seat">El nuevo asiento asociado a la reserva.</param>
+    public void ChangeSeat(Guid seatId, Seat seat)
+    {
+        SeatId = seatId;
+        Seat = seat;
     }
 }

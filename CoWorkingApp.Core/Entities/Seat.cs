@@ -1,4 +1,7 @@
 ﻿using CoWorkingApp.Core.Primitives;
+using CoWorkingApp.Core.Shared;
+using CoWorkingApp.Core.ValueObjects.Composite;
+using CoWorkingApp.Core.ValueObjects.Single;
 
 namespace CoWorkingApp.Core.Entities;
 
@@ -10,53 +13,98 @@ public class Seat : EntityBase
     /// <summary>
     /// Obtiene o establece el nombre del asiento.
     /// </summary>
-    public string? Name { get; set; }
-
-    /// <summary>
-    /// Obtiene o establece un valor que indica si el asiento está bloqueado.
-    /// </summary>
-    public bool IsBlocked { get; set; }
+    public SeatName Name { get; set; }
 
     /// <summary>
     /// Obtiene o establece la descripción del asiento.
     /// </summary>
-    public string? Description { get; set; }
+    public Description Description { get; set; }
 
     /// <summary>
     /// Obtiene o establece la lista de reservas asociadas al asiento.
     /// </summary>
-    public List<Reservation> Reservations { get; set; } = new();
+    public List<Reservation> Reservations { get; set; } = new List<Reservation>();
 
     /// <summary>
-    /// Determina si el objeto actual es igual a otro objeto.
-    /// Dos objetos de tipo Seat se consideran iguales si tienen el mismo identificador único (Id).
+    /// Constructor público sin argumentos para inicializar un asiento.
     /// </summary>
-    /// <param name="obj">El objeto que se va a comparar con el objeto actual.</param>
-    /// <returns>True si el objeto actual es igual al parámetro obj; de lo contrario, false.</returns>
-    public override bool Equals(object? obj)
+    public Seat() : base() { }
+
+    /// <summary>
+    /// Constructor privado para inicializar un asiento con un identificador especificado.
+    /// </summary>
+    /// <param name="id">El identificador del asiento.</param>
+    /// <param name="name">El nombre del asiento.</param>
+    /// <param name="description">La descripción del asiento.</param>
+    private Seat(Guid id, SeatName name, Description description) : base(id)
     {
-        // Verifica si el objeto proporcionado no es nulo y es del mismo tipo que Seat
-        if (obj is null || GetType() != obj.GetType())
-        {
-            // Si el objeto proporcionado es nulo o no es del mismo tipo que Seat, retorna false
-            return false;
-        }
-
-        // Convierte el objeto a tipo Seat
-        Seat other = (Seat)obj;
-
-        // Compara los identificadores únicos para determinar la igualdad
-        return Id.Equals(other.Id);
+        Name = name;
+        Description = description;
     }
 
     /// <summary>
-    /// Obtiene un código hash para el objeto actual.
-    /// El código hash se basa en el identificador único (Id) del objeto Seat.
+    /// Crea una nueva instancia de <see cref="Seat"/> con los valores especificados.
     /// </summary>
-    /// <returns>Un código hash para el objeto actual.</returns>
-    public override int GetHashCode()
+    /// <param name="id">El identificador del asiento.</param>
+    /// <param name="number">El número del asiento.</param>
+    /// <param name="row">La fila del asiento.</param>
+    /// <param name="description">La descripción del asiento.</param>
+    /// <returns>Un resultado que contiene una instancia de <see cref="Seat"/> si es exitoso; de lo contrario, contiene un error.</returns>
+    public static Result<Seat> Create(Guid id, string number, string row, string description)
     {
-        // Retorna el código hash del identificador único (Id)
-        return Id.GetHashCode();
+        var seatNameResult = SeatName.Create(number, row);
+        if (seatNameResult.IsFailure)
+        {
+            return Result<Seat>.Failure(seatNameResult.FirstError);
+        }
+
+        var descriptionValue = Description.Create(description);
+
+        return Result<Seat>.Success(new Seat(id, seatNameResult.Value, descriptionValue));
+    }
+
+    /// <summary>
+    /// Cambia el nombre del asiento.
+    /// </summary>
+    /// <param name="number">El nuevo número del asiento.</param>
+    /// <param name="row">La nueva fila del asiento.</param>
+    /// <returns>Un resultado que indica si la operación fue exitosa.</returns>
+    public Result ChangeName(string number, string row)
+    {
+        var seatNameResult = SeatName.Create(number, row);
+        if (seatNameResult.IsFailure)
+        {
+            return Result.Failure(seatNameResult.FirstError);
+        }
+
+        Name = seatNameResult.Value;
+        return Result.Success();
+    }
+
+    /// <summary>
+    /// Cambia la descripción del asiento.
+    /// </summary>
+    /// <param name="description">La nueva descripción del asiento.</param>
+    public void ChangeDescription(string description)
+    {
+        Description = Description.Create(description);
+    }
+
+    /// <summary>
+    /// Agrega una reserva a la lista de reservas del asiento.
+    /// </summary>
+    /// <param name="reservation">La reserva a agregar.</param>
+    public void AddReservation(Reservation reservation)
+    {
+        Reservations.Add(reservation);
+    }
+
+    /// <summary>
+    /// Elimina una reserva de la lista de reservas del asiento.
+    /// </summary>
+    /// <param name="reservation">La reserva a eliminar.</param>
+    public void RemoveReservation(Reservation reservation)
+    {
+        Reservations.Remove(reservation);
     }
 }
