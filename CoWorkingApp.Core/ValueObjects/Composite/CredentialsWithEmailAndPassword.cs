@@ -48,13 +48,13 @@ public record struct CredentialsWithEmailAndPassword
     public static Result<CredentialsWithEmailAndPassword> Create(string email, string password)
     {
         var emailResult = Email.Create(email);
-        if (!emailResult.IsSuccess)
+        if (emailResult.IsFailure)
         {
             return Result<CredentialsWithEmailAndPassword>.Failure(emailResult.FirstError);
         }
 
         var passwordResult = Password.Create(password);
-        if (!passwordResult.IsSuccess)
+        if (passwordResult.IsFailure)
         {
             return Result<CredentialsWithEmailAndPassword>.Failure(passwordResult.FirstError);
         }

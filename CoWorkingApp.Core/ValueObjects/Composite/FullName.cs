@@ -53,13 +53,13 @@ public record struct FullName
     public static Result<FullName> Create(string firstName, string lastName)
     {
         var firstNameResult = FirstName.Create(firstName);
-        if (!firstNameResult.IsSuccess)
+        if (firstNameResult.IsFailure)
         {
             return Result<FullName>.Failure(firstNameResult.FirstError);
         }
 
         var lastNameResult = LastName.Create(lastName);
-        if (!lastNameResult.IsSuccess)
+        if (lastNameResult.IsFailure)
         {
             return Result<FullName>.Failure(lastNameResult.FirstError);
         }
