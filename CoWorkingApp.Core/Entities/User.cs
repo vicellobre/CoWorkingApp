@@ -94,12 +94,13 @@ public class User : EntityBase
             return Result.Failure(emailResult.FirstError);
         }
 
-        Credentials = new CredentialsWithEmailAndPassword
+        var credentialsResult = CredentialsWithEmailAndPassword.Create(emailResult.Value, Credentials.Password.Value);
+        if (credentialsResult.IsFailure)
         {
-            Email = emailResult.Value,
-            Password = Credentials.Password
-        };
+            return Result.Failure(credentialsResult.FirstError);
+        }
 
+        Credentials = credentialsResult.Value;
         return Result.Success();
     }
 
@@ -116,12 +117,13 @@ public class User : EntityBase
             return Result.Failure(passwordResult.FirstError);
         }
 
-        Credentials = new CredentialsWithEmailAndPassword
+        var credentialsResult = CredentialsWithEmailAndPassword.Create(Credentials.Email.Value, passwordResult.Value);
+        if (credentialsResult.IsFailure)
         {
-            Email = Credentials.Email,
-            Password = passwordResult.Value
-        };
+            return Result.Failure(credentialsResult.FirstError);
+        }
 
+        Credentials = credentialsResult.Value;
         return Result.Success();
     }
 

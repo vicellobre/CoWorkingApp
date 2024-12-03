@@ -1,4 +1,5 @@
 ﻿using Azure.Core;
+using CoWorkingApp.Application.Abstracts.Services;
 using CoWorkingApp.Application.Contracts.Adapters;
 using CoWorkingApp.Core.Contracts.UnitOfWork;
 using CoWorkingApp.Core.Primitives;
@@ -13,12 +14,12 @@ namespace CoWorkingApp.Infrastructure.Abstracts;
 /// <typeparam name="TRepository">Tipo de repositorio asociado al servicio.</typeparam>
 /// <typeparam name="TEntity">Tipo de entidad que se manejará.</typeparam>
 /// <typeparam name="TRequest">Tipo de objeto de solicitud (<see cref="IRequest"/>).</typeparam>
-/// <typeparam name="TResponse">Tipo de objeto de respuesta (<see cref="ResponseMessage"/>).</typeparam>
+/// <typeparam name="TResponse">Tipo de objeto de respuesta (<see cref="IResponse"/>).</typeparam>
 public abstract class ServiceGeneric<TRepository, TEntity, TRequest, TResponse> : IService<TRequest, TResponse>
     where TRepository : IRepository<TEntity>
     where TEntity : EntityBase
     where TRequest : IRequest
-    where TResponse : ResponseMessage, new()
+    where TResponse : IResponse, new()
 {
     protected readonly IUnitOfWork _unitOfWork;
     protected readonly TRepository _repository;
@@ -43,7 +44,7 @@ public abstract class ServiceGeneric<TRepository, TEntity, TRequest, TResponse> 
     /// </summary>
     /// <param name="ex">La excepción que se va a manejar.</param>
     /// <returns>Un objeto de respuesta de tipo <typeparamref name="TResponse"/> que representa el error.</returns>
-    protected TResponse HandleException(Exception ex) => ResponseMessage.HandleException<TResponse>(ex);
+    protected TResponse HandleException(Exception ex) => IResponse.HandleException<TResponse>(ex);
 
     // Implementación de métodos de la interfaz IService
 

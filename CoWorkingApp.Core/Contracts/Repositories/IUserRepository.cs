@@ -26,5 +26,13 @@ public interface IUserRepository : IRepository<User>
     /// <returns>La entidad <see cref="User"/> autenticada si las credenciales son válidas, o null si las credenciales son incorrectas.</returns>
     Task<User?> AuthenticateAsync(Email email, Password password, CancellationToken cancellationToken = default);
 
+    /// <summary>
+    /// Verifica si una dirección de correo electrónico es única de manera asincrónica.
+    /// </summary>
+    /// <param name="email">Dirección de correo electrónico del usuario.</param>
+    /// <param name="cancellationToken">Token de cancelación opcional para la operación asincrónica.</param>
+    /// <returns>True si el correo electrónico es único, de lo contrario false.</returns>
+    Task<bool> IsEmailUniqueAsync(Email email, CancellationToken cancellationToken = default);
+
     // Otros métodos específicos para UserRepository
 }

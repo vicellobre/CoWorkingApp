@@ -10,4 +10,18 @@
     <ProjectReference Include="..\CoWorkingApp.Core\CoWorkingApp.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Reservations\Commands\" />
+    <Folder Include="Reservations\Queries\" />
+    <Folder Include="Seats\Commands\" />
+    <Folder Include="Seats\Queries\" />
+    <Folder Include="Users\Queries\GetAllUsers\" />
+    <Folder Include="Users\Queries\GetUserById\" />
+    <Folder Include="Users\Queries\GetUserByEmail\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.4.1" />
+  </ItemGroup>
+
 </Project>

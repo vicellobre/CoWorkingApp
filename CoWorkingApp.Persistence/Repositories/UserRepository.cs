@@ -40,5 +40,14 @@ public class UserRepository : RepositoryGeneric<User>, IUserRepository
         // manejando el caso de posibles valores null en Email y Password
         await Set.FirstOrDefaultAsync(u => u.Credentials.Email == email && u.Credentials.Password == password, cancellationToken);
 
+    /// <summary>
+    /// Verifica si una dirección de correo electrónico es única de manera asincrónica.
+    /// </summary>
+    /// <param name="email">Dirección de correo electrónico del usuario.</param>
+    /// <param name="cancellationToken">Token de cancelación opcional para la operación asincrónica.</param>
+    /// <returns>True si el correo electrónico es único, de lo contrario false.</returns>
+    public Task<bool> IsEmailUniqueAsync(Email email, CancellationToken cancellationToken = default) =>
+        Set.AnyAsync(u => u.Credentials.Email == email, cancellationToken);
+
     // Puedes implementar otros métodos específicos para UserRepository si es necesario
 }
