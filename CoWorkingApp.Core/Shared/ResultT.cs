@@ -24,7 +24,7 @@ public readonly record struct Result<TValue>
     /// Obtiene el valor resultante de la operación si es exitosa; de lo contrario, lanza una excepción.
     /// </summary>
     /// <exception cref="InvalidOperationException">Se lanza cuando se intenta acceder al valor de un resultado fallido.</exception>
-    public TValue? Value => IsSuccess ? _value : throw new InvalidOperationException("The value of a failure result cannot be accessed.");
+    public TValue Value => IsSuccess ? _value! : throw new InvalidOperationException("The value of a failure result cannot be accessed.");
 
     /// <summary>
     /// Indica si el resultado es exitoso.
@@ -61,7 +61,7 @@ public readonly record struct Result<TValue>
     /// Inicializa una nueva instancia de la estructura <see cref="Result{TValue}"/> con el valor especificado.
     /// </summary>
     /// <param name="value">El valor resultante de la operación.</param>
-    private Result(TValue? value)
+    private Result(TValue value)
     {
         Errors = value is not null ? ERRORS.EmptyErrors : [ERRORS.NullValue];
         _value = value;
@@ -84,6 +84,27 @@ public readonly record struct Result<TValue>
     {
         //Evaluar cuando la colección tiene un error y es None o todos son None
         Errors = !errors.IsNullOrEmpty() ? errors : [ERRORS.NullValue];
+    }
+
+    /// <summary>
+    /// Obtiene el valor del resultado si es exitoso; de lo contrario, devuelve un valor predeterminado.
+    /// </summary>
+    /// <param name="defaultValue">El valor predeterminado a devolver si el resultado es fallido.</param>
+    /// <returns>El valor del resultado si es exitoso; de lo contrario, el valor predeterminado.</returns>
+    public TValue? GetValueOrDefault(TValue? defaultValue = default) => IsSuccess ? _value : defaultValue;
+
+    /// <summary>
+    /// Ejecuta una acción si el resultado es exitoso.
+    /// </summary>
+    /// <param name="action">La acción a ejecutar.</param>
+    /// <returns>El propio resultado.</returns>
+    public Result<TValue> OnSuccess(Action<TValue?> action)
+    {
+        if (IsSuccess)
+        {
+            action(_value);
+        }
+        return this;
     }
 
     /// <summary>
@@ -153,4 +174,60 @@ public readonly record struct Result<TValue>
     /// </summary>
     /// <param name="errors">El arreglo de errores resultantes de la operación.</param>
     public static implicit operator Result<TValue>(Error[] errors) => new(errors);
+
+    /// <summary>
+    /// Ejecuta una acción si el resultado es exitoso.
+    /// </summary>
+    /// <param name="action">La acción a ejecutar.</param>
+    /// <returns>El propio resultado.</returns>
+    public Result<TValue> OnSuccess(Action action)
+    {
+        if (IsSuccess)
+        {
+            action();
+        }
+        return this;
+    }
+
+    /// <summary>
+    /// Ejecuta una acción si el resultado es fallido.
+    /// </summary>
+    /// <param name="action">La acción a ejecutar.</param>
+    /// <returns>El propio resultado.</returns>
+    public Result<TValue> OnFailure(Action action)
+    {
+        if (IsFailure)
+        {
+            action();
+        }
+        return this;
+    }
+
+    /// <summary>
+    /// Ejecuta una acción si el resultado es fallido.
+    /// </summary>
+    /// <param name="action">La acción a ejecutar con el error asociado.</param>
+    /// <returns>El propio resultado.</returns>
+    public Result<TValue> OnFailure(Action<Error> action)
+    {
+        if (IsFailure)
+        {
+            action(FirstError);
+        }
+        return this;
+    }
+
+    /// <summary>
+    /// Ejecuta una acción si el resultado es fallido.
+    /// </summary>
+    /// <param name="action">La acción a ejecutar con la colección de errores asociada.</param>
+    /// <returns>El propio resultado.</returns>
+    public Result<TValue> OnFailure(Action<ICollection<Error>> action)
+    {
+        if (IsFailure)
+        {
+            action(Errors);
+        }
+        return this;
+    }
 }

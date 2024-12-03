@@ -58,6 +58,34 @@ public readonly struct Result
     }
 
     /// <summary>
+    /// Ejecuta una acción si el resultado es exitoso.
+    /// </summary>
+    /// <param name="action">La acción a ejecutar.</param>
+    /// <returns>El propio resultado.</returns>
+    public Result OnSuccess(Action action)
+    {
+        if (IsSuccess)
+        {
+            action();
+        }
+        return this;
+    }
+
+    /// <summary>
+    /// Ejecuta una acción si el resultado es fallido.
+    /// </summary>
+    /// <param name="action">La acción a ejecutar.</param>
+    /// <returns>El propio resultado.</returns>
+    public Result OnFailure(Action<Error> action)
+    {
+        if (IsFailure)
+        {
+            action(Error);
+        }
+        return this;
+    }
+
+    /// <summary>
     /// Crea un resultado exitoso sin valor asociado.
     /// </summary>
     /// <returns>Una nueva instancia de la estructura <see cref="Result"/> que representa un resultado exitoso.</returns>
