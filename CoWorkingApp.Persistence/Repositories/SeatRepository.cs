@@ -1,5 +1,6 @@
 ﻿using CoWorkingApp.Core.Contracts.Repositories;
 using CoWorkingApp.Core.Entities;
+using CoWorkingApp.Core.ValueObjects.Composite;
 using CoWorkingApp.Persistence.Abstracts;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,19 +26,19 @@ public class SeatRepository : RepositoryGeneric<Seat>, ISeatRepository
         // Filtra los asientos que no están bloqueados
         await Set
             .AsNoTracking()
-            .Where(s => !s.IsBlocked)
+            //.Where(s => !s.IsBlocked)
             .ToListAsync(cancellationToken);
 
     /// <summary>
-    /// Busca la primera entidad <see cref="Seat"/> que coincida con el nombre especificado de manera asincrónica.
+    /// Obtiene una entidad <see cref="Seat"/> por su <see cref="SeatName"/> de manera asincrónica.
     /// </summary>
     /// <param name="name">Nombre de la entidad <see cref="Seat"/>.</param>
     /// <param name="cancellationToken">Token de cancelación opcional para la operación asincrónica.</param>
     /// <returns>La entidad <see cref="Seat"/> correspondiente al nombre especificado o null si no se encuentra.</returns>
-    public async Task<Seat?> GetByNameAsync(string name, CancellationToken cancellationToken = default) =>
+    public async Task<Seat?> GetByNameAsync(SeatName name, CancellationToken cancellationToken = default) =>
         // Busca el primer asiento que coincida con el nombre
         await Set
-            .FirstOrDefaultAsync(s => s != null && s.Name != null && s.Name.Equals(name), cancellationToken);
+            .FirstOrDefaultAsync(s => s != null && s.Name.Value != null && s.Name.Equals(name), cancellationToken);
 
     // Puedes implementar otros métodos específicos para SeatRepository si es necesario
 }

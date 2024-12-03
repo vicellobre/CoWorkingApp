@@ -64,7 +64,7 @@ public abstract class RepositoryGeneric<T> : IRepository<T> where T : EntityBase
     /// <param name="cancellationToken">Token de cancelación opcional para la operación asincrónica.</param>
     /// <returns>True si la entidad de tipo <typeparamref name="T"/> existe; de lo contrario, false.</returns>
     public virtual async Task<bool> ContainsAsync(Guid id, CancellationToken cancellationToken = default) =>
-        await Set.FindAsync(id, cancellationToken) is not null;
+        await Set.FindAsync([id, cancellationToken], cancellationToken: cancellationToken) is not null;
 
     /// <summary>
     /// Añade una nueva entidad de tipo <typeparamref name="T"/> al repositorio.

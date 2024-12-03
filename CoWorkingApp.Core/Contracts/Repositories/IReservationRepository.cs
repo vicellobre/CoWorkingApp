@@ -1,5 +1,7 @@
 ﻿using CoWorkingApp.Core.Entities;
 using CoWorkingApp.Core.Primitives;
+using CoWorkingApp.Core.ValueObjects.Composite;
+using CoWorkingApp.Core.ValueObjects.Single;
 
 namespace CoWorkingApp.Core.Contracts.Repositories;
 
@@ -25,28 +27,28 @@ public interface IReservationRepository : IRepository<Reservation>
     Task<IEnumerable<Reservation>> GetBySeatIdAsNoTrackingAsync(Guid seatId, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Obtiene reservaciones de la entidad <see cref="Reservation"/> por fecha de manera asincrónica sin realizar seguimiento de cambios.
+    /// Obtiene reservaciones de la entidad <see cref="Reservation"/> por <see cref="Date"/> de manera asincrónica sin realizar seguimiento de cambios.
     /// </summary>
     /// <param name="date">Fecha de la reservación.</param>
     /// <param name="cancellationToken">Token de cancelación opcional para la operación asincrónica.</param>
     /// <returns>Una colección de reservaciones de la entidad <see cref="Reservation"/> realizadas en la fecha especificada.</returns>
-    Task<IEnumerable<Reservation>> GetByDateAsNoTrackingAsync(DateTime date, CancellationToken cancellationToken = default);
+    Task<IEnumerable<Reservation>> GetByDateAsNoTrackingAsync(Date date, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Obtiene reservaciones de la entidad <see cref="Reservation"/> por correo electrónico del usuario de manera asincrónica sin realizar seguimiento de cambios.
+    /// Obtiene reservaciones de la entidad <see cref="Reservation"/> por <see cref="Email"/> del usuario de manera asincrónica sin realizar seguimiento de cambios.
     /// </summary>
     /// <param name="email">Correo electrónico del usuario.</param>
     /// <param name="cancellationToken">Token de cancelación opcional para la operación asincrónica.</param>
     /// <returns>Una colección de reservaciones de la entidad <see cref="Reservation"/> asociadas al usuario con el correo electrónico especificado.</returns>
-    Task<IEnumerable<Reservation>> GetByUserEmailAsNoTrackingAsync(string email, CancellationToken cancellationToken = default);
+    Task<IEnumerable<Reservation>> GetByUserEmailAsNoTrackingAsync(Email email, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Obtiene reservaciones de la entidad <see cref="Reservation"/> por nombre del asiento de manera asincrónica sin realizar seguimiento de cambios.
+    /// Obtiene reservaciones de la entidad <see cref="Reservation"/> por <see cref="SeatName"/> de manera asincrónica sin realizar seguimiento de cambios.
     /// </summary>
     /// <param name="seatName">Nombre del asiento.</param>
     /// <param name="cancellationToken">Token de cancelación opcional para la operación asincrónica.</param>
     /// <returns>Una colección de reservaciones de la entidad <see cref="Reservation"/> asociadas al asiento con el nombre especificado.</returns>
-    Task<IEnumerable<Reservation>> GetBySeatNameAsNoTrackingAsync(string seatName, CancellationToken cancellationToken = default);
+    Task<IEnumerable<Reservation>> GetBySeatNameAsNoTrackingAsync(SeatName seatName, CancellationToken cancellationToken = default);
 
     // Otros métodos específicos para ReservationRepository
 }
