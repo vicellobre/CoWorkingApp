@@ -1,6 +1,7 @@
 ﻿using CoWorkingApp.Core.Primitives;
 using CoWorkingApp.Core.Shared;
 using CoWorkingApp.Core.ValueObjects.Composite;
+using CoWorkingApp.Core.ValueObjects.Single;
 
 namespace CoWorkingApp.Core.Entities;
 
@@ -25,11 +26,6 @@ public class User : EntityBase
     public ICollection<Reservation> Reservations { get; set; } = [];
 
     /// <summary>
-    /// Constructor para inicializar un usuario.
-    /// </summary>
-    protected User() : base() { }
-
-    /// <summary>
     /// Constructor privado para inicializar un usuario con un identificador especificado.
     /// </summary>
     /// <param name="id">El identificador del usuario.</param>
@@ -50,7 +46,7 @@ public class User : EntityBase
     /// <param name="email">El correo electrónico del usuario.</param>
     /// <param name="password">La contraseña del usuario.</param>
     /// <returns>Un resultado que contiene una instancia de <see cref="User"/> si es exitoso; de lo contrario, contiene un error.</returns>
-    public static Result<User> Create(Guid id, string firstName, string lastName, string email, string password)
+    public static Result<User> Create(Guid id, string? firstName, string? lastName, string? email, string? password)
     {
         var fullNameResult = FullName.Create(firstName, lastName);
         if (fullNameResult.IsFailure)
@@ -82,6 +78,50 @@ public class User : EntityBase
         }
 
         Name = fullNameResult.Value;
+        return Result.Success();
+    }
+
+    /// <summary>
+    /// Cambia el correo electrónico del usuario.
+    /// </summary>
+    /// <param name="email">El nuevo correo electrónico del usuario.</param>
+    /// <returns>Un resultado que indica si la operación fue exitosa.</returns>
+    public Result ChangeEmail(string email)
+    {
+        var emailResult = Email.Create(email);
+        if (emailResult.IsFailure)
+        {
+            return Result.Failure(emailResult.FirstError);
+        }
+
+        Credentials = new CredentialsWithEmailAndPassword
+        {
+            Email = emailResult.Value,
+            Password = Credentials.Password
+        };
+
+        return Result.Success();
+    }
+
+    /// <summary>
+    /// Cambia la contraseña del usuario.
+    /// </summary>
+    /// <param name="password">La nueva contraseña del usuario.</param>
+    /// <returns>Un resultado que indica si la operación fue exitosa.</returns>
+    public Result ChangePassword(string password)
+    {
+        var passwordResult = Password.Create(password);
+        if (passwordResult.IsFailure)
+        {
+            return Result.Failure(passwordResult.FirstError);
+        }
+
+        Credentials = new CredentialsWithEmailAndPassword
+        {
+            Email = Credentials.Email,
+            Password = passwordResult.Value
+        };
+
         return Result.Success();
     }
 

@@ -23,12 +23,7 @@ public class Seat : EntityBase
     /// <summary>
     /// Obtiene o establece la lista de reservas asociadas al asiento.
     /// </summary>
-    public List<Reservation> Reservations { get; set; } = new List<Reservation>();
-
-    /// <summary>
-    /// Constructor público sin argumentos para inicializar un asiento.
-    /// </summary>
-    public Seat() : base() { }
+    public List<Reservation> Reservations { get; set; } = [];
 
     /// <summary>
     /// Constructor privado para inicializar un asiento con un identificador especificado.
@@ -58,9 +53,9 @@ public class Seat : EntityBase
             return Result<Seat>.Failure(seatNameResult.FirstError);
         }
 
-        var descriptionValue = Description.Create(description);
+        var descriptionResult = Description.Create(description);
 
-        return Result<Seat>.Success(new Seat(id, seatNameResult.Value, descriptionValue));
+        return Result<Seat>.Success(new Seat(id, seatNameResult.Value, descriptionResult.Value));
     }
 
     /// <summary>
@@ -87,7 +82,7 @@ public class Seat : EntityBase
     /// <param name="description">La nueva descripción del asiento.</param>
     public void ChangeDescription(string description)
     {
-        Description = Description.Create(description);
+        Description = Description.Create(description).Value;
     }
 
     /// <summary>
