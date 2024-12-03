@@ -54,7 +54,7 @@ public readonly record struct Password
     /// </summary>
     /// <param name="value">El valor de la contraseña.</param>
     /// <returns>Un resultado que contiene una instancia de <see cref="Password"/> si es exitoso; de lo contrario, contiene un error.</returns>
-    public static Result<Password> Create(string value)
+    public static Result<Password> Create(string? value)
     {
         if (string.IsNullOrWhiteSpace(value))
         {
@@ -84,4 +84,10 @@ public readonly record struct Password
     /// </summary>
     /// <returns>La contraseña como una cadena.</returns>
     public override string ToString() => Value;
+
+    /// <summary>
+    /// Define una conversión implícita de <see cref="Password"/> a <see cref="string"/>.
+    /// </summary>
+    /// <param name="password">El valor de <see cref="Password"/> a convertir.</param>
+    public static implicit operator string(Password password) => password.Value;
 }

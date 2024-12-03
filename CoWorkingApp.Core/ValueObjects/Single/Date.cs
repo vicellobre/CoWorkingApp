@@ -52,4 +52,10 @@ public readonly record struct Date
     /// </summary>
     /// <returns>La fecha como una cadena.</returns>
     public override string ToString() => Value.ToString("o");
+
+    /// <summary>
+    /// Define una conversión implícita de <see cref="Date"/> a <see cref="DateTime"/>.
+    /// </summary>
+    /// <param name="date">La instancia de <see cref="Date"/> a convertir.</param>
+    public static implicit operator DateTime(Date date) => date.Value;
 }

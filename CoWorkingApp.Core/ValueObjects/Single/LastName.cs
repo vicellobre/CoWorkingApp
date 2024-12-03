@@ -53,7 +53,7 @@ public readonly record struct LastName
     /// </summary>
     /// <param name="value">El valor del apellido.</param>
     /// <returns>Un resultado que contiene una instancia de <see cref="LastName"/> si es exitoso; de lo contrario, contiene un error.</returns>
-    public static Result<LastName> Create(string value)
+    public static Result<LastName> Create(string? value)
     {
         if (string.IsNullOrWhiteSpace(value))
         {
@@ -83,4 +83,10 @@ public readonly record struct LastName
     /// </summary>
     /// <returns>El apellido como una cadena.</returns>
     public override string ToString() => Value;
+
+    /// <summary>
+    /// Define una conversión implícita de <see cref="LastName"/> a <see cref="string"/>.
+    /// </summary>
+    /// <param name="lastName">El valor de <see cref="LastName"/> a convertir.</param>
+    public static implicit operator string(LastName lastName) => lastName.Value;
 }

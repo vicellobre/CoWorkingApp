@@ -1,6 +1,6 @@
-﻿using CoWorkingApp.Core.DomainErrors;
+﻿using System.Text.RegularExpressions;
+using CoWorkingApp.Core.DomainErrors;
 using CoWorkingApp.Core.Shared;
-using System.Text.RegularExpressions;
 
 namespace CoWorkingApp.Core.ValueObjects.Single;
 
@@ -53,7 +53,7 @@ public readonly record struct Email
     /// </summary>
     /// <param name="value">El valor del correo electrónico.</param>
     /// <returns>Un resultado que contiene una instancia de <see cref="Email"/> si es exitoso; de lo contrario, contiene un error.</returns>
-    public static Result<Email> Create(string value)
+    public static Result<Email> Create(string? value)
     {
         if (string.IsNullOrWhiteSpace(value))
         {
@@ -83,4 +83,10 @@ public readonly record struct Email
     /// </summary>
     /// <returns>El correo electrónico como una cadena.</returns>
     public override string ToString() => Value;
+
+    /// <summary>
+    /// Define una conversión implícita de <see cref="Email"/> a <see cref="string"/>.
+    /// </summary>
+    /// <param name="email">El valor de <see cref="Email"/> a convertir.</param>
+    public static implicit operator string(Email email) => email.Value;
 }

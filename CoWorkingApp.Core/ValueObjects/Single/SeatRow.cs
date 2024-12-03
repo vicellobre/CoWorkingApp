@@ -37,7 +37,7 @@ public readonly record struct SeatRow
     /// </summary>
     /// <param name="value">El valor de la fila del asiento.</param>
     /// <returns>Un resultado que contiene una instancia de <see cref="SeatRow"/> si es exitoso; de lo contrario, contiene un error.</returns>
-    public static Result<SeatRow> Create(string value)
+    public static Result<SeatRow> Create(string? value)
     {
         if (string.IsNullOrWhiteSpace(value))
         {
@@ -52,4 +52,10 @@ public readonly record struct SeatRow
     /// </summary>
     /// <returns>La fila del asiento como una cadena.</returns>
     public override string ToString() => Value;
+
+    /// <summary>
+    /// Define una conversión implícita de <see cref="SeatRow"/> a <see cref="string"/>.
+    /// </summary>
+    /// <param name="seatRow">El valor de <see cref="SeatRow"/> a convertir.</param>
+    public static implicit operator string(SeatRow seatRow) => seatRow.Value;
 }

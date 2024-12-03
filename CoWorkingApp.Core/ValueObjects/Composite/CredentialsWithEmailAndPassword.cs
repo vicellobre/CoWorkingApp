@@ -6,7 +6,7 @@ namespace CoWorkingApp.Core.ValueObjects.Composite;
 /// <summary>
 /// Representa las credenciales del usuario, compuestas por correo electrónico y contraseña.
 /// </summary>
-public record struct CredentialsWithEmailAndPassword
+public sealed record class CredentialsWithEmailAndPassword
 {
     /// <summary>
     /// Obtiene o establece el correo electrónico del usuario.
@@ -19,21 +19,16 @@ public record struct CredentialsWithEmailAndPassword
     public Password Password { get; set; }
 
     /// <summary>
-    /// Constructor sin parámetros que lanza una excepción.
-    /// Use el método estático <see cref="Create"/> para instanciar <see cref="CredentialsWithEmailAndPassword"/>.
+    /// Constructor protegido sin parámetros.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Lanza siempre indicando que use el método <see cref="Create"/>.</exception>
-    public CredentialsWithEmailAndPassword()
-    {
-        throw new InvalidOperationException("Use the static Create method to instantiate CredentialsWithEmailAndPassword.");
-    }
+    private CredentialsWithEmailAndPassword() : base() { }
 
     /// <summary>
     /// Constructor privado para inicializar las credenciales.
     /// </summary>
     /// <param name="email">El correo electrónico del usuario.</param>
     /// <param name="password">La contraseña del usuario.</param>
-    private CredentialsWithEmailAndPassword(Email email, Password password)
+    private CredentialsWithEmailAndPassword(Email email, Password password) : base()
     {
         Email = email;
         Password = password;
@@ -45,7 +40,7 @@ public record struct CredentialsWithEmailAndPassword
     /// <param name="email">El correo electrónico del usuario.</param>
     /// <param name="password">La contraseña del usuario.</param>
     /// <returns>Un resultado que contiene una instancia de <see cref="CredentialsWithEmailAndPassword"/> si es exitoso; de lo contrario, contiene un error.</returns>
-    public static Result<CredentialsWithEmailAndPassword> Create(string email, string password)
+    public static Result<CredentialsWithEmailAndPassword> Create(string? email, string? password)
     {
         var emailResult = Email.Create(email);
         if (emailResult.IsFailure)
@@ -66,5 +61,11 @@ public record struct CredentialsWithEmailAndPassword
     /// Devuelve una representación en cadena de las credenciales del usuario.
     /// </summary>
     /// <returns>Una cadena que representa las credenciales del usuario.</returns>
-    public override readonly string ToString() => $"{Email.Value} / ******";
+    public override string ToString() => $"{Email.Value} / ******";
+
+    /// <summary>
+    /// Define una conversión implícita de <see cref="CredentialsWithEmailAndPassword"/> a <see cref="string"/>.
+    /// </summary>
+    /// <param name="credentials">El valor de <see cref="CredentialsWithEmailAndPassword"/> a convertir.</param>
+    public static implicit operator string(CredentialsWithEmailAndPassword credentials) => credentials.ToString();
 }
