@@ -40,5 +40,14 @@ public class SeatRepository : RepositoryGeneric<Seat>, ISeatRepository
         await Set
             .FirstOrDefaultAsync(s => s != null && s.Name.Value != null && s.Name.Equals(name), cancellationToken);
 
+    /// <summary>
+    /// Verifica si el nombre de una entidad <see cref="Seat"/> es único de manera asincrónica.
+    /// </summary>
+    /// <param name="name">Nombre de la entidad <see cref="Seat"/>.</param>
+    /// <param name="cancellationToken">Token de cancelación opcional para la operación asincrónica.</param>
+    /// <returns>True si el nombre es único; de lo contrario, false.</returns>
+    public async Task<bool> IsNameUniqueAsync(SeatName name, CancellationToken cancellationToken = default) =>
+        await Set.AnyAsync(s => s.Name == name, cancellationToken);
+
     // Puedes implementar otros métodos específicos para SeatRepository si es necesario
 }
