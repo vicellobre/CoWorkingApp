@@ -9,16 +9,16 @@ namespace CoWorkingApp.Application.Seats.Queries.GetSeatByName;
 /// <summary>
 /// Maneja la consulta para obtener un asiento por su nombre.
 /// </summary>
-public sealed class GetSeatByEmailQueryHandler : IQueryHandler<GetSeatByNameQuery, GetSeatByNameQueryResponse>
+public sealed class GetSeatByNameQueryHandler : IQueryHandler<GetSeatByNameQuery, GetSeatByNameQueryResponse>
 {
     private readonly ISeatRepository _seatRepository;
 
     /// <summary>
-    /// Inicializa una nueva instancia de la clase <see cref="GetSeatByEmailQueryHandler"/>.
+    /// Inicializa una nueva instancia de la clase <see cref="GetSeatByNameQueryHandler"/>.
     /// </summary>
     /// <param name="seatRepository">El repositorio de asientos.</param>
     /// <exception cref="ArgumentNullException">Lanzado cuando el repositorio de asientos es null.</exception>
-    public GetSeatByEmailQueryHandler(ISeatRepository seatRepository)
+    public GetSeatByNameQueryHandler(ISeatRepository seatRepository)
     {
         _seatRepository = seatRepository ?? throw new ArgumentNullException(nameof(seatRepository));
     }
