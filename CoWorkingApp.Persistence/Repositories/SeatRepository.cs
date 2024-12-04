@@ -38,7 +38,7 @@ public class SeatRepository : RepositoryGeneric<Seat>, ISeatRepository
     public async Task<Seat?> GetByNameAsync(SeatName name, CancellationToken cancellationToken = default) =>
         // Busca el primer asiento que coincida con el nombre
         await Set
-            .FirstOrDefaultAsync(s => s != null && s.Name.Value != null && s.Name.Equals(name), cancellationToken);
+            .FirstOrDefaultAsync(s => s.Name.Equals(name), cancellationToken);
 
     /// <summary>
     /// Verifica si el nombre de una entidad <see cref="Seat"/> es único de manera asincrónica.
