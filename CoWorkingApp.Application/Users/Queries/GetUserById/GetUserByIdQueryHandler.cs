@@ -1,7 +1,6 @@
 ﻿using CoWorkingApp.Application.Abstracts.Messaging;
 using CoWorkingApp.Core.Contracts.Repositories;
 using CoWorkingApp.Core.DomainErrors;
-using CoWorkingApp.Core.Extensions;
 using CoWorkingApp.Core.Shared;
 
 namespace CoWorkingApp.Application.Users.Queries.GetUserById;
