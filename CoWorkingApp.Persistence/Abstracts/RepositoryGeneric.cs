@@ -44,7 +44,8 @@ public abstract class RepositoryGeneric<T> : IRepository<T> where T : EntityBase
     /// <param name="id">Identificador de la entidad de tipo <typeparamref name="T"/>.</param>
     /// <param name="cancellationToken">Token de cancelación opcional para la operación asincrónica.</param>
     /// <returns>La entidad de tipo <typeparamref name="T"/> con el identificador especificado, o null si no se encuentra.</returns>
-    public virtual async Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default) => await Set.FindAsync(new object[] { id }, cancellationToken);
+    public virtual async Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default) => 
+        await Set.FindAsync([id, cancellationToken], cancellationToken);
 
     /// <summary>
     /// Recupera una entidad de tipo <typeparamref name="T"/> por su identificador de manera asincrónica sin realizar seguimiento de cambios.
