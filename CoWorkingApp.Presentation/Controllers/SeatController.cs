@@ -1,5 +1,5 @@
-﻿using CoWorkingApp.Application.Abstracts.Services;
-using CoWorkingApp.Application.DTOs;
+﻿using CoWorkingApp.Application.Seats.Services.Contracts;
+using CoWorkingApp.Application.Seats.Services.DTOs;
 using CoWorkingApp.Presentation.Abstracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,14 +13,14 @@ namespace CoWorkingApp.Presentation.Controllers;
 [ApiController]
 //[ApiExplorerSettings(GroupName = "v2")]
 [Route("api/[controller]s")] // Se utiliza el plural "seats" en la ruta para seguir convenciones RESTful
-public class SeatController : ControllerGeneric<ISeatService, SeatRequest, SeatResponse>
+public class SeatController : ControllerGeneric<ISeatService, SeatServiceRequest, SeatServiceResponse>
 {
     /// <summary>
     /// Constructor de la clase SeatController.
     /// </summary>
     /// <param name="service">Instancia del servicio de asientos.</param>
     /// <param name="logger">Instancia del logger.</param>
-    public SeatController(ISeatService? service, ILogger<ControllerGeneric<ISeatService, SeatRequest, SeatResponse>>? logger) : base(service, logger) { }
+    public SeatController(ISeatService? service, ILogger<ControllerGeneric<ISeatService, SeatServiceRequest, SeatServiceResponse>>? logger) : base(service, logger) { }
 
     /// <summary>
     /// Obtiene los asientos disponibles.
@@ -28,7 +28,7 @@ public class SeatController : ControllerGeneric<ISeatService, SeatRequest, SeatR
     /// <returns>ActionResult con la colección de asientos disponibles o un error interno.</returns>
     [HttpGet("availables")]
     [AllowAnonymous] // Se permite acceso anónimo para obtener los asientos disponibles
-    public async Task<ActionResult<IEnumerable<SeatResponse>>> GetAvailables()
+    public async Task<ActionResult<IEnumerable<SeatServiceResponse>>> GetAvailables()
     {
         try
         {
@@ -67,7 +67,7 @@ public class SeatController : ControllerGeneric<ISeatService, SeatRequest, SeatR
     /// <param name="name">Nombre de los asientos a obtener.</param>
     /// <returns>ActionResult con la colección de asientos correspondientes al nombre o un error interno.</returns>
     [HttpGet("by-name/{name}")]
-    public async Task<ActionResult<SeatResponse>> GetByName(string name)
+    public async Task<ActionResult<SeatServiceResponse>> GetByName(string name)
     {
         try
         {

@@ -1,15 +1,14 @@
 ﻿using CoWorkingApp.Core.Shared;
 
-namespace CoWorkingApp.Application.Abstracts.Services;
+namespace CoWorkingApp.Core.Primitives;
 
 /// <summary>
 /// Interfaz que define los métodos básicos que deben implementar los servicios en la aplicación CoWorkingApp.
 /// </summary>
 /// <typeparam name="TRequest">Tipo de objeto de solicitud (<see cref="IRequest"/>).</typeparam>
 /// <typeparam name="TResponse">Tipo de objeto de respuesta (<see cref="IResponse"/>).</typeparam>
-public interface IService<TRequest, TResponse>
+public interface IEntityService<TRequest, TResponse>
     where TRequest : IRequest
-    where TResponse : ResponseMessage
 {
     /// <summary>
     /// Obtiene todas las entidades de tipo <typeparamref name="TResponse"/> disponibles de manera asincrónica.

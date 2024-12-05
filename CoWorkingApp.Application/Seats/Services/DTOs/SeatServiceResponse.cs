@@ -1,11 +1,11 @@
 ﻿using CoWorkingApp.Core.Shared;
 
-namespace CoWorkingApp.Application.DTOs;
+namespace CoWorkingApp.Application.Seats.Services.DTOs;
 
 /// <summary>
-/// Representa la respuesta de un asiento en el sistema.
+/// Representa la respuesta de un servicio de asientos en el sistema.
 /// </summary>
-public record SeatResponse : ResponseMessage
+public record SeatServiceResponse : ResponseMessage
 {
     /// <summary>
     /// Obtiene o establece el identificador único del asiento.

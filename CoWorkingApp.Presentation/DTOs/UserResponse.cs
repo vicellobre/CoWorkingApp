@@ -1,6 +1,6 @@
 ﻿using CoWorkingApp.Core.Shared;
 
-namespace CoWorkingApp.Application.DTOs;
+namespace CoWorkingApp.Presentation.DTOs;
 
 /// <summary>
 /// Representa la respuesta de un usuario en el sistema.

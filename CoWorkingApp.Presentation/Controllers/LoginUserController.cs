@@ -1,5 +1,5 @@
-﻿using CoWorkingApp.Application.Abstracts.Services;
-using CoWorkingApp.Application.DTOs;
+﻿using CoWorkingApp.Application.Users.Services.Contracts;
+using CoWorkingApp.Application.Users.Services.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -41,7 +41,7 @@ public class LoginUserController : ControllerBase
     [HttpPost]
     [AllowAnonymous] // Permite el acceso a este método sin autenticación
     [Route("validateuser")]
-    public async Task<IActionResult> Login([FromBody] UserRequest user)
+    public async Task<IActionResult> Login([FromBody] UserServiceRequest user)
     {
         try
         {
@@ -66,7 +66,7 @@ public class LoginUserController : ControllerBase
         {
             // Manejar cualquier error y devolver un mensaje de error
             var exception = new Exception("An unexpected error occurred while retrieving all entities");
-            var response = Core.Shared.ResponseMessage.HandleException<UserResponse>(exception);
+            var response = Core.Shared.ResponseMessage.HandleException<UserServiceResponse>(exception);
             return StatusCode(500, response);
         }
     }
@@ -76,7 +76,7 @@ public class LoginUserController : ControllerBase
     /// </summary>
     /// <param name="user">Usuario autenticado para el cual se genera el token.</param>
     /// <returns>JsonResult con el token generado.</returns>
-    private JsonResult BuildToken(UserResponse user)
+    private JsonResult BuildToken(UserServiceResponse user)
     {
         // Verifica que los campos del usuario no sean nulos
         if (string.IsNullOrWhiteSpace(user.Name))

@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
-using CoWorkingApp.Application.Abstracts.Services;
 using CoWorkingApp.Application.Contracts.Adapters;
+using CoWorkingApp.Application.Reservations.Services.Contracts;
+using CoWorkingApp.Application.Seats.Services.Contracts;
+using CoWorkingApp.Application.Users.Services.Contracts;
 using CoWorkingApp.Core.Contracts.Repositories;
 using CoWorkingApp.Core.Contracts.UnitOfWork;
 using CoWorkingApp.Infrastructure.Adapters;

@@ -1,4 +1,4 @@
-﻿using CoWorkingApp.Application.Abstracts.Services;
+﻿using CoWorkingApp.Core.Primitives;
 using CoWorkingApp.Core.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,12 +10,12 @@ namespace CoWorkingApp.Presentation.Abstracts;
 /// <summary>
 /// Clase base genérica para controladores API que utiliza servicios genéricos.
 /// </summary>
-/// <typeparam name="TService">Tipo del servicio que implementa la interfaz <see cref="IService{TRequest, TResponse}"/>.</typeparam>
+/// <typeparam name="TService">Tipo del servicio que implementa la interfaz <see cref="IEntityService{TRequest, TResponse}"/>.</typeparam>
 /// <typeparam name="TRequest">Tipo de la solicitud que implementa la interfaz <see cref="IRequest"/>.</typeparam>
 /// <typeparam name="TResponse">Tipo de la respuesta que hereda de <see cref="IResponse"/>.</typeparam>
 [ApiController]
 public class ControllerGeneric<TService, TRequest, TResponse> : ControllerBase
-    where TService : IService<TRequest, TResponse>  // Restricción para el tipo de servicio
+    where TService : IEntityService<TRequest, TResponse>  // Restricción para el tipo de servicio
     where TRequest : IRequest                       // Restricción para el tipo de solicitud
     where TResponse : ResponseMessage, new()        // Restricción para el tipo de respuesta
 {

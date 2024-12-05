@@ -1,6 +1,6 @@
-﻿using CoWorkingApp.Application.Abstracts.Services;
-using CoWorkingApp.Application.Contracts.Adapters;
-using CoWorkingApp.Application.DTOs;
+﻿using CoWorkingApp.Application.Contracts.Adapters;
+using CoWorkingApp.Application.Users.Services.Contracts;
+using CoWorkingApp.Application.Users.Services.DTOs;
 using CoWorkingApp.Core.Contracts.Repositories;
 using CoWorkingApp.Core.Contracts.UnitOfWork;
 using CoWorkingApp.Core.Entities;
@@ -14,7 +14,7 @@ namespace CoWorkingApp.Infrastructure.Services;
 /// <summary>
 /// Implementación concreta del servicio para la entidad <see cref="User"/>.
 /// </summary>
-public class UserService : ServiceGeneric<IUserRepository, User, UserRequest, UserResponse>, IUserService
+public class UserService : ServiceGeneric<IUserRepository, User, UserServiceRequest, UserServiceResponse>, IUserService
 {
     /// <summary>
     /// Inicializa una nueva instancia de la clase <see cref="UserService"/> utilizando las dependencias necesarias.
@@ -27,11 +27,11 @@ public class UserService : ServiceGeneric<IUserRepository, User, UserRequest, Us
     // Implementación de métodos específicos de IUserService
 
     /// <summary>
-    /// Obtiene una entidad <see cref="UserResponse"/> por su dirección de correo electrónico.
+    /// Obtiene una entidad <see cref="UserServiceResponse"/> por su dirección de correo electrónico.
     /// </summary>
     /// <param name="email">La dirección de correo electrónico del usuario.</param>
-    /// <returns>Un objeto <see cref="UserResponse"/> que representa al usuario encontrado.</returns>
-    public async Task<UserResponse> GetByEmailAsync(string? email)
+    /// <returns>Un objeto <see cref="UserServiceResponse"/> que representa al usuario encontrado.</returns>
+    public async Task<UserServiceResponse> GetByEmailAsync(string? email)
     {
         try
         {
@@ -52,7 +52,7 @@ public class UserService : ServiceGeneric<IUserRepository, User, UserRequest, Us
             var user = await _repository.GetByEmailAsync(emailResult.Value) ?? throw new ArgumentException($"Email {email} not found");
 
             // Mapear el usuario a una respuesta de usuario y establecer el éxito en verdadero
-            var response = _mapper.Map<User, UserResponse>(user);
+            var response = _mapper.Map<User, UserServiceResponse>(user);
             response.Success = true;
             return response;
         }
@@ -64,11 +64,11 @@ public class UserService : ServiceGeneric<IUserRepository, User, UserRequest, Us
     }
 
     /// <summary>
-    /// Autentica a una entidad <see cref="UserResponse"/> utilizando su dirección de correo electrónico y contraseña.
+    /// Autentica a una entidad <see cref="UserServiceResponse"/> utilizando su dirección de correo electrónico y contraseña.
     /// </summary>
     /// <param name="request">La solicitud de autenticación que contiene la dirección de correo electrónico y la contraseña del usuario.</param>
-    /// <returns>Un objeto <see cref="UserResponse"/> que representa al usuario autenticado.</returns>
-    public async Task<UserResponse> AuthenticateAsync(UserRequest? request)
+    /// <returns>Un objeto <see cref="UserServiceResponse"/> que representa al usuario autenticado.</returns>
+    public async Task<UserServiceResponse> AuthenticateAsync(UserServiceRequest? request)
     {
         try
         {
@@ -96,7 +96,7 @@ public class UserService : ServiceGeneric<IUserRepository, User, UserRequest, Us
             var user = await _repository.AuthenticateAsync(credentials.Email, credentials.Password) ?? throw new ArgumentException("Credentials incorrect");
 
             // Mapear el usuario autenticado a una respuesta de usuario y establecer el éxito en verdadero
-            var response = _mapper.Map<User, UserResponse>(user);
+            var response = _mapper.Map<User, UserServiceResponse>(user);
             response.Success = true;
             return response;
         }
@@ -110,12 +110,12 @@ public class UserService : ServiceGeneric<IUserRepository, User, UserRequest, Us
     // Implementación de métodos abstractos de ServiceGeneric
 
     /// <summary>
-    /// Actualiza las propiedades de una entidad <see cref="User"/> existente con los valores de una solicitud de tipo <see cref="UserRequest"/>.
+    /// Actualiza las propiedades de una entidad <see cref="User"/> existente con los valores de una solicitud de tipo <see cref="UserServiceRequest"/>.
     /// </summary>
     /// <param name="existingEntity">La entidad existente que se va a actualizar.</param>
     /// <param name="request">La solicitud de usuario con los nuevos valores.</param>
     /// <returns>La entidad <see cref="User"/> actualizada.</returns>
-    protected override User UpdateProperties(User existingEntity, UserRequest request)
+    protected override User UpdateProperties(User existingEntity, UserServiceRequest request)
     {
         // Actualizar las propiedades del usuario existente con los valores de la solicitud
         var firstName = FirstName

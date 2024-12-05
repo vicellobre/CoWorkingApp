@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
-using CoWorkingApp.Application.DTOs;
+using CoWorkingApp.Application.Reservations.Services.DTOs;
+using CoWorkingApp.Application.Seats.Services.DTOs;
+using CoWorkingApp.Application.Users.Services.DTOs;
 using CoWorkingApp.Core.Entities;
 
 namespace CoWorkingApp.Infrastructure.Adapters;
@@ -15,17 +17,17 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         // Configura el mapeo entre la entidad User y su correspondiente DTO UserResponse
-        CreateMap<User, UserResponse>();
+        CreateMap<User, UserServiceResponse>();
         // Configura el mapeo entre el DTO UserRequest y su correspondiente entidad User
-        CreateMap<UserRequest, User>();
+        CreateMap<UserServiceRequest, User>();
 
         // Configura el mapeo entre la entidad Seat y su correspondiente DTO SeatResponse
-        CreateMap<Seat, SeatResponse>();
+        CreateMap<Seat, SeatServiceResponse>();
         // Configura el mapeo entre el DTO SeatRequest y su correspondiente entidad Seat
-        CreateMap<SeatRequest, Seat>();
+        CreateMap<SeatServiceRequest, Seat>();
 
         // Configura el mapeo entre la entidad Reservation y su correspondiente DTO ReservationResponse
-        CreateMap<Reservation, ReservationResponse>()
+        CreateMap<Reservation, ReservationServiceResponse>()
             // Mapea la fecha de la reserva
             .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date))
             // Mapea el nombre del usuario, verifica que User no sea null
@@ -42,7 +44,7 @@ public class MappingProfile : Profile
 
 
         // Configura el mapeo entre el DTO ReservationRequest y su correspondiente entidad Reservation
-        CreateMap<ReservationRequest, Reservation>()
+        CreateMap<ReservationServiceRequest, Reservation>()
            // Mapea la fecha de la reserva
            .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date))
            // Mapea el identificador único del usuario

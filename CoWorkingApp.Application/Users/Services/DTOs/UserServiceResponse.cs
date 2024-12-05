@@ -1,16 +1,21 @@
 ﻿using CoWorkingApp.Core.Shared;
 
-namespace CoWorkingApp.Application.DTOs;
+namespace CoWorkingApp.Application.Users.Services.DTOs;
 
 /// <summary>
-/// Representa una solicitud para crear o actualizar un usuario en el sistema.
+/// Representa la respuesta de un servicio de usuarios en el sistema.
 /// </summary>
-public record UserRequest : IRequest
+public record UserServiceResponse : ResponseMessage
 {
+    /// <summary>
+    /// Obtiene o establece el identificador único del usuario.
+    /// </summary>
+    public Guid Id { get; set; }
+
     /// <summary>
     /// Obtiene o establece el nombre del usuario.
     /// </summary>
-    public string? FirstName { get; set; }
+    public string? Name { get; set; }
 
     /// <summary>
     /// Obtiene o establece el apellido del usuario.
@@ -21,9 +26,4 @@ public record UserRequest : IRequest
     /// Obtiene o establece el correo electrónico del usuario.
     /// </summary>
     public string? Email { get; set; }
-
-    /// <summary>
-    /// Obtiene o establece la contraseña del usuario.
-    /// </summary>
-    public string? Password { get; set; }
 }

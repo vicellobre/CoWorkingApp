@@ -1,6 +1,6 @@
-﻿using CoWorkingApp.Application.Abstracts.Services;
-using CoWorkingApp.Application.Contracts.Adapters;
-using CoWorkingApp.Application.DTOs;
+﻿using CoWorkingApp.Application.Contracts.Adapters;
+using CoWorkingApp.Application.Seats.Services.Contracts;
+using CoWorkingApp.Application.Seats.Services.DTOs;
 using CoWorkingApp.Core.Contracts.Repositories;
 using CoWorkingApp.Core.Contracts.UnitOfWork;
 using CoWorkingApp.Core.Entities;
@@ -13,7 +13,7 @@ namespace CoWorkingApp.Infrastructure.Services;
 /// <summary>
 /// Implementación concreta del servicio para la entidad <see cref="Seat"/>.
 /// </summary>
-public class SeatService : ServiceGeneric<ISeatRepository, Seat, SeatRequest, SeatResponse>, ISeatService
+public class SeatService : ServiceGeneric<ISeatRepository, Seat, SeatServiceRequest, SeatServiceResponse>, ISeatService
 {
     /// <summary>
     /// Inicializa una nueva instancia de la clase <see cref="SeatService"/> utilizando las dependencias necesarias.
@@ -28,8 +28,8 @@ public class SeatService : ServiceGeneric<ISeatRepository, Seat, SeatRequest, Se
     /// <summary>
     /// Obtiene todas las entidades <see cref="Seat"/> disponibles de manera asincrónica.
     /// </summary>
-    /// <returns>Una colección de respuestas de tipo <see cref="SeatResponse"/> que representa los asientos disponibles.</returns>
-    public async Task<IEnumerable<SeatResponse>> GetAvailablesAsync()
+    /// <returns>Una colección de respuestas de tipo <see cref="SeatServiceResponse"/> que representa los asientos disponibles.</returns>
+    public async Task<IEnumerable<SeatServiceResponse>> GetAvailablesAsync()
     {
         try
         {
@@ -37,7 +37,7 @@ public class SeatService : ServiceGeneric<ISeatRepository, Seat, SeatRequest, Se
             var seatsAvailable = await _repository.GetAvailablesAsNoTrackingAsync();
 
             // Mapear los asientos disponibles a respuestas de asientos
-            var responses = _mapper.Map<IEnumerable<Seat>, IEnumerable<SeatResponse>>(seatsAvailable).ToList();
+            var responses = _mapper.Map<IEnumerable<Seat>, IEnumerable<SeatServiceResponse>>(seatsAvailable).ToList();
             responses.ForEach(response => response.Success = true);
             return responses;
         }
@@ -52,8 +52,8 @@ public class SeatService : ServiceGeneric<ISeatRepository, Seat, SeatRequest, Se
     /// Obtiene una entidad <see cref="Seat"/> por su nombre de manera asincrónica.
     /// </summary>
     /// <param name="name">El nombre del asiento.</param>
-    /// <returns>Una respuesta de tipo <see cref="SeatResponse"/> correspondiente al nombre proporcionado.</returns>
-    public async Task<SeatResponse> GetByNameAsync(string? name)
+    /// <returns>Una respuesta de tipo <see cref="SeatServiceResponse"/> correspondiente al nombre proporcionado.</returns>
+    public async Task<SeatServiceResponse> GetByNameAsync(string? name)
     {
         try
         {
@@ -68,7 +68,7 @@ public class SeatService : ServiceGeneric<ISeatRepository, Seat, SeatRequest, Se
             var seat = await _repository.GetByNameAsync(seatNameResult.Value) ?? throw new ArgumentException($"Seat {name} not found");
 
             // Mapear el asiento a una respuesta de asiento y establecer el éxito en verdadero
-            var response = _mapper.Map<Seat, SeatResponse>(seat);
+            var response = _mapper.Map<Seat, SeatServiceResponse>(seat);
             response.Success = true;
             return response;
         }
@@ -82,12 +82,12 @@ public class SeatService : ServiceGeneric<ISeatRepository, Seat, SeatRequest, Se
     // Implementación de métodos abstractos de ServiceGeneric
 
     /// <summary>
-    /// Actualiza las propiedades de una entidad <see cref="Seat"/> existente con los valores de una solicitud de tipo <see cref="SeatRequest"/>.
+    /// Actualiza las propiedades de una entidad <see cref="Seat"/> existente con los valores de una solicitud de tipo <see cref="SeatServiceRequest"/>.
     /// </summary>
     /// <param name="existingEntity">La entidad de asiento existente que se actualizará.</param>
     /// <param name="request">La solicitud de asiento que contiene los nuevos valores.</param>
     /// <returns>La entidad <see cref="Seat"/> actualizada.</returns>
-    protected override Seat UpdateProperties(Seat existingEntity, SeatRequest request)
+    protected override Seat UpdateProperties(Seat existingEntity, SeatServiceRequest request)
     {
         // Actualizar las propiedades del asiento existente con los valores de la solicitud
         if (!string.IsNullOrEmpty(request.Name))

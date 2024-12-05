@@ -1,5 +1,5 @@
-﻿using CoWorkingApp.Application.Abstracts.Services;
-using CoWorkingApp.Application.DTOs;
+﻿using CoWorkingApp.Application.Users.Services.Contracts;
+using CoWorkingApp.Application.Users.Services.DTOs;
 using CoWorkingApp.Presentation.Abstracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,14 +13,14 @@ namespace CoWorkingApp.Presentation.Controllers;
 [ApiController]
 //[ApiExplorerSettings(GroupName = "v1")]
 [Route("api/[controller]s")] // Se utiliza el plural "users" en la ruta para seguir convenciones RESTful
-public class UserController : ControllerGeneric<IUserService, UserRequest, UserResponse>
+public class UserController : ControllerGeneric<IUserService, UserServiceRequest, UserServiceResponse>
 {
     /// <summary>
     /// Constructor de la clase UserController.
     /// </summary>
     /// <param name="service">Instancia del servicio de usuarios.</param>
     /// <param name="logger">Instancia del logger.</param>
-    public UserController(IUserService? service, ILogger<ControllerGeneric<IUserService, UserRequest, UserResponse>>? logger) : base(service, logger) { }
+    public UserController(IUserService? service, ILogger<ControllerGeneric<IUserService, UserServiceRequest, UserServiceResponse>>? logger) : base(service, logger) { }
 
     /// <summary>
     /// Obtiene un usuario por su dirección de correo electrónico.
@@ -29,7 +29,7 @@ public class UserController : ControllerGeneric<IUserService, UserRequest, UserR
     /// <returns>ActionResult con el usuario correspondiente al correo electrónico o NotFound si no existe.</returns>
     [HttpGet("email/{email}")]
     [ResponseCache(Duration = 60)] // Se agrega caché HTTP para mejorar el rendimiento
-    public async Task<ActionResult<UserResponse>> GetByEmail(string email)
+    public async Task<ActionResult<UserServiceResponse>> GetByEmail(string email)
     {
         try
         {
@@ -66,7 +66,7 @@ public class UserController : ControllerGeneric<IUserService, UserRequest, UserR
     /// </returns>
     [HttpPost("register")]
     [AllowAnonymous] // Permite el acceso a este método sin autenticación
-    public override async Task<ActionResult<UserResponse>> Create([FromBody] UserRequest userRequest)
+    public override async Task<ActionResult<UserServiceResponse>> Create([FromBody] UserServiceRequest userRequest)
     {
         try
         {

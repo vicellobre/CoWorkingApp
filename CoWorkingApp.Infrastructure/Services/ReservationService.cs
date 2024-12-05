@@ -1,6 +1,6 @@
-﻿using CoWorkingApp.Application.Abstracts.Services;
-using CoWorkingApp.Application.Contracts.Adapters;
-using CoWorkingApp.Application.DTOs;
+﻿using CoWorkingApp.Application.Contracts.Adapters;
+using CoWorkingApp.Application.Reservations.Services.Contracts;
+using CoWorkingApp.Application.Reservations.Services.DTOs;
 using CoWorkingApp.Core.Contracts.Repositories;
 using CoWorkingApp.Core.Contracts.UnitOfWork;
 using CoWorkingApp.Core.Entities;
@@ -13,7 +13,7 @@ namespace CoWorkingApp.Infrastructure.Services;
 /// <summary>
 /// Implementación concreta del servicio para la entidad <see cref="Reservation"/>.
 /// </summary>
-public class ReservationService : ServiceGeneric<IReservationRepository, Reservation, ReservationRequest, ReservationResponse>, IReservationService
+public class ReservationService : ServiceGeneric<IReservationRepository, Reservation, ReservationServiceRequest, ReservationServiceResponse>, IReservationService
 {
     /// <summary>
     /// Inicializa una nueva instancia de la clase <see cref="ReservationService"/> utilizando las dependencias necesarias.
@@ -28,9 +28,9 @@ public class ReservationService : ServiceGeneric<IReservationRepository, Reserva
     /// <summary>
     /// Crea una nueva entidad <see cref="Reservation"/> de manera asincrónica.
     /// </summary>
-    /// <param name="request">El objeto de solicitud de tipo <see cref="ReservationRequest"/>.</param>
-    /// <returns>Un objeto de respuesta de tipo <see cref="ReservationResponse"/> que representa la reservación creada.</returns>
-    public override async Task<ReservationResponse> CreateAsync(ReservationRequest? request)
+    /// <param name="request">El objeto de solicitud de tipo <see cref="ReservationServiceRequest"/>.</param>
+    /// <returns>Un objeto de respuesta de tipo <see cref="ReservationServiceResponse"/> que representa la reservación creada.</returns>
+    public override async Task<ReservationServiceResponse> CreateAsync(ReservationServiceRequest? request)
     {
         try
         {
@@ -41,7 +41,7 @@ public class ReservationService : ServiceGeneric<IReservationRepository, Reserva
             }
 
             // Mapear la solicitud a una reservación
-            var reservation = _mapper.Map<ReservationRequest, Reservation>(request);
+            var reservation = _mapper.Map<ReservationServiceRequest, Reservation>(request);
 
             // Validar la reservación
             if (!IsValid(reservation))
@@ -58,7 +58,7 @@ public class ReservationService : ServiceGeneric<IReservationRepository, Reserva
                 ?? throw new ArgumentException("The request contains inconsistent details");
 
             // Mapear la reservación a un objeto de respuesta y retornarlo
-            var response = _mapper.Map<Reservation, ReservationResponse>(responseComplete);
+            var response = _mapper.Map<Reservation, ReservationServiceResponse>(responseComplete);
             response.Success = true;
             return response;
         }
@@ -73,8 +73,8 @@ public class ReservationService : ServiceGeneric<IReservationRepository, Reserva
     /// Obtiene las entidades <see cref="Reservation"/> realizadas en una fecha específica de manera asincrónica.
     /// </summary>
     /// <param name="date">La fecha para la cual se desean obtener las reservaciones.</param>
-    /// <returns>Una colección de respuestas de tipo <see cref="ReservationResponse"/> que representan las reservaciones realizadas en la fecha especificada.</returns>
-    public async Task<IEnumerable<ReservationResponse>> GetByDateAsync(DateTime date)
+    /// <returns>Una colección de respuestas de tipo <see cref="ReservationServiceResponse"/> que representan las reservaciones realizadas en la fecha especificada.</returns>
+    public async Task<IEnumerable<ReservationServiceResponse>> GetByDateAsync(DateTime date)
     {
         try
         {
@@ -83,7 +83,7 @@ public class ReservationService : ServiceGeneric<IReservationRepository, Reserva
             var reservations = await _repository.GetByDateAsNoTrackingAsync(dateResult.Value);
 
             // Mapear las reservaciones a ReservationResponse y convertirlas en una lista
-            var response = _mapper.Map<IEnumerable<Reservation>, IEnumerable<ReservationResponse>>(reservations).ToList();
+            var response = _mapper.Map<IEnumerable<Reservation>, IEnumerable<ReservationServiceResponse>>(reservations).ToList();
 
             // Marcar todas las respuestas como exitosas
             response.ForEach(r => r.Success = true);
@@ -101,8 +101,8 @@ public class ReservationService : ServiceGeneric<IReservationRepository, Reserva
     /// Obtiene las entidades <see cref="Reservation"/> realizadas por un usuario específico de manera asincrónica.
     /// </summary>
     /// <param name="userId">El ID del usuario para el cual se desean obtener las reservaciones.</param>
-    /// <returns>Una colección de respuestas de tipo <see cref="ReservationResponse"/> que representan las reservaciones realizadas por el usuario con el ID especificado.</returns>
-    public async Task<IEnumerable<ReservationResponse>> GetByUserIdAsync(Guid userId)
+    /// <returns>Una colección de respuestas de tipo <see cref="ReservationServiceResponse"/> que representan las reservaciones realizadas por el usuario con el ID especificado.</returns>
+    public async Task<IEnumerable<ReservationServiceResponse>> GetByUserIdAsync(Guid userId)
     {
         try
         {
@@ -110,7 +110,7 @@ public class ReservationService : ServiceGeneric<IReservationRepository, Reserva
             var reservations = await _repository.GetByUserIdAsNoTrackingAsync(userId);
 
             // Mapear las reservaciones a ReservationResponse y convertirlas en una lista
-            var response = _mapper.Map<IEnumerable<Reservation>, IEnumerable<ReservationResponse>>(reservations).ToList();
+            var response = _mapper.Map<IEnumerable<Reservation>, IEnumerable<ReservationServiceResponse>>(reservations).ToList();
 
             // Marcar todas las respuestas como exitosas
             response.ForEach(r => r.Success = true);
@@ -128,8 +128,8 @@ public class ReservationService : ServiceGeneric<IReservationRepository, Reserva
     /// Obtiene las entidades <see cref="Reservation"/> asociadas a un asiento específico de manera asincrónica.
     /// </summary>
     /// <param name="seatId">El ID del asiento para el cual se desean obtener las reservaciones.</param>
-    /// <returns>Una colección de respuestas de tipo <see cref="ReservationResponse"/> que representan las reservaciones asociadas al asiento con el ID especificado.</returns>
-    public async Task<IEnumerable<ReservationResponse>> GetBySeatIdAsync(Guid seatId)
+    /// <returns>Una colección de respuestas de tipo <see cref="ReservationServiceResponse"/> que representan las reservaciones asociadas al asiento con el ID especificado.</returns>
+    public async Task<IEnumerable<ReservationServiceResponse>> GetBySeatIdAsync(Guid seatId)
     {
         try
         {
@@ -137,7 +137,7 @@ public class ReservationService : ServiceGeneric<IReservationRepository, Reserva
             var reservations = await _repository.GetBySeatIdAsNoTrackingAsync(seatId);
 
             // Mapear las reservaciones a ReservationResponse y convertirlas en una lista
-            var response = _mapper.Map<IEnumerable<Reservation>, IEnumerable<ReservationResponse>>(reservations).ToList();
+            var response = _mapper.Map<IEnumerable<Reservation>, IEnumerable<ReservationServiceResponse>>(reservations).ToList();
 
             // Marcar todas las respuestas como exitosas
             response.ForEach(r => r.Success = true);
@@ -155,9 +155,9 @@ public class ReservationService : ServiceGeneric<IReservationRepository, Reserva
     /// Actualiza una entidad <see cref="Reservation"/> existente de manera asincrónica.
     /// </summary>
     /// <param name="id">El ID de la reservación.</param>
-    /// <param name="request">El objeto de solicitud de tipo <see cref="ReservationRequest"/>.</param>
-    /// <returns>Un objeto de respuesta de tipo <see cref="ReservationResponse"/> que representa la reservación actualizada.</returns>
-    public override async Task<ReservationResponse> UpdateAsync(Guid id, ReservationRequest? request)
+    /// <param name="request">El objeto de solicitud de tipo <see cref="ReservationServiceRequest"/>.</param>
+    /// <returns>Un objeto de respuesta de tipo <see cref="ReservationServiceResponse"/> que representa la reservación actualizada.</returns>
+    public override async Task<ReservationServiceResponse> UpdateAsync(Guid id, ReservationServiceRequest? request)
     {
         try
         {
@@ -196,7 +196,7 @@ public class ReservationService : ServiceGeneric<IReservationRepository, Reserva
             await _unitOfWork.CommitAsync();
 
             // Mapear la reservación actualizada a un objeto de respuesta y retornarlo
-            var response = _mapper.Map<Reservation, ReservationResponse>(updatedReservation);
+            var response = _mapper.Map<Reservation, ReservationServiceResponse>(updatedReservation);
             response.Success = true;
             return response;
         }
@@ -210,12 +210,12 @@ public class ReservationService : ServiceGeneric<IReservationRepository, Reserva
     // Implementación de métodos abstractos de ServiceGeneric
 
     /// <summary>
-    /// Actualiza las propiedades de una entidad <see cref="Reservation"/> existente con los valores de una solicitud de tipo <see cref="ReservationRequest"/>.
+    /// Actualiza las propiedades de una entidad <see cref="Reservation"/> existente con los valores de una solicitud de tipo <see cref="ReservationServiceRequest"/>.
     /// </summary>
     /// <param name="existingEntity">La reserva existente que se actualizará.</param>
     /// <param name="request">La nueva solicitud de reserva con los valores actualizados.</param>
     /// <returns>La entidad <see cref="Reservation"/> actualizada.</returns>
-    protected override Reservation UpdateProperties(Reservation existingEntity, ReservationRequest request)
+    protected override Reservation UpdateProperties(Reservation existingEntity, ReservationServiceRequest request)
     {
         // Actualizar las propiedades de la reserva existente con los valores de la nueva reserva
         existingEntity.Date = Date.Create(request.Date).Value;

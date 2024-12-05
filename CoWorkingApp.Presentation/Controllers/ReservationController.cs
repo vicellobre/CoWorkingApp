@@ -1,5 +1,5 @@
-﻿using CoWorkingApp.Application.Abstracts.Services;
-using CoWorkingApp.Application.DTOs;
+﻿using CoWorkingApp.Application.Reservations.Services.Contracts;
+using CoWorkingApp.Application.Reservations.Services.DTOs;
 using CoWorkingApp.Presentation.Abstracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -11,14 +11,14 @@ namespace CoWorkingApp.Presentation.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/[controller]s")] // Se utiliza el plural "reservations" en la ruta para seguir convenciones RESTful
-public class ReservationController : ControllerGeneric<IReservationService, ReservationRequest, ReservationResponse>
+public class ReservationController : ControllerGeneric<IReservationService, ReservationServiceRequest, ReservationServiceResponse>
 {
     /// <summary>
     /// Constructor de la clase ReservationController.
     /// </summary>
     /// <param name="service">Instancia del servicio de reservaciones.</param>
     /// <param name="logger">Instancia del logger.</param>
-    public ReservationController(IReservationService? service, ILogger<ControllerGeneric<IReservationService, ReservationRequest, ReservationResponse>>? logger) : base(service, logger) { }
+    public ReservationController(IReservationService? service, ILogger<ControllerGeneric<IReservationService, ReservationServiceRequest, ReservationServiceResponse>>? logger) : base(service, logger) { }
 
     /// <summary>
     /// Obtiene reservaciones por fecha.
@@ -26,7 +26,7 @@ public class ReservationController : ControllerGeneric<IReservationService, Rese
     /// <param name="date">Fecha de las reservaciones a obtener.</param>
     /// <returns>ActionResult con la colección de reservaciones correspondientes a la fecha o un error interno.</returns>
     [HttpGet("bydate")]
-    public virtual async Task<ActionResult<IEnumerable<ReservationResponse>>> GetByDate([FromQuery] DateTime date)
+    public virtual async Task<ActionResult<IEnumerable<ReservationServiceResponse>>> GetByDate([FromQuery] DateTime date)
     {
         try
         {
@@ -64,7 +64,7 @@ public class ReservationController : ControllerGeneric<IReservationService, Rese
     /// <param name="userId">ID del usuario para el cual se obtendrán las reservaciones.</param>
     /// <returns>ActionResult con la colección de reservaciones correspondientes al usuario o un error interno.</returns>
     [HttpGet("byuser/{userId}")]
-    public virtual async Task<ActionResult<IEnumerable<ReservationResponse>>> GetByUserId(Guid userId)
+    public virtual async Task<ActionResult<IEnumerable<ReservationServiceResponse>>> GetByUserId(Guid userId)
     {
         try
         {
@@ -102,7 +102,7 @@ public class ReservationController : ControllerGeneric<IReservationService, Rese
     /// <param name="seatId">ID del asiento para el cual se obtendrán las reservaciones.</param>
     /// <returns>ActionResult con la colección de reservaciones correspondientes al asiento o un error interno.</returns>
     [HttpGet("byseat/{seatId}")]
-    public virtual async Task<ActionResult<IEnumerable<ReservationResponse>>> GetBySeatId(Guid seatId)
+    public virtual async Task<ActionResult<IEnumerable<ReservationServiceResponse>>> GetBySeatId(Guid seatId)
     {
         try
         {

@@ -1,11 +1,11 @@
 ﻿using CoWorkingApp.Core.Shared;
 
-namespace CoWorkingApp.Application.DTOs;
+namespace CoWorkingApp.Application.Reservations.Services.DTOs;
 
 /// <summary>
-/// Representa la solicitud de una reserva en el sistema.
+/// Representa la solicitud a un servicio de reservas en el sistema.
 /// </summary>
-public record ReservationRequest : IRequest
+public record ReservationServiceRequest : IRequest
 {
     /// <summary>
     /// Obtiene o establece la fecha de la reserva.

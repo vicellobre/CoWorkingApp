@@ -1,5 +1,4 @@
-﻿using CoWorkingApp.Application.Abstracts.Services;
-using CoWorkingApp.Application.Contracts.Adapters;
+﻿using CoWorkingApp.Application.Contracts.Adapters;
 using CoWorkingApp.Core.Contracts.UnitOfWork;
 using CoWorkingApp.Core.Primitives;
 using CoWorkingApp.Core.Shared;
@@ -14,7 +13,7 @@ namespace CoWorkingApp.Infrastructure.Abstracts;
 /// <typeparam name="TEntity">Tipo de entidad que se manejará.</typeparam>
 /// <typeparam name="TRequest">Tipo de objeto de solicitud (<see cref="IRequest"/>).</typeparam>
 /// <typeparam name="TResponse">Tipo de objeto de respuesta (<see cref="IResponse"/>).</typeparam>
-public abstract class ServiceGeneric<TRepository, TEntity, TRequest, TResponse> : IService<TRequest, TResponse>
+public abstract class ServiceGeneric<TRepository, TEntity, TRequest, TResponse> : IEntityService<TRequest, TResponse>
     where TRepository : IRepository<TEntity>
     where TEntity : EntityBase
     where TRequest : IRequest
