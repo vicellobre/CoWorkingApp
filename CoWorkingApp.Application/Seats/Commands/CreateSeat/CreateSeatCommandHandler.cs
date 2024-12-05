@@ -1,5 +1,4 @@
 ﻿using CoWorkingApp.Application.Abstracts.Messaging;
-using CoWorkingApp.Application.Users.Commands.CreateUser;
 using CoWorkingApp.Core.Contracts.Repositories;
 using CoWorkingApp.Core.Contracts.UnitOfWork;
 using CoWorkingApp.Core.DomainErrors;

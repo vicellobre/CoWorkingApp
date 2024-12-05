@@ -1,6 +1,7 @@
 ﻿using CoWorkingApp.Core.Contracts.Repositories;
 using CoWorkingApp.Core.Entities;
 using CoWorkingApp.Core.ValueObjects.Composite;
+using CoWorkingApp.Core.ValueObjects.Single;
 using CoWorkingApp.Persistence.Abstracts;
 using Microsoft.EntityFrameworkCore;
 
@@ -39,6 +40,18 @@ public class SeatRepository : RepositoryGeneric<Seat>, ISeatRepository
         // Busca el primer asiento que coincida con el nombre
         await Set
             .FirstOrDefaultAsync(s => s.Name.Equals(name), cancellationToken);
+
+    /// <summary>
+    /// Verifica si un asiento está disponible para una fecha (<see cref="Date"/>) específica de manera asincrónica.
+    /// </summary>
+    /// <param name="seatId">Identificador del asiento.</param>
+    /// <param name="date">Fecha para verificar disponibilidad.</param>
+    /// <param name="cancellationToken">Token de cancelación opcional para la operación asincrónica.</param>
+    /// <returns>True si el asiento está disponible en la fecha especificada; de lo contrario, false.</returns>
+    public async Task<bool> IsAvailable(Guid seatId, Date date, CancellationToken cancellationToken = default) =>
+        !await Set
+            .Include(s => s.Reservations)
+            .AnyAsync(s => s.Id == seatId && s.Reservations.Any(r => r.Date == date), cancellationToken);
 
     /// <summary>
     /// Verifica si el nombre de una entidad <see cref="Seat"/> es único de manera asincrónica.

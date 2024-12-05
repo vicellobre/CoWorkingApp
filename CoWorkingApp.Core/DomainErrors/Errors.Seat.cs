@@ -26,5 +26,10 @@ public static partial class Errors
         /// Error que indica que el nombre del asiento no existe.
         /// </summary>
         public static readonly Func<string, Error> NameNotExist = name => Error.Create("Seat.NameNotExist", $"El asiento con el nombre {name} no existe.");
+
+        /// <summary>
+        /// Error que indica que el asiento no está disponible para la fecha especificada.
+        /// </summary>
+        public static readonly Func<Guid, DateTime, Error> NotAvailable = (id, date) => Error.Create("Seat.NotAvailable", $"El asiento con el identificador {id} no está disponible para la fecha {date}.");
     }
 }
