@@ -1,4 +1,5 @@
-﻿using CoWorkingApp.Core.Primitives;
+﻿using CoWorkingApp.Core.DomainErrors;
+using CoWorkingApp.Core.Primitives;
 using CoWorkingApp.Core.Shared;
 using CoWorkingApp.Core.ValueObjects.Single;
 
@@ -22,7 +23,7 @@ public class Reservation : EntityBase
     /// <summary>
     /// Obtiene o establece el usuario asociado a la reserva.
     /// </summary>
-    public User User { get; set; } = default!;
+    public User User { get; set; }
 
     /// <summary>
     /// Obtiene o establece el identificador único del asiento asociado a la reserva.
@@ -32,20 +33,22 @@ public class Reservation : EntityBase
     /// <summary>
     /// Obtiene o establece el asiento asociado a la reserva.
     /// </summary>
-    public Seat Seat { get; set; } = default!;
+    public Seat Seat { get; set; }
 
     /// <summary>
     /// Constructor privado para inicializar una reserva con un identificador especificado.
     /// </summary>
     /// <param name="id">El identificador de la reserva.</param>
     /// <param name="date">La fecha de la reserva.</param>
-    /// <param name="userId">El identificador del usuario asociado a la reserva.</param>
-    /// <param name="seatId">El identificador del asiento asociado a la reserva.</param>
-    private Reservation(Guid id, Date date, Guid userId, Guid seatId) : base(id)
+    /// <param name="user">El usuario asociado a la reserva.</param>
+    /// <param name="seat">El asiento asociado a la reserva.</param>
+    private Reservation(Guid id, Date date, User user, Seat seat) : base(id)
     {
         Date = date;
-        UserId = userId;
-        SeatId = seatId;
+        UserId = user.Id;
+        User = user;
+        SeatId = seat.Id;
+        Seat = seat;
     }
 
     /// <summary>
@@ -53,10 +56,10 @@ public class Reservation : EntityBase
     /// </summary>
     /// <param name="id">El identificador de la reserva.</param>
     /// <param name="date">La fecha de la reserva.</param>
-    /// <param name="userId">El identificador del usuario asociado a la reserva.</param>
-    /// <param name="seatId">El identificador del asiento asociado a la reserva.</param>
+    /// <param name="user">El usuario asociado a la reserva.</param>
+    /// <param name="seat">El asiento asociado a la reserva.</param>
     /// <returns>Un resultado que contiene una instancia de <see cref="Reservation"/> si es exitoso; de lo contrario, contiene un error.</returns>
-    public static Result<Reservation> Create(Guid id, DateTime date, Guid userId, Guid seatId)
+    public static Result<Reservation> Create(Guid id, DateTime date, User user, Seat seat)
     {
         var dateResult = Date.Create(date);
         if (dateResult.IsFailure)
@@ -64,7 +67,7 @@ public class Reservation : EntityBase
             return Result<Reservation>.Failure(dateResult.FirstError);
         }
 
-        return Result<Reservation>.Success(new Reservation(id, dateResult.Value, userId, seatId));
+        return Result<Reservation>.Success(new Reservation(id, dateResult.Value, user, seat));
     }
 
     /// <summary>
@@ -81,28 +84,43 @@ public class Reservation : EntityBase
         }
 
         Date = dateResult.Value;
+
         return Result.Success();
     }
 
     /// <summary>
     /// Cambia el usuario asociado a la reserva.
     /// </summary>
-    /// <param name="userId">El nuevo identificador del usuario.</param>
-    /// <param name="user">El nuevo usuario asociado a la reserva.</param>
-    public void ChangeUser(Guid userId, User user)
+    /// <param name="newUser">El nuevo usuario asociado a la reserva.</param>
+    /// <returns>Un resultado que indica si la operación fue exitosa.</returns>
+    public Result ChangeUser(User? newUser)
     {
-        UserId = userId;
-        User = user;
+        if (newUser is null)
+        {
+            return Result.Failure(Errors.User.IsNull);
+        }
+
+        UserId = newUser.Id;
+        User = newUser;
+
+        return Result.Success();
     }
 
     /// <summary>
     /// Cambia el asiento asociado a la reserva.
     /// </summary>
-    /// <param name="seatId">El nuevo identificador del asiento.</param>
-    /// <param name="seat">El nuevo asiento asociado a la reserva.</param>
-    public void ChangeSeat(Guid seatId, Seat seat)
+    /// <param name="newSeat">El nuevo asiento asociado a la reserva.</param>
+    /// <returns>Un resultado que indica si la operación fue exitosa.</returns>
+    public Result ChangeSeat(Seat? newSeat)
     {
-        SeatId = seatId;
-        Seat = seat;
+        if (newSeat is null)
+        {
+            return Result.Failure(Errors.Seat.IsNull);
+        }
+
+        SeatId = newSeat.Id;
+        Seat = newSeat;
+
+        return Result.Success();
     }
 }
