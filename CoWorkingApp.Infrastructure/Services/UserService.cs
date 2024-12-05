@@ -1,9 +1,11 @@
-﻿using CoWorkingApp.Application.Contracts.Adapters;
-using CoWorkingApp.Application.Contracts.Services;
+﻿using CoWorkingApp.Application.Abstracts.Services;
+using CoWorkingApp.Application.Contracts.Adapters;
 using CoWorkingApp.Application.DTOs;
 using CoWorkingApp.Core.Contracts.Repositories;
 using CoWorkingApp.Core.Contracts.UnitOfWork;
 using CoWorkingApp.Core.Entities;
+using CoWorkingApp.Core.ValueObjects.Composite;
+using CoWorkingApp.Core.ValueObjects.Single;
 using CoWorkingApp.Infrastructure.Abstracts;
 using System.ComponentModel.DataAnnotations;
 
@@ -45,8 +47,9 @@ public class UserService : ServiceGeneric<IUserRepository, User, UserRequest, Us
                 throw new ValidationException("Argument is invalid.");
             }
 
+            var emailResult = Email.Create(email);
             // Obtener el usuario por su correo electrónico desde el repositorio. Si no, lanzar una excepción
-            var user = await _repository.GetByEmailAsync(email) ?? throw new ArgumentException($"Email {email} not found");
+            var user = await _repository.GetByEmailAsync(emailResult.Value) ?? throw new ArgumentException($"Email {email} not found");
 
             // Mapear el usuario a una respuesta de usuario y establecer el éxito en verdadero
             var response = _mapper.Map<User, UserResponse>(user);
@@ -87,8 +90,10 @@ public class UserService : ServiceGeneric<IUserRepository, User, UserRequest, Us
                 throw new ValidationException("Argument is invalid.");
             }
 
+            var credentials = CredentialsWithEmailAndPassword.Create(request.Email, request.Password).Value;
+
             // Autenticar al usuario utilizando el correo electrónico y la contraseña proporcionados
-            var user = await _repository.AuthenticateAsync(request.Email, request.Password) ?? throw new ArgumentException("Credentials incorrect");
+            var user = await _repository.AuthenticateAsync(credentials.Email, credentials.Password) ?? throw new ArgumentException("Credentials incorrect");
 
             // Mapear el usuario autenticado a una respuesta de usuario y establecer el éxito en verdadero
             var response = _mapper.Map<User, UserResponse>(user);
@@ -113,25 +118,28 @@ public class UserService : ServiceGeneric<IUserRepository, User, UserRequest, Us
     protected override User UpdateProperties(User existingEntity, UserRequest request)
     {
         // Actualizar las propiedades del usuario existente con los valores de la solicitud
-        if (!string.IsNullOrEmpty(request.Name))
-        {
-            existingEntity.Name = request.Name;
-        }
+        var firstName = FirstName
+            .Create(request.FirstName)
+            .OnSuccess(_ => Console.WriteLine(""))
+            .GetValueOrDefault(existingEntity.Name.FirstName);
 
-        if (!string.IsNullOrEmpty(request.LastName))
-        {
-            existingEntity.LastName = request.LastName;
-        }
+        var lastName = LastName
+            .Create(request.LastName)
+            .GetValueOrDefault(existingEntity.Name.LastName);
 
-        if (!string.IsNullOrEmpty(request.Email))
-        {
-            existingEntity.Email = request.Email;
-        }
+        var email = Email
+            .Create(request.Email)
+            .GetValueOrDefault(existingEntity.Credentials.Email);
 
-        if (!string.IsNullOrEmpty(request.Password))
-        {
-            existingEntity.Password = request.Password;
-        }
+        var password = Password
+            .Create(request.Password)
+            .GetValueOrDefault(existingEntity.Credentials.Password);
+
+        var fullNameResult = FullName.Create(firstName, lastName);
+        var credentialsResult = CredentialsWithEmailAndPassword.Create(email, password);
+
+        existingEntity.Name = fullNameResult.Value;
+        existingEntity.Credentials = credentialsResult.Value;
 
         // Retornar la entidad existente que ahora está actualizada
         return existingEntity;
@@ -145,10 +153,10 @@ public class UserService : ServiceGeneric<IUserRepository, User, UserRequest, Us
     protected override bool IsValid(User entity) =>
         // Verificar si el usuario es válido (ninguna propiedad debe ser nula o vacía)
         entity is not null
-               && !string.IsNullOrEmpty(entity.Name)
-               && !string.IsNullOrEmpty(entity.LastName)
-               && !string.IsNullOrEmpty(entity.Email)
-               && !string.IsNullOrEmpty(entity.Password);
+               && !string.IsNullOrEmpty(entity.Name.FirstName)
+               && !string.IsNullOrEmpty(entity.Name.LastName)
+               && !string.IsNullOrEmpty(entity.Credentials.Email)
+               && !string.IsNullOrEmpty(entity.Credentials.Password);
 
     // Métodos privados
 

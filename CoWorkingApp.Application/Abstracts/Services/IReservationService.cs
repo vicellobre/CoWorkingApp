@@ -1,7 +1,6 @@
 ﻿using CoWorkingApp.Application.DTOs;
-using CoWorkingApp.Core.Primitives;
 
-namespace CoWorkingApp.Application.Contracts.Services;
+namespace CoWorkingApp.Application.Abstracts.Services;
 
 /// <summary>
 /// Interfaz para servicios que manejan operaciones específicas para la entidad <see cref="Reservation"/>.

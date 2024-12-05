@@ -1,9 +1,11 @@
-﻿using CoWorkingApp.Application.Contracts.Adapters;
-using CoWorkingApp.Application.Contracts.Services;
+﻿using CoWorkingApp.Application.Abstracts.Services;
+using CoWorkingApp.Application.Contracts.Adapters;
 using CoWorkingApp.Application.DTOs;
 using CoWorkingApp.Core.Contracts.Repositories;
 using CoWorkingApp.Core.Contracts.UnitOfWork;
 using CoWorkingApp.Core.Entities;
+using CoWorkingApp.Core.ValueObjects.Composite;
+using CoWorkingApp.Core.ValueObjects.Single;
 using CoWorkingApp.Infrastructure.Abstracts;
 
 namespace CoWorkingApp.Infrastructure.Services;
@@ -61,8 +63,9 @@ public class SeatService : ServiceGeneric<ISeatRepository, Seat, SeatRequest, Se
                 throw new ArgumentNullException(nameof(name), "The name cannot be null or empty");
             }
 
+            var seatNameResult = SeatName.ConvertFromString(name);
             // Obtener el asiento por su nombre desde el repositorio. Si no, lanzar una excepción
-            var seat = await _repository.GetByNameAsync(name) ?? throw new ArgumentException($"Seat {name} not found");
+            var seat = await _repository.GetByNameAsync(seatNameResult.Value) ?? throw new ArgumentException($"Seat {name} not found");
 
             // Mapear el asiento a una respuesta de asiento y establecer el éxito en verdadero
             var response = _mapper.Map<Seat, SeatResponse>(seat);
@@ -89,15 +92,15 @@ public class SeatService : ServiceGeneric<ISeatRepository, Seat, SeatRequest, Se
         // Actualizar las propiedades del asiento existente con los valores de la solicitud
         if (!string.IsNullOrEmpty(request.Name))
         {
-            existingEntity.Name = request.Name;
+            existingEntity.Name = SeatName.Create(request.Name, "").Value;
         }
 
         if (!string.IsNullOrEmpty(request.Description))
         {
-            existingEntity.Description = request.Description;
+            existingEntity.Description = Description.Create(request.Description).Value;
         }
 
-        existingEntity.IsBlocked = request.IsBlocked;
+        //existingEntity.IsBlocked = request.IsBlocked;
 
         // Retornar la entidad existente que ahora está actualizada
         return existingEntity;
@@ -110,7 +113,7 @@ public class SeatService : ServiceGeneric<ISeatRepository, Seat, SeatRequest, Se
     /// <returns>True si la entidad <see cref="Seat"/> es válida, de lo contrario False.</returns>
     protected override bool IsValid(Seat entity) =>
         // Verificar si la entidad es válida (en este caso, el nombre no puede ser nulo o vacío)
-        !string.IsNullOrEmpty(entity.Name);
+        !string.IsNullOrEmpty(entity.Name.Value);
 
     // Otros métodos específicos para SeatService
 }

@@ -31,9 +31,9 @@ public class MappingProfile : Profile
             // Mapea el nombre del usuario, verifica que User no sea null
             .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User != null ? src.User.Name : "Unkonw"))
             // Mapea el apellido del usuario, verifica que User no sea null
-            .ForMember(dest => dest.UserLastName, opt => opt.MapFrom(src => src.User != null ? src.User.LastName : "Unkonw"))
+            .ForMember(dest => dest.UserLastName, opt => opt.MapFrom(src => src.User != null ? src.User.Name.LastName : "Unkonw"))
             // Mapea el correo electrónico del usuario, verifica que User no sea null
-            .ForMember(dest => dest.UserEmail, opt => opt.MapFrom(src => src.User != null ? src.User.Email : "Unkonw"))
+            .ForMember(dest => dest.UserEmail, opt => opt.MapFrom(src => src.User != null ? src.User.Credentials.Email : "Unkonw"))
             // Mapea el nombre del asiento, verifica que Seat no sea null
             .ForMember(dest => dest.SeatName, opt => opt.MapFrom(src => src.Seat != null ? src.Seat.Name : "Unkonw"))
             // Mapea la descripción del asiento, verifica que Seat no sea null

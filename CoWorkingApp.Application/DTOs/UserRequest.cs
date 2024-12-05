@@ -10,7 +10,7 @@ public record UserRequest : IRequest
     /// <summary>
     /// Obtiene o establece el nombre del usuario.
     /// </summary>
-    public string? Name { get; set; }
+    public string? FirstName { get; set; }
 
     /// <summary>
     /// Obtiene o establece el apellido del usuario.

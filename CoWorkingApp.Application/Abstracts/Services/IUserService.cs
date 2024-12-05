@@ -1,7 +1,6 @@
 ﻿using CoWorkingApp.Application.DTOs;
-using CoWorkingApp.Core.Primitives;
 
-namespace CoWorkingApp.Application.Contracts.Services
+namespace CoWorkingApp.Application.Abstracts.Services
 {
     /// <summary>
     /// Interfaz que define los métodos específicos para el servicio de usuarios.

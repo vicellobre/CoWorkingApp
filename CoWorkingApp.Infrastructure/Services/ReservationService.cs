@@ -1,9 +1,10 @@
-﻿using CoWorkingApp.Application.Contracts.Adapters;
-using CoWorkingApp.Application.Contracts.Services;
+﻿using CoWorkingApp.Application.Abstracts.Services;
+using CoWorkingApp.Application.Contracts.Adapters;
 using CoWorkingApp.Application.DTOs;
 using CoWorkingApp.Core.Contracts.Repositories;
 using CoWorkingApp.Core.Contracts.UnitOfWork;
 using CoWorkingApp.Core.Entities;
+using CoWorkingApp.Core.ValueObjects.Single;
 using CoWorkingApp.Infrastructure.Abstracts;
 using System.ComponentModel.DataAnnotations;
 
@@ -77,8 +78,9 @@ public class ReservationService : ServiceGeneric<IReservationRepository, Reserva
     {
         try
         {
+            var dateResult = Date.Create(date);
             // Obtener las reservaciones por fecha del repositorio
-            var reservations = await _repository.GetByDateAsNoTrackingAsync(date);
+            var reservations = await _repository.GetByDateAsNoTrackingAsync(dateResult.Value);
 
             // Mapear las reservaciones a ReservationResponse y convertirlas en una lista
             var response = _mapper.Map<IEnumerable<Reservation>, IEnumerable<ReservationResponse>>(reservations).ToList();
@@ -216,7 +218,7 @@ public class ReservationService : ServiceGeneric<IReservationRepository, Reserva
     protected override Reservation UpdateProperties(Reservation existingEntity, ReservationRequest request)
     {
         // Actualizar las propiedades de la reserva existente con los valores de la nueva reserva
-        existingEntity.Date = request.Date;
+        existingEntity.Date = Date.Create(request.Date).Value;
         return existingEntity;
     }
 
@@ -227,5 +229,5 @@ public class ReservationService : ServiceGeneric<IReservationRepository, Reserva
     /// <returns>True si la reserva es válida, False en caso contrario.</returns>
     protected override bool IsValid(Reservation entity) =>
         // Verificar si la reserva es válida (la fecha debe ser igual o posterior a la fecha actual)
-        entity.Date >= DateTime.Today;
+        entity.Date.Value >= DateTime.Today;
 }
