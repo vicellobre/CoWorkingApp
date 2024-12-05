@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using CoWorkingApp.Application.Abstracts.Services;
 using CoWorkingApp.Application.Contracts.Adapters;
-using CoWorkingApp.Application.Contracts.Services;
 using CoWorkingApp.Core.Contracts.Repositories;
 using CoWorkingApp.Core.Contracts.UnitOfWork;
 using CoWorkingApp.Infrastructure.Adapters;
