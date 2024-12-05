@@ -1,4 +1,5 @@
-﻿using CoWorkingApp.Core.Shared;
+﻿using CoWorkingApp.Application.Users.Services.DTOs;
+using CoWorkingApp.Core.Shared;
 
 namespace CoWorkingApp.Presentation.DTOs;
 
@@ -26,4 +27,17 @@ public record UserRequest : IRequest
     /// Obtiene o establece la contraseña del usuario.
     /// </summary>
     public string? Password { get; set; }
+
+    /// <summary>
+    /// Convierte implícitamente una instancia de <see cref="UserRequest"/> a <see cref="UserServiceRequest"/>.
+    /// </summary>
+    /// <param name="request">La solicitud del usuario.</param>
+    public static implicit operator UserServiceRequest(UserRequest request) =>
+        new()
+        {
+            FirstName = request.FirstName,
+            LastName = request.LastName,
+            Email = request.Email,
+            Password = request.Password,
+        };
 }

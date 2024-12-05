@@ -1,4 +1,5 @@
-﻿using CoWorkingApp.Core.Shared;
+﻿using CoWorkingApp.Application.Seats.Services.DTOs;
+using CoWorkingApp.Core.Shared;
 
 namespace CoWorkingApp.Presentation.DTOs;
 
@@ -26,4 +27,17 @@ public record SeatResponse : ResponseMessage
     /// Obtiene o establece la descripción del asiento.
     /// </summary>
     public string? Description { get; set; }
+
+    /// <summary>
+    /// Convierte implícitamente una instancia de <see cref="SeatServiceResponse"/> a <see cref="SeatResponse"/>.
+    /// </summary>
+    /// <param name="request">La respuesta del servicio de asiento.</param>
+    public static implicit operator SeatResponse(SeatServiceResponse request) =>
+        new()
+        {
+            Id = request.Id,
+            Name = request.Name,
+            IsBlocked = request.IsBlocked,
+            Description = request.Description,
+        };
 }

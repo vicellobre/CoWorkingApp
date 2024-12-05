@@ -1,4 +1,5 @@
-﻿using CoWorkingApp.Core.Shared;
+﻿using CoWorkingApp.Application.Users.Services.DTOs;
+using CoWorkingApp.Core.Shared;
 
 namespace CoWorkingApp.Presentation.DTOs;
 
@@ -26,4 +27,17 @@ public record UserResponse : ResponseMessage
     /// Obtiene o establece el correo electrónico del usuario.
     /// </summary>
     public string? Email { get; set; }
+
+    /// <summary>
+    /// Convierte implícitamente una instancia de <see cref="UserServiceResponse"/> a <see cref="UserResponse"/>.
+    /// </summary>
+    /// <param name="request">La respuesta del servicio de usuario.</param>
+    public static implicit operator UserResponse(UserServiceResponse request) =>
+        new()
+        {
+            Id = request.Id,
+            Name = request.Name,
+            LastName = request.LastName,
+            Email = request.Email,
+        };
 }

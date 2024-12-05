@@ -1,4 +1,5 @@
-﻿using CoWorkingApp.Core.Shared;
+﻿using CoWorkingApp.Application.Reservations.Services.DTOs;
+using CoWorkingApp.Core.Shared;
 
 namespace CoWorkingApp.Presentation.DTOs;
 
@@ -22,4 +23,15 @@ public record ReservationRequest : IRequest
     /// </summary>
     public Guid SeatId { get; set; }
 
+    /// <summary>
+    /// Convierte implícitamente una instancia de <see cref="ReservationRequest"/> a <see cref="ReservationServiceRequest"/>.
+    /// </summary>
+    /// <param name="request">La solicitud de reserva.</param>
+    public static implicit operator ReservationServiceRequest(ReservationRequest request) =>
+        new()
+        {
+            Date = request.Date,
+            UserId = request.UserId,
+            SeatId = request.SeatId
+        };
 }

@@ -1,4 +1,5 @@
-﻿using CoWorkingApp.Core.Shared;
+﻿using CoWorkingApp.Application.Reservations.Services.DTOs;
+using CoWorkingApp.Core.Shared;
 
 namespace CoWorkingApp.Presentation.DTOs;
 
@@ -41,4 +42,20 @@ public record ReservationResponse : ResponseMessage
     /// Obtiene o establece la descripción del asiento.
     /// </summary>
     public string? SeatDescription { get; set; }
+
+    /// <summary>
+    /// Convierte implícitamente una instancia de <see cref="ReservationServiceResponse"/> a <see cref="ReservationResponse"/>.
+    /// </summary>
+    /// <param name="request">La respuesta de la reserva.</param>
+    public static implicit operator ReservationResponse(ReservationServiceResponse request) =>
+        new()
+        {
+            Id = request.Id,
+            Date = request.Date,
+            UserName = request.UserName,
+            UserLastName = request.UserLastName,
+            UserEmail = request.UserEmail,
+            SeatName = request.SeatName,
+            SeatDescription = request.SeatDescription,
+        };
 }
