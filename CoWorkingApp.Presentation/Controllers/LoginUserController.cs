@@ -1,6 +1,5 @@
-﻿using CoWorkingApp.Application.Contracts.Services;
+﻿using CoWorkingApp.Application.Abstracts.Services;
 using CoWorkingApp.Application.DTOs;
-using CoWorkingApp.Core.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -67,7 +66,7 @@ public class LoginUserController : ControllerBase
         {
             // Manejar cualquier error y devolver un mensaje de error
             var exception = new Exception("An unexpected error occurred while retrieving all entities");
-            var response = ResponseMessage.HandleException<UserResponse>(exception);
+            var response = Core.Shared.ResponseMessage.HandleException<UserResponse>(exception);
             return StatusCode(500, response);
         }
     }

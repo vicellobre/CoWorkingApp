@@ -1,4 +1,4 @@
-﻿using CoWorkingApp.Application.Contracts.Services;
+﻿using CoWorkingApp.Application.Abstracts.Services;
 using CoWorkingApp.Application.DTOs;
 using CoWorkingApp.Presentation.Abstracts;
 using Microsoft.AspNetCore.Mvc;
