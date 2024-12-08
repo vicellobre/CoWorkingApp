@@ -12,6 +12,6 @@ public static partial class Errors
         /// <summary>
         /// La fila del asiento no puede ser nula o vacía.
         /// </summary>
-        public static readonly Error IsNullOrEmpty = Error.Create("SeatRow.IsNullOrEmpty", "Seat row cannot be null or empty.");
+        public static readonly Error IsNullOrEmpty = Error.Validation("SeatRow.IsNullOrEmpty", "Seat row cannot be null or empty.");
     }
 }

@@ -2,17 +2,7 @@
 
 namespace CoWorkingApp.Core.Shared;
 
-public enum ErrorType
-{
-    None,
-    Failure,
-    Unexpected,
-    Validation,
-    Conflict,
-    NotFound,
-    Unauthorized,
-    Forbidden,
-}
+
 
 /// <summary>
 /// Representa el resultado de una operación que puede ser exitosa o contener un error.
@@ -116,7 +106,7 @@ public readonly struct Result
     /// </summary>
     /// <param name="exception">La excepción resultante de la operación.</param>
     /// <returns>Una nueva instancia de la estructura <see cref="Result"/> que representa un resultado fallido.</returns>
-    public static Result Failure(Exception exception) => Failure(Error.Create(exception.GetType().Name, exception.Message));
+    public static Result Failure(Exception exception) => Failure(Error.Exception(exception.GetType().Name, exception.Message));
 
     /// <summary>
     /// Crea un resultado exitoso con el valor especificado.
@@ -142,7 +132,7 @@ public readonly struct Result
     /// <param name="exception">La excepción resultante de la operación.</param>
     /// <returns>Una nueva instancia de la estructura <see cref="Result{TValue}"/>.</returns>
     public static Result<TValue> Failure<TValue>(Exception exception) =>
-        Result<TValue>.Failure(Error.Create(exception.GetType().Name, exception.Message));
+        Result<TValue>.Failure(Error.Exception(exception.GetType().Name, exception.Message));
 
     /// <summary>
     /// Crea un resultado fallido con la colección de errores especificada.

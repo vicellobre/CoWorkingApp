@@ -128,7 +128,7 @@ public readonly record struct Result<TValue>
     /// <param name="exception">La excepción resultante de la operación.</param>
     /// <returns>Una nueva instancia de la estructura <see cref="Result{TValue}"/>.</returns>
     public static Result<TValue> Failure(Exception exception) =>
-        Failure(Error.Create(exception.GetType().Name, exception.Message));
+        Failure(Error.Exception(exception.GetType().Name, exception.Message));
 
     /// <summary>
     /// Crea una nueva instancia de la estructura <see cref="Result{TValue}"/> con la colección de errores especificada.

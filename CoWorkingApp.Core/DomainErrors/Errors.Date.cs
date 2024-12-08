@@ -12,6 +12,6 @@ public static partial class Errors
         /// <summary>
         /// La fecha es inválida.
         /// </summary>
-        public static readonly Error Invalid = Error.Create("Date.Invalid", "The date is invalid.");
+        public static readonly Error Invalid = Error.Validation("Date.Invalid", "The date is invalid.");
     }
 }

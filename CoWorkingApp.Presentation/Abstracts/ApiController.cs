@@ -1,4 +1,5 @@
-﻿using CoWorkingApp.Core.Shared;
+﻿using CoWorkingApp.Core.Enumerations;
+using CoWorkingApp.Core.Shared;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

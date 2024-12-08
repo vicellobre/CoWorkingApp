@@ -15,6 +15,6 @@ public static partial class Errors
         /// <summary>
         /// Error que indica que una reserva no fue encontrada.
         /// </summary>
-        public static readonly Func<Guid, Error> NotFound = id => Error.Create("Reservation.NotFound", $"The reservation with the identifier {id} was not found.");
+        public static readonly Func<Guid, Error> NotFound = id => Error.NotFound("Reservation.NotFound", $"The reservation with the identifier {id} was not found.");
     }
 }

@@ -15,6 +15,6 @@ public static partial class Errors
         /// <summary>
         /// 
         /// </summary>
-        public static readonly Error InvalidFormat = Error.Create("InvalidFormat", "The value must be in the format 'Row-Number'.");
+        public static readonly Error InvalidFormat = Error.Validation("InvalidFormat", "The value must be in the format 'Row-Number'.");
     }
 }
