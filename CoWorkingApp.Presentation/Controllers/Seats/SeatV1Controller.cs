@@ -4,13 +4,11 @@ using CoWorkingApp.Application.Seats.Commands.UpdateSeat;
 using CoWorkingApp.Application.Seats.Queries.GetAllSeats;
 using CoWorkingApp.Application.Seats.Queries.GetSeatById;
 using CoWorkingApp.Application.Seats.Queries.GetSeatByName;
-using CoWorkingApp.Core.Shared;
 using CoWorkingApp.Core.Extensions;
 using CoWorkingApp.Presentation.Abstracts;
 using CoWorkingApp.Presentation.DTOs.Seats;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 
@@ -39,22 +37,13 @@ public class SeatV1Controller : ApiController
     [AllowAnonymous]
     public async Task<IActionResult> GetAll()
     {
-        try
-        {
-            GetAllSeatsQuery query = new();
+        GetAllSeatsQuery query = new();
 
-            var response = await _sender.Send(query);
+        var response = await _sender.Send(query);
 
-            return response.Match(
-                onSuccess: value => Ok(response.Value),
-                onFailure: error => HandleFailure(response));
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(
-                StatusCodes.Status500InternalServerError,
-                Result.Failure(ex));
-        }
+        return response.Match(
+            onSuccess: value => Ok(response.Value),
+            onFailure: error => HandleFailure(response.FirstError));
     }
 
     /// <summary>
@@ -65,22 +54,13 @@ public class SeatV1Controller : ApiController
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(Guid id)
     {
-        try
-        {
-            GetSeatByIdQuery query = new(id);
+        GetSeatByIdQuery query = new(id);
 
-            var response = await _sender.Send(query);
+        var response = await _sender.Send(query);
 
-            return response.Match(
-                onSuccess: value => Ok(response.Value),
-                onFailure: error => HandleFailure(response));
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(
-                StatusCodes.Status500InternalServerError,
-                Result.Failure(ex));
-        }
+        return response.Match(
+            onSuccess: value => Ok(response.Value),
+            onFailure: error => HandleFailure(response.FirstError));
     }
 
     /// <summary>
@@ -91,43 +71,25 @@ public class SeatV1Controller : ApiController
     [HttpGet("by-name/{name}")]
     public async Task<IActionResult> GetByName(string name)
     {
-        try
-        {
-            GetSeatByNameQuery query = new(name);
+        GetSeatByNameQuery query = new(name);
 
-            var response = await _sender.Send(query);
+        var response = await _sender.Send(query);
 
-            return response.Match(
-                onSuccess: value => Ok(response.Value),
-                onFailure: error => HandleFailure(response));
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(
-                StatusCodes.Status500InternalServerError,
-                Result.Failure(ex));
-        }
+        return response.Match(
+            onSuccess: value => Ok(response.Value),
+            onFailure: error => HandleFailure(response.FirstError));
     }
 
     //[HttpGet("availables")]
     //[AllowAnonymous]
     //public async Task<IActionResult> GetAvailables()
     //{
-    //    try
-    //    {
     //        GetAvailableSeatsQuery query = new();
 
     //        var response = await _sender.Send(query);
 
     //        return response.IsSuccess
     //            ? Ok(response) : NotFound(response.Errors);
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        return StatusCode(
-    //            StatusCodes.Status500InternalServerError,
-    //            Result.Failure(ex));
-    //    }
     //}
 
     /// <summary>
@@ -138,24 +100,15 @@ public class SeatV1Controller : ApiController
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] SeatRequest request)
     {
-        try
-        {
-            CreateSeatCommand command = new(
-                request.Name!,
-                request.Description!);
+        CreateSeatCommand command = new(
+            request.Name!,
+            request.Description!);
 
-            var response = await _sender.Send(command);
+        var response = await _sender.Send(command);
 
-            return response.Match(
-                onSuccess: value => Ok(response.Value),
-                onFailure: error => HandleFailure(response));
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(
-                StatusCodes.Status500InternalServerError,
-                Result.Failure(ex));
-        }
+        return response.Match(
+            onSuccess: value => Ok(response.Value),
+            onFailure: error => HandleFailure(response.FirstError));
     }
 
     /// <summary>
@@ -167,25 +120,16 @@ public class SeatV1Controller : ApiController
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(Guid id, [FromBody] SeatRequest request)
     {
-        try
-        {
-            UpdateSeatCommand command = new(
-                id,
-                request.Name!,
-                request.Description!);
+        UpdateSeatCommand command = new(
+            id,
+            request.Name!,
+            request.Description!);
 
-            var response = await _sender.Send(command);
+        var response = await _sender.Send(command);
 
-            return response.Match(
-                onSuccess: value => Ok(response.Value),
-                onFailure: error => HandleFailure(response));
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(
-                StatusCodes.Status500InternalServerError,
-                Result.Failure(ex));
-        }
+        return response.Match(
+            onSuccess: value => Ok(response.Value),
+            onFailure: error => HandleFailure(response.FirstError));
     }
 
     /// <summary>
@@ -196,21 +140,12 @@ public class SeatV1Controller : ApiController
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        try
-        {
-            DeleteSeatCommand command = new(id);
+        DeleteSeatCommand command = new(id);
 
-            var response = await _sender.Send(command);
+        var response = await _sender.Send(command);
 
-            return response.Match(
-                onSuccess: value => Ok(response.Value),
-                onFailure: error => HandleFailure(response));
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(
-                StatusCodes.Status500InternalServerError,
-                Result.Failure(ex));
-        }
+        return response.Match(
+            onSuccess: value => Ok(response.Value),
+            onFailure: error => HandleFailure(response.FirstError));
     }
 }

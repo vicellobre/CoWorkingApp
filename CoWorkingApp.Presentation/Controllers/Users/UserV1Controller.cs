@@ -5,12 +5,10 @@ using CoWorkingApp.Application.Users.Queries.GetAllUsers;
 using CoWorkingApp.Application.Users.Queries.GetUserByEmail;
 using CoWorkingApp.Application.Users.Queries.GetUserById;
 using CoWorkingApp.Core.Extensions;
-using CoWorkingApp.Core.Shared;
 using CoWorkingApp.Presentation.Abstracts;
 using CoWorkingApp.Presentation.DTOs.Users;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 
@@ -38,22 +36,13 @@ public class UserV1Controller : ApiController
     [AllowAnonymous]
     public async Task<IActionResult> GetAll()
     {
-        try
-        {
-            GetAllUsersQuery query = new();
+        GetAllUsersQuery query = new();
 
-            var response = await _sender.Send(query);
+        var response = await _sender.Send(query);
 
-            return response.Match(
-                onSuccess: value => Ok(response.Value),
-                onFailure: error => HandleFailure(response));
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(
-                StatusCodes.Status500InternalServerError,
-                Result.Failure(ex));
-        }
+        return response.Match(
+            onSuccess: value => Ok(response.Value),
+            onFailure: error => HandleFailure(response.FirstError));
     }
 
     /// <summary>
@@ -64,22 +53,13 @@ public class UserV1Controller : ApiController
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(Guid id)
     {
-        try
-        {
-            GetUserByIdQuery query = new(id);
+        GetUserByIdQuery query = new(id);
 
-            var response = await _sender.Send(query);
+        var response = await _sender.Send(query);
 
-            return response.Match(
-                onSuccess: value => Ok(response.Value),
-                onFailure: error => HandleFailure(response));
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(
-                StatusCodes.Status500InternalServerError,
-                Result.Failure(ex));
-        }
+        return response.Match(
+            onSuccess: value => Ok(response.Value),
+            onFailure: error => HandleFailure(response.FirstError));
     }
 
     /// <summary>
@@ -91,22 +71,13 @@ public class UserV1Controller : ApiController
     [ResponseCache(Duration = 60)]
     public async Task<IActionResult> GetByEmail(string email)
     {
-        try
-        {
-            GetUserByEmailQuery query = new(email);
+        GetUserByEmailQuery query = new(email);
 
-            var response = await _sender.Send(query);
+        var response = await _sender.Send(query);
 
-            return response.Match(
-                onSuccess: value => Ok(response.Value),
-                onFailure: error => HandleFailure(response));
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(
-                StatusCodes.Status500InternalServerError,
-                Result.Failure(ex));
-        }
+        return response.Match(
+            onSuccess: value => Ok(response.Value),
+            onFailure: error => HandleFailure(response.FirstError));
     }
 
     /// <summary>
@@ -118,26 +89,17 @@ public class UserV1Controller : ApiController
     [AllowAnonymous]
     public async Task<IActionResult> Create([FromBody] UserRequest request)
     {
-        try
-        {
-            CreateUserCommand command = new(
-                request.FirstName!,
-                request.LastName!,
-                request.Email!,
-                request.Password!);
+        CreateUserCommand command = new(
+            request.FirstName!,
+            request.LastName!,
+            request.Email!,
+            request.Password!);
 
-            var response = await _sender.Send(command);
+        var response = await _sender.Send(command);
 
-            return response.Match(
-                onSuccess: value => Ok(response.Value),
-                onFailure: error => HandleFailure(response));
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(
-                StatusCodes.Status500InternalServerError,
-                Result.Failure(ex));
-        }
+        return response.Match(
+            onSuccess: value => Ok(response.Value),
+            onFailure: error => HandleFailure(response.FirstError));
     }
 
     /// <summary>
@@ -149,27 +111,18 @@ public class UserV1Controller : ApiController
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(Guid id, [FromBody] UserRequest request)
     {
-        try
-        {
-            UpdateUserCommand command = new(
+        UpdateUserCommand command = new(
                 id,
                 request.FirstName!,
                 request.LastName!,
                 request.Email!,
                 request.Password!);
 
-            var response = await _sender.Send(command);
+        var response = await _sender.Send(command);
 
-            return response.Match(
-                onSuccess: value => Ok(response.Value),
-                onFailure: error => HandleFailure(response));
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(
-                StatusCodes.Status500InternalServerError,
-                Result.Failure(ex));
-        }
+        return response.Match(
+            onSuccess: value => Ok(response.Value),
+            onFailure: error => HandleFailure(response.FirstError));
     }
 
     /// <summary>
@@ -180,21 +133,12 @@ public class UserV1Controller : ApiController
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        try
-        {
-            DeleteUserCommand command = new(id);
+        DeleteUserCommand command = new(id);
 
-            var response = await _sender.Send(command);
+        var response = await _sender.Send(command);
 
-            return response.Match(
-                onSuccess: value => Ok(response.Value),
-                onFailure: error => HandleFailure(response));
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(
-                StatusCodes.Status500InternalServerError,
-                Result.Failure(ex));
-        }
+        return response.Match(
+            onSuccess: value => Ok(response.Value),
+            onFailure: error => HandleFailure(response.FirstError));
     }
 }

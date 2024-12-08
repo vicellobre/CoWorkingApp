@@ -3,17 +3,21 @@ using CoWorkingApp.API.Extensions;
 using CoWorkingApp.Core.Entities;
 using CoWorkingApp.Persistence.Constants;
 using CoWorkingApp.Persistence.Context;
+//using Hellang.Middleware.ProblemDetails;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OData.Edm;
 using Microsoft.OData.ModelBuilder;
 using Microsoft.OpenApi.Models;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
@@ -101,8 +105,35 @@ public class Startup
             options.Filters.Add(new AuthorizeFilter(policy));
         });
 
-        // Agrega el servicio de Problem Details
-        services.AddProblemDetails();
+        // Adds services for using Problem Details format
+        //ProblemDetailsExtensions.AddProblemDetails(services);
+        services.AddProblemDetails(options =>
+        {
+            options.CustomizeProblemDetails = context =>
+            {
+                context.ProblemDetails.Instance =
+                    $"{context.HttpContext.Request.Method} {context.HttpContext.Request.Path}";
+
+                context.ProblemDetails.Extensions.TryAdd("requestId", context.HttpContext.TraceIdentifier);
+
+                Activity? activity = context.HttpContext.Features.Get<IHttpActivityFeature>()?.Activity;
+                context.ProblemDetails.Extensions.TryAdd("traceId", activity?.Id);
+            };
+        });
+
+        //ProblemDetailsExtensions.AddProblemDetails(services, options =>
+        //{
+        //    options.CustomizeProblemDetails = context =>
+        //    {
+        //        context.ProblemDetails.Instance =
+        //            $"{context.HttpContext.Request.Method} {context.HttpContext.Request.Path}";
+
+        //        context.ProblemDetails.Extensions.TryAdd("requestId", context.HttpContext.TraceIdentifier);
+
+        //        var activity = context.HttpContext.Features.Get<IHttpActivityFeature>()?.Activity;
+        //        context.ProblemDetails.Extensions.TryAdd("traceId", activity?.Id);
+        //    };
+        //});
 
         // Configuración para habilitar la caché de respuestas
         services.AddResponseCaching();
@@ -191,10 +222,15 @@ public class Startup
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
-            //app.UseExceptionHandler("/error");
         }
-        app.UseExceptionHandler("/Home/Error");
-        app.UseHsts();
+        else
+        {
+            // Returns the Problem Details response for (empty) non-successful responses
+            app.UseExceptionHandler();
+            app.UseHsts();
+        }
+
+        app.UseStatusCodePages();
 
         // Habilita Swagger
         app.UseSwagger(options =>
@@ -235,6 +271,7 @@ public class Startup
             endpoints.MapControllers();
         });
 
+        // agrega comentario
         //app.UseProblemDetails();
     }
 }

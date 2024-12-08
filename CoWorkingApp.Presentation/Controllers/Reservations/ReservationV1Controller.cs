@@ -4,13 +4,11 @@ using CoWorkingApp.Application.Reservations.Commands.UpdateReservation;
 using CoWorkingApp.Application.Reservations.Queries.GetAllReservations;
 using CoWorkingApp.Application.Reservations.Queries.GetReservationById;
 using CoWorkingApp.Application.Reservations.Queries.GetReservationsByDate;
-using CoWorkingApp.Core.Shared;
 using CoWorkingApp.Core.Extensions;
 using CoWorkingApp.Presentation.Abstracts;
 using CoWorkingApp.Presentation.DTOs.Reservations;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 
@@ -39,22 +37,13 @@ public class ReservationV1Controller : ApiController
     [AllowAnonymous]
     public async Task<IActionResult> GetAll()
     {
-        try
-        {
-            GetAllReservationsQuery query = new();
+        GetAllReservationsQuery query = new();
 
-            var response = await _sender.Send(query);
+        var response = await _sender.Send(query);
 
-            return response.Match(
-                onSuccess: value => Ok(response.Value),
-                onFailure: error => HandleFailure(response));
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(
-                StatusCodes.Status500InternalServerError,
-                Result.Failure(ex));
-        }
+        return response.Match(
+            onSuccess: value => Ok(response.Value),
+            onFailure: error => HandleFailure(response.FirstError));
     }
 
     /// <summary>
@@ -65,22 +54,13 @@ public class ReservationV1Controller : ApiController
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(Guid id)
     {
-        try
-        {
-            GetReservationByIdQuery query = new(id);
+        GetReservationByIdQuery query = new(id);
 
-            var response = await _sender.Send(query);
+        var response = await _sender.Send(query);
 
-            return response.Match(
-                onSuccess: value => Ok(response.Value),
-                onFailure: error => HandleFailure(response));
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(
-                StatusCodes.Status500InternalServerError,
-                Result.Failure(ex));
-        }
+        return response.Match(
+            onSuccess: value => Ok(response.Value),
+            onFailure: error => HandleFailure(response.FirstError));
     }
 
     /// <summary>
@@ -91,22 +71,13 @@ public class ReservationV1Controller : ApiController
     [HttpGet("bydate")]
     public async Task<IActionResult> GetByDate([FromQuery] DateTime date)
     {
-        try
-        {
-            GetReservationsByDateQuery query = new(date);
+        GetReservationsByDateQuery query = new(date);
 
-            var response = await _sender.Send(query);
+        var response = await _sender.Send(query);
 
-            return response.Match(
-                onSuccess: value => Ok(response.Value),
-                onFailure: error => HandleFailure(response));
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(
-                StatusCodes.Status500InternalServerError,
-                Result.Failure(ex));
-        }
+        return response.Match(
+            onSuccess: value => Ok(response.Value),
+            onFailure: error => HandleFailure(response.FirstError));
     }
 
     ///// <summary>
@@ -117,8 +88,6 @@ public class ReservationV1Controller : ApiController
     //[HttpGet("byuser/{userId}")]
     //public async Task<IActionResult> GetByUserId(Guid userId)
     //{
-    //    try
-    //    {
     //        GetReservationsByUserIdQuery query = new(userId);
 
     //        var response = await _sender.Send(query);
@@ -126,13 +95,6 @@ public class ReservationV1Controller : ApiController
     //        return response.IsSuccess
     //            ? Ok(response.Value)
     //            : NotFound(response.FirstError);
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        return StatusCode(
-    //            StatusCodes.Status500InternalServerError,
-    //            Result.Failure(ex));
-    //    }
     //}
 
     ///// <summary>
@@ -143,8 +105,6 @@ public class ReservationV1Controller : ApiController
     //[HttpGet("byseat/{seatId}")]
     //public async Task<IActionResult> GetBySeatId(Guid seatId)
     //{
-    //    try
-    //    {
     //        GetReservationsBySeatIdQuery query = new(seatId);
 
     //        var response = await _sender.Send(query);
@@ -152,13 +112,6 @@ public class ReservationV1Controller : ApiController
     //        return response.IsSuccess
     //            ? Ok(response.Value)
     //            : NotFound(response.FirstError);
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        return StatusCode(
-    //            StatusCodes.Status500InternalServerError,
-    //            Result.Failure(ex));
-    //    }
     //}
 
     /// <summary>
@@ -169,25 +122,16 @@ public class ReservationV1Controller : ApiController
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] ReservationRequest request)
     {
-        try
-        {
-            CreateReservationCommand command = new(
-                request.Date,
-                request.UserId,
-                request.SeatId);
+        CreateReservationCommand command = new(
+            request.Date,
+            request.UserId,
+            request.SeatId);
 
-            var response = await _sender.Send(command);
+        var response = await _sender.Send(command);
 
-            return response.Match(
-                onSuccess: value => Ok(response.Value),
-                onFailure: error => HandleFailure(response));
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(
-                StatusCodes.Status500InternalServerError,
-                Result.Failure(ex));
-        }
+        return response.Match(
+            onSuccess: value => Ok(response.Value),
+            onFailure: error => HandleFailure(response.FirstError));
     }
 
     /// <summary>
@@ -199,26 +143,17 @@ public class ReservationV1Controller : ApiController
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(Guid id, [FromBody] ReservationRequest request)
     {
-        try
-        {
-            UpdateReservationCommand command = new(
-                id,
-                request.Date,
-                request.UserId,
-                request.SeatId);
+        UpdateReservationCommand command = new(
+            id,
+            request.Date,
+            request.UserId,
+            request.SeatId);
 
-            var response = await _sender.Send(command);
+        var response = await _sender.Send(command);
 
-            return response.Match(
-                onSuccess: value => Ok(response.Value),
-                onFailure: error => HandleFailure(response));
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(
-                StatusCodes.Status500InternalServerError,
-                Result.Failure(ex));
-        }
+        return response.Match(
+            onSuccess: value => Ok(response.Value),
+            onFailure: error => HandleFailure(response.FirstError));
     }
 
     /// <summary>
@@ -229,21 +164,12 @@ public class ReservationV1Controller : ApiController
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        try
-        {
-            DeleteReservationCommand command = new(id);
+        DeleteReservationCommand command = new(id);
 
-            var response = await _sender.Send(command);
+        var response = await _sender.Send(command);
 
-            return response.Match(
-                onSuccess: value => Ok(response.Value),
-                onFailure: error => HandleFailure(response));
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(
-                StatusCodes.Status500InternalServerError,
-                Result.Failure(ex));
-        }
+        return response.Match(
+            onSuccess: value => Ok(response.Value),
+            onFailure: error => HandleFailure(response.FirstError));
     }
 }

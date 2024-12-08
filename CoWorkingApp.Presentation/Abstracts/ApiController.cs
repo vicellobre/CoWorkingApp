@@ -1,6 +1,5 @@
 ﻿using CoWorkingApp.Core.Enumerations;
 using CoWorkingApp.Core.Shared;
-using CoWorkingApp.Presentation.Problems;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -25,31 +24,29 @@ public abstract class ApiController : ControllerBase
     protected ApiController(ISender sender) : base() => _sender = sender ?? throw new ArgumentNullException(nameof(sender));
 
     /// <summary>
-    /// Maneja un resultado fallido y devuelve una respuesta HTTP adecuada basada en el tipo de error.
+    /// Maneja un error y devuelve una respuesta HTTP adecuada basada en el tipo de error.
     /// </summary>
     /// <typeparam name="T">El tipo de datos contenidos en el resultado.</typeparam>
-    /// <param name="result">El <see cref="Result"/> que contiene el estado de éxito o fallo y los errores correspondientes.</param>
+    /// <param name="error">El <see cref="Error"/> que contiene información sobre el error ocurrido.</param>
     /// <returns>Un <see cref="IActionResult"/> que representa la respuesta HTTP adecuada para el error.</returns>
-    protected IActionResult HandleFailure<T>(Result<T> result)
+    protected IActionResult HandleFailure(Error error)
     {
-        return result.FirstError.Type switch
+        int statusCode = error.Type switch
         {
-            ErrorType.Validation => BadRequest(
-                ProblemDetailsFactory.FromResult(result, "Validation Error", StatusCodes.Status400BadRequest)),
-            ErrorType.NotFound => NotFound(
-                ProblemDetailsFactory.FromResult(result, "Not Found", StatusCodes.Status404NotFound)),
-            ErrorType.Conflict => Conflict(
-                ProblemDetailsFactory.FromResult(result, "Conflict", StatusCodes.Status409Conflict)),
-            ErrorType.Unauthorized => Unauthorized(
-                ProblemDetailsFactory.FromResult(result, "Unauthorized", StatusCodes.Status401Unauthorized)),
-            ErrorType.Forbidden => StatusCode(
-                StatusCodes.Status403Forbidden,
-                ProblemDetailsFactory.FromResult(result, "Forbidden", StatusCodes.Status403Forbidden)),
-            ErrorType.Exception => StatusCode(
-                StatusCodes.Status500InternalServerError,
-                ProblemDetailsFactory.FromResult(result, "Internal Server Error", StatusCodes.Status500InternalServerError)),
-            _ => BadRequest(
-                ProblemDetailsFactory.FromResult(result, "Bad Request", StatusCodes.Status400BadRequest))
+            ErrorType.Validation => StatusCodes.Status400BadRequest,
+            ErrorType.NotFound => StatusCodes.Status404NotFound,
+            ErrorType.Conflict => StatusCodes.Status409Conflict,
+            ErrorType.Unauthorized => StatusCodes.Status401Unauthorized,
+            ErrorType.Forbidden => StatusCodes.Status403Forbidden,
+            ErrorType.Exception => StatusCodes.Status500InternalServerError,
+            _ => StatusCodes.Status400BadRequest,
         };
+
+        return Problem(
+            title: error.Code,
+            type: error.Type.ToString(),
+            statusCode: statusCode,
+            detail: error.Message
+        );
     }
 }
