@@ -4,6 +4,7 @@ using CoWorkingApp.Application.Users.Commands.UpdateUser;
 using CoWorkingApp.Application.Users.Queries.GetAllUsers;
 using CoWorkingApp.Application.Users.Queries.GetUserByEmail;
 using CoWorkingApp.Application.Users.Queries.GetUserById;
+using CoWorkingApp.Core.Extensions;
 using CoWorkingApp.Core.Shared;
 using CoWorkingApp.Presentation.Abstracts;
 using CoWorkingApp.Presentation.DTOs.Users;
@@ -43,9 +44,9 @@ public class UserV1Controller : ApiController
 
             var response = await _sender.Send(query);
 
-            return response.IsSuccess
-                ? Ok(response.Value)
-                : BadRequest(response.Errors);
+            return response.Match(
+                onSuccess: value => Ok(response.Value),
+                onFailure: error => HandleFailure(response));
         }
         catch (Exception ex)
         {
@@ -69,9 +70,9 @@ public class UserV1Controller : ApiController
 
             var response = await _sender.Send(query);
 
-            return response.IsSuccess
-                ? Ok(response.Value)
-                : NotFound(response.FirstError);
+            return response.Match(
+                onSuccess: value => Ok(response.Value),
+                onFailure: error => HandleFailure(response));
         }
         catch (Exception ex)
         {
@@ -96,8 +97,9 @@ public class UserV1Controller : ApiController
 
             var response = await _sender.Send(query);
 
-            return response.IsSuccess
-                ? Ok(response) : NotFound(response.Errors);
+            return response.Match(
+                onSuccess: value => Ok(response.Value),
+                onFailure: error => HandleFailure(response));
         }
         catch (Exception ex)
         {
@@ -126,9 +128,9 @@ public class UserV1Controller : ApiController
 
             var response = await _sender.Send(command);
 
-            return response.IsSuccess
-                ? Ok(response.Value)
-                : BadRequest(response.Errors);
+            return response.Match(
+                onSuccess: value => Ok(response.Value),
+                onFailure: error => HandleFailure(response));
         }
         catch (Exception ex)
         {
@@ -158,9 +160,9 @@ public class UserV1Controller : ApiController
 
             var response = await _sender.Send(command);
 
-            return response.IsSuccess
-                ? Ok(response.Value)
-                : BadRequest(response.Errors);
+            return response.Match(
+                onSuccess: value => Ok(response.Value),
+                onFailure: error => HandleFailure(response));
         }
         catch (Exception ex)
         {
@@ -184,9 +186,9 @@ public class UserV1Controller : ApiController
 
             var response = await _sender.Send(command);
 
-            return response.IsSuccess
-                ? Ok(response.Value)
-                : BadRequest(response.Errors);
+            return response.Match(
+                onSuccess: value => Ok(response.Value),
+                onFailure: error => HandleFailure(response));
         }
         catch (Exception ex)
         {

@@ -87,25 +87,39 @@ public readonly record struct Result<TValue>
     }
 
     /// <summary>
+    /// Ejecuta una acción si el resultado es exitoso y devuelve el resultado.
+    /// </summary>
+    /// <param name="action">La acción a ejecutar si el resultado es exitoso.</param>
+    /// <returns>La instancia actual de <see cref="Result{TValue}"/>.</returns>
+    public Result<TValue> OnSuccess(Action action)
+    {
+        if (IsSuccess)
+        {
+            action();
+        }
+        return this;
+    }
+
+    /// <summary>
+    /// Ejecuta una acción si el resultado es fallido y devuelve el resultado.
+    /// </summary>
+    /// <param name="action">La acción a ejecutar si el resultado es fallido.</param>
+    /// <returns>La instancia actual de <see cref="Result{TValue}"/>.</returns>
+    public Result<TValue> OnFailure(Action action)
+    {
+        if (IsFailure)
+        {
+            action();
+        }
+        return this;
+    }
+
+    /// <summary>
     /// Obtiene el valor del resultado si es exitoso; de lo contrario, devuelve un valor predeterminado.
     /// </summary>
     /// <param name="defaultValue">El valor predeterminado a devolver si el resultado es fallido.</param>
     /// <returns>El valor del resultado si es exitoso; de lo contrario, el valor predeterminado.</returns>
     public TValue? GetValueOrDefault(TValue? defaultValue = default) => IsSuccess ? _value : defaultValue;
-
-    /// <summary>
-    /// Ejecuta una acción si el resultado es exitoso.
-    /// </summary>
-    /// <param name="action">La acción a ejecutar.</param>
-    /// <returns>El propio resultado.</returns>
-    public Result<TValue> OnSuccess(Action<TValue?> action)
-    {
-        if (IsSuccess)
-        {
-            action(_value);
-        }
-        return this;
-    }
 
     /// <summary>
     /// Crea una nueva instancia de la estructura <see cref="Result{TValue}"/> con el valor especificado.
@@ -176,58 +190,9 @@ public readonly record struct Result<TValue>
     public static implicit operator Result<TValue>(Error[] errors) => new(errors);
 
     /// <summary>
-    /// Ejecuta una acción si el resultado es exitoso.
+    /// Define una conversión explícita de una instancia de <see cref="Result{TValue}"/> a una instancia de <see cref="Result"/>.
     /// </summary>
-    /// <param name="action">La acción a ejecutar.</param>
-    /// <returns>El propio resultado.</returns>
-    public Result<TValue> OnSuccess(Action action)
-    {
-        if (IsSuccess)
-        {
-            action();
-        }
-        return this;
-    }
-
-    /// <summary>
-    /// Ejecuta una acción si el resultado es fallido.
-    /// </summary>
-    /// <param name="action">La acción a ejecutar.</param>
-    /// <returns>El propio resultado.</returns>
-    public Result<TValue> OnFailure(Action action)
-    {
-        if (IsFailure)
-        {
-            action();
-        }
-        return this;
-    }
-
-    /// <summary>
-    /// Ejecuta una acción si el resultado es fallido.
-    /// </summary>
-    /// <param name="action">La acción a ejecutar con el error asociado.</param>
-    /// <returns>El propio resultado.</returns>
-    public Result<TValue> OnFailure(Action<Error> action)
-    {
-        if (IsFailure)
-        {
-            action(FirstError);
-        }
-        return this;
-    }
-
-    /// <summary>
-    /// Ejecuta una acción si el resultado es fallido.
-    /// </summary>
-    /// <param name="action">La acción a ejecutar con la colección de errores asociada.</param>
-    /// <returns>El propio resultado.</returns>
-    public Result<TValue> OnFailure(Action<ICollection<Error>> action)
-    {
-        if (IsFailure)
-        {
-            action(Errors);
-        }
-        return this;
-    }
+    /// <param name="result">El resultado que contiene el estado de éxito o fallo y los errores correspondientes.</param>
+    /// <returns>Una instancia de <see cref="Result"/>.</returns>
+    public static implicit operator Result(Result<TValue> result) => result.IsSuccess ? Result.Success() : Result.Failure(result.FirstError);
 }

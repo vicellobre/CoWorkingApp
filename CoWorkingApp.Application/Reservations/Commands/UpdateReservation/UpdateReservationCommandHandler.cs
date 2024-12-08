@@ -74,7 +74,7 @@ public sealed class UpdateReservationCommandHandler : ICommandHandler<UpdateRese
             var changeDateResult = reservation.ChangeDate(request.Date);
             if (changeDateResult.IsFailure)
             {
-                return changeDateResult.Error;
+                return Result.Failure<UpdateReservationCommandResponse>(changeDateResult.Errors); ;
             }
         }
 

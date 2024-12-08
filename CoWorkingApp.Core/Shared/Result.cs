@@ -1,8 +1,7 @@
-﻿using CoWorkingApp.Core.DomainErrors;
+﻿using CoWorkingApp.Core.Extensions;
+using ERRORS = CoWorkingApp.Core.DomainErrors.Errors;
 
 namespace CoWorkingApp.Core.Shared;
-
-
 
 /// <summary>
 /// Representa el resultado de una operación que puede ser exitosa o contener un error.
@@ -10,9 +9,14 @@ namespace CoWorkingApp.Core.Shared;
 public readonly struct Result
 {
     /// <summary>
-    /// Obtiene el error asociado con el resultado, si lo hay.
+    /// Colección de errores asociados con el resultado.
     /// </summary>
-    public Error Error { get; init; }
+    public ICollection<Error> Errors { get; init; }
+
+    /// <summary>
+    /// El primer error en la colección de errores, o un error vacío si la colección está vacía.
+    /// </summary>
+    public Error FirstError => Errors.IsEmpty() ? ERRORS.None : Errors.First();
 
     /// <summary>
     /// Indica si el resultado es exitoso.
@@ -31,7 +35,8 @@ public readonly struct Result
     /// <item><description><see cref="Success()"/> para crear un resultado exitoso.</description></item>
     /// <item><description><see cref="Failure(Error)"/> para crear un resultado fallido con un error.</description></item>
     /// <item><description><see cref="Failure(Exception)"/> para crear un resultado fallido con una excepción.</description></item>
-    /// </list></summary>
+    /// </list>
+    /// </summary>
     /// <exception cref="InvalidOperationException">Se lanza cuando se intenta usar el constructor sin parámetros.</exception>
     public Result()
     {
@@ -39,31 +44,54 @@ public readonly struct Result
     }
 
     /// <summary>
-    /// Inicializa una nueva instancia de la estructura <see cref="Result"/> con el estado de éxito y el error especificados.
+    /// Inicializa una nueva instancia de la estructura <see cref="Result"/> con el estado de éxito y la colección de errores especificados.
     /// </summary>
     /// <param name="isSuccess">Indica si la operación fue exitosa.</param>
-    /// <param name="error">El error asociado con el resultado, si lo hay.</param>
-    private Result(bool isSuccess, Error error)
+    /// <param name="errors">La colección de errores asociados con el resultado.</param>
+    /// <exception cref="InvalidOperationException">Se lanza si el estado de éxito no concuerda con la colección de errores.</exception>
+    private Result(bool isSuccess, ICollection<Error> errors)
     {
-        if (isSuccess && error != Errors.None)
+        if (isSuccess && !errors.IsEmpty())
         {
             throw new InvalidOperationException();
         }
 
-        if (!isSuccess && error == Errors.None)
+        if (!isSuccess && errors.IsEmpty())
         {
             throw new InvalidOperationException();
         }
 
         IsSuccess = isSuccess;
-        Error = error;
+        Errors = errors;
     }
 
     /// <summary>
-    /// Ejecuta una acción si el resultado es exitoso.
+    /// Inicializa una nueva instancia de la estructura <see cref="Result"/> con el estado de éxito y el error especificado.
     /// </summary>
-    /// <param name="action">La acción a ejecutar.</param>
-    /// <returns>El propio resultado.</returns>
+    /// <param name="isSuccess">Indica si la operación fue exitosa.</param>
+    /// <param name="error">El error asociado con el resultado, si lo hay.</param>
+    /// <exception cref="InvalidOperationException">Se lanza si el estado de éxito no concuerda con el error.</exception>
+    private Result(bool isSuccess, Error error)
+    {
+        if (isSuccess && error != ERRORS.None)
+        {
+            throw new InvalidOperationException();
+        }
+
+        if (!isSuccess && error == ERRORS.None)
+        {
+            throw new InvalidOperationException();
+        }
+
+        IsSuccess = isSuccess;
+        Errors = [error];
+    }
+
+    /// <summary>
+    /// Ejecuta una acción si el resultado es exitoso y devuelve el resultado.
+    /// </summary>
+    /// <param name="action">La acción a ejecutar si el resultado es exitoso.</param>
+    /// <returns>La instancia actual de <see cref="Result"/>.</returns>
     public Result OnSuccess(Action action)
     {
         if (IsSuccess)
@@ -74,15 +102,15 @@ public readonly struct Result
     }
 
     /// <summary>
-    /// Ejecuta una acción si el resultado es fallido.
+    /// Ejecuta una acción si el resultado es fallido y devuelve el resultado.
     /// </summary>
-    /// <param name="action">La acción a ejecutar.</param>
-    /// <returns>El propio resultado.</returns>
-    public Result OnFailure(Action<Error> action)
+    /// <param name="action">La acción a ejecutar si el resultado es fallido.</param>
+    /// <returns>La instancia actual de <see cref="Result"/>.</returns>
+    public Result OnFailure(Action action)
     {
         if (IsFailure)
         {
-            action(Error);
+            action();
         }
         return this;
     }
@@ -91,7 +119,7 @@ public readonly struct Result
     /// Crea un resultado exitoso sin valor asociado.
     /// </summary>
     /// <returns>Una nueva instancia de la estructura <see cref="Result"/> que representa un resultado exitoso.</returns>
-    public static Result Success() => new(true, Errors.None);
+    public static Result Success() => new(true, ERRORS.None);
 
     /// <summary>
     /// Crea un resultado fallido con el error especificado.
@@ -99,6 +127,7 @@ public readonly struct Result
     /// <param name="error">El error asociado con el resultado.</param>
     /// <returns>Una nueva instancia de la estructura <see cref="Result"/> que representa un resultado fallido.</returns>
     public static Result Failure(Error error) => new(false, error);
+
 
     /// <summary>
     /// Crea un resultado fallido con la excepción especificada,

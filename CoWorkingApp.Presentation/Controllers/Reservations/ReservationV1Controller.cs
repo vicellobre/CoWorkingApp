@@ -5,6 +5,7 @@ using CoWorkingApp.Application.Reservations.Queries.GetAllReservations;
 using CoWorkingApp.Application.Reservations.Queries.GetReservationById;
 using CoWorkingApp.Application.Reservations.Queries.GetReservationsByDate;
 using CoWorkingApp.Core.Shared;
+using CoWorkingApp.Core.Extensions;
 using CoWorkingApp.Presentation.Abstracts;
 using CoWorkingApp.Presentation.DTOs.Reservations;
 using MediatR;
@@ -44,9 +45,9 @@ public class ReservationV1Controller : ApiController
 
             var response = await _sender.Send(query);
 
-            return response.IsSuccess
-                ? Ok(response.Value)
-                : BadRequest(response.Errors);
+            return response.Match(
+                onSuccess: value => Ok(response.Value),
+                onFailure: error => HandleFailure(response));
         }
         catch (Exception ex)
         {
@@ -70,9 +71,9 @@ public class ReservationV1Controller : ApiController
 
             var response = await _sender.Send(query);
 
-            return response.IsSuccess
-                ? Ok(response.Value)
-                : NotFound(response.FirstError);
+            return response.Match(
+                onSuccess: value => Ok(response.Value),
+                onFailure: error => HandleFailure(response));
         }
         catch (Exception ex)
         {
@@ -96,9 +97,9 @@ public class ReservationV1Controller : ApiController
 
             var response = await _sender.Send(query);
 
-            return response.IsSuccess
-                ? Ok(response.Value)
-                : NotFound(response.FirstError);
+            return response.Match(
+                onSuccess: value => Ok(response.Value),
+                onFailure: error => HandleFailure(response));
         }
         catch (Exception ex)
         {
@@ -177,9 +178,9 @@ public class ReservationV1Controller : ApiController
 
             var response = await _sender.Send(command);
 
-            return response.IsSuccess
-                ? Ok(response.Value)
-                : BadRequest(response.Errors);
+            return response.Match(
+                onSuccess: value => Ok(response.Value),
+                onFailure: error => HandleFailure(response));
         }
         catch (Exception ex)
         {
@@ -208,9 +209,9 @@ public class ReservationV1Controller : ApiController
 
             var response = await _sender.Send(command);
 
-            return response.IsSuccess
-                ? Ok(response.Value)
-                : BadRequest(response.Errors);
+            return response.Match(
+                onSuccess: value => Ok(response.Value),
+                onFailure: error => HandleFailure(response));
         }
         catch (Exception ex)
         {
@@ -234,9 +235,9 @@ public class ReservationV1Controller : ApiController
 
             var response = await _sender.Send(command);
 
-            return response.IsSuccess
-                ? Ok(response.Value)
-                : BadRequest(response.Errors);
+            return response.Match(
+                onSuccess: value => Ok(response.Value),
+                onFailure: error => HandleFailure(response));
         }
         catch (Exception ex)
         {

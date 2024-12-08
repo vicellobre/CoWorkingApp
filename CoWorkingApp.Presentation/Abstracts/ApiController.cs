@@ -1,5 +1,6 @@
 ﻿using CoWorkingApp.Core.Enumerations;
 using CoWorkingApp.Core.Shared;
+using CoWorkingApp.Presentation.Problems;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,73 +24,32 @@ public abstract class ApiController : ControllerBase
     /// <exception cref="ArgumentNullException">Se lanza si el <paramref name="sender"/> es <see langword="null"/>.</exception>
     protected ApiController(ISender sender) : base() => _sender = sender ?? throw new ArgumentNullException(nameof(sender));
 
-
-    /// <summary>
-    /// Crea un objeto <see cref="ProblemDetails"/> que contiene información detallada sobre un problema específico.
-    /// </summary>
-    /// <param name="title">El título del problema.</param>
-    /// <param name="status">El código de estado HTTP asociado con el problema.</param>
-    /// <param name="error">El error principal que describe el problema.</param>
-    /// <param name="errors">Errores adicionales relacionados con el problema (opcional).</param>
-    /// <returns>Un <see cref="ProblemDetails"/> que contiene información detallada sobre el problema.</returns>
-    protected static ProblemDetails CreateProblemDetails(string title, int status, Error error, Error[]? errors = null) =>
-        new()
-        {
-            Title = title,
-            Type = error.Code,
-            Detail = error.Message,
-            Status = status,
-            Extensions = { { nameof(errors), errors } }
-        };
-
     /// <summary>
     /// Maneja un resultado fallido y devuelve una respuesta HTTP adecuada basada en el tipo de error.
     /// </summary>
     /// <typeparam name="T">El tipo de datos contenidos en el resultado.</typeparam>
-    /// <param name="result">El <see cref="Result{T}"/> que contiene el estado de éxito o fallo y los errores correspondientes.</param>
+    /// <param name="result">El <see cref="Result"/> que contiene el estado de éxito o fallo y los errores correspondientes.</param>
     /// <returns>Un <see cref="IActionResult"/> que representa la respuesta HTTP adecuada para el error.</returns>
-    /// <exception cref="InvalidOperationException">Se lanza si el resultado indica éxito en lugar de fallo.</exception>
     protected IActionResult HandleFailure<T>(Result<T> result)
     {
-        if (result.IsSuccess)
-        {
-            throw new InvalidOperationException();
-        }
-
         return result.FirstError.Type switch
         {
             ErrorType.Validation => BadRequest(
-                CreateProblemDetails(
-                    "Validation Error",
-                    StatusCodes.Status400BadRequest,
-                    result.FirstError,
-                    [.. result.Errors])),
+                ProblemDetailsFactory.FromResult(result, "Validation Error", StatusCodes.Status400BadRequest)),
             ErrorType.NotFound => NotFound(
-                CreateProblemDetails(
-                    "Not Found",
-                    StatusCodes.Status404NotFound,
-                    result.FirstError)),
+                ProblemDetailsFactory.FromResult(result, "Not Found", StatusCodes.Status404NotFound)),
             ErrorType.Conflict => Conflict(
-                CreateProblemDetails(
-                    "Conflict",
-                    StatusCodes.Status409Conflict,
-                    result.FirstError)),
+                ProblemDetailsFactory.FromResult(result, "Conflict", StatusCodes.Status409Conflict)),
             ErrorType.Unauthorized => Unauthorized(
-                CreateProblemDetails(
-                    "Unauthorized",
-                    StatusCodes.Status401Unauthorized,
-                    result.FirstError)),
+                ProblemDetailsFactory.FromResult(result, "Unauthorized", StatusCodes.Status401Unauthorized)),
             ErrorType.Forbidden => StatusCode(
                 StatusCodes.Status403Forbidden,
-                CreateProblemDetails(
-                    "Forbidden",
-                    StatusCodes.Status403Forbidden,
-                    result.FirstError)),
+                ProblemDetailsFactory.FromResult(result, "Forbidden", StatusCodes.Status403Forbidden)),
+            ErrorType.Exception => StatusCode(
+                StatusCodes.Status500InternalServerError,
+                ProblemDetailsFactory.FromResult(result, "Internal Server Error", StatusCodes.Status500InternalServerError)),
             _ => BadRequest(
-                CreateProblemDetails(
-                    "Bad Request",
-                    StatusCodes.Status400BadRequest,
-                    result.FirstError))
+                ProblemDetailsFactory.FromResult(result, "Bad Request", StatusCodes.Status400BadRequest))
         };
     }
 }

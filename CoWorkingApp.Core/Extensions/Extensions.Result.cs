@@ -56,52 +56,33 @@ public static class ResultExtensions
     public static Result<TValue> ToResult<TValue>(this Error[] errors) => errors;
 
     /// <summary>
-    /// Ejecuta una función si el resultado es exitoso.
+    /// Ejecuta una de las funciones proporcionadas dependiendo del estado del <see cref="Result"/>.
     /// </summary>
-    /// <typeparam name="T">El tipo de retorno de la función.</typeparam>
-    /// <param name="result">El resultado de la operación.</param>
-    /// <param name="func">La función a ejecutar.</param>
-    /// <returns>El resultado de la función, o el valor por defecto de <typeparamref name="T"/> si no se ejecuta.</returns>
-    public static T? OnSuccess<T>(this Result result, Func<T> func)
-    {
-        return result.IsSuccess ? func() : default;
-    }
+    /// <typeparam name="TValue">El tipo del valor resultante de la operación.</typeparam>
+    /// <param name="result">El resultado de la operación que se va a evaluar.</param>
+    /// <param name="onSuccess">Función a ejecutar si el resultado es exitoso.</param>
+    /// <param name="onFailure">Función a ejecutar si el resultado es fallido, que recibe el primer error como parámetro.</param>
+    /// <returns>El valor retornado por la función <paramref name="onSuccess"/> si la operación fue exitosa, o por la función <paramref name="onFailure"/> si la operación falló.</returns>
+    public static TValue Match<TValue>(this Result result, Func<TValue> onSuccess, Func<Error, TValue> onFailure) =>
+        result.IsSuccess ? onSuccess() : onFailure(result.FirstError);
 
     /// <summary>
-    /// Ejecuta una función si el resultado es fallido.
+    /// Ejecuta una de las funciones proporcionadas dependiendo del estado del <see cref="Result{TValue}"/>.
     /// </summary>
-    /// <typeparam name="T">El tipo de retorno de la función.</typeparam>
-    /// <param name="result">El resultado de la operación.</param>
-    /// <param name="func">La función a ejecutar.</param>
-    /// <returns>El resultado de la función, o el valor por defecto de <typeparamref name="T"/> si no se ejecuta.</returns>
-    public static T? OnFailure<T>(this Result result, Func<Error, T> func)
-    {
-        return result.IsFailure ? func(result.Error) : default;
-    }
+    /// <param name="result">El resultado de la operación que se va a evaluar.</param>
+    /// <param name="onSuccess">Función a ejecutar si el resultado es exitoso, que recibe el valor como parámetro.</param>
+    /// <param name="onFailure">Función a ejecutar si el resultado es fallido, que recibe el primer error como parámetro.</param>
+    /// <returns>El valor retornado por la función <paramref name="onSuccess"/> si la operación fue exitosa, o por la función <paramref name="onFailure"/> si la operación falló.</returns>
+    public static TValue Match<TValue>(this Result<TValue> result, Func<TValue, TValue> onSuccess, Func<Error, TValue> onFailure) =>
+        result.IsSuccess ? onSuccess(result.Value) : onFailure(result.FirstError);
 
     /// <summary>
-    /// Ejecuta una función si el resultado es exitoso.
+    /// Ejecuta una de las funciones proporcionadas dependiendo del estado del <see cref="Result{TValue}"/>.
     /// </summary>
-    /// <typeparam name="T">El tipo de retorno de la función.</typeparam>
-    /// <typeparam name="TValue">El tipo del valor resultante.</typeparam>
-    /// <param name="result">El resultado de la operación.</param>
-    /// <param name="func">La función a ejecutar.</param>
-    /// <returns>El resultado de la función, o el valor por defecto de <typeparamref name="T"/> si no se ejecuta.</returns>
-    public static T? OnSuccess<T, TValue>(this Result<TValue> result, Func<TValue?, T> func)
-    {
-        return result.IsSuccess ? func(result.Value) : default;
-    }
-
-    /// <summary>
-    /// Ejecuta una función si el resultado es fallido.
-    /// </summary>
-    /// <typeparam name="T">El tipo de retorno de la función.</typeparam>
-    /// <typeparam name="TValue">El tipo del valor resultante.</typeparam>
-    /// <param name="result">El resultado de la operación.</param>
-    /// <param name="func">La función a ejecutar.</param>
-    /// <returns>El resultado de la función, o el valor por defecto de <typeparamref name="T"/> si no se ejecuta.</returns>
-    public static T? OnFailure<T, TValue>(this Result<TValue> result, Func<Error, T> func)
-    {
-        return result.IsFailure ? func(result.FirstError) : default;
-    }
+    /// <param name="result">El resultado de la operación que se va a evaluar.</param>
+    /// <param name="onSuccess">Función a ejecutar si el resultado es exitoso, que recibe el valor como parámetro.</param>
+    /// <param name="onFailure">Función a ejecutar si el resultado es fallido, que recibe el primer error como parámetro.</param>
+    /// <returns>El valor retornado por la función <paramref name="onSuccess"/> si la operación fue exitosa, o por la función <paramref name="onFailure"/> si la operación falló.</returns>
+    public static TResult Match<TValue, TResult>(this Result<TValue> result, Func<TValue, TResult> onSuccess, Func<Error, TResult> onFailure) =>
+        result.IsSuccess ? onSuccess(result.Value) : onFailure(result.FirstError);
 }
