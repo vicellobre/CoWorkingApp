@@ -14,16 +14,6 @@ public readonly record struct SeatNumber
     public string Value { get; }
 
     /// <summary>
-    /// Constructor sin parámetros que lanza una excepción.
-    /// Use el método estático <see cref="Create"/> para instanciar <see cref="SeatNumber"/>.
-    /// </summary>
-    /// <exception cref="InvalidOperationException">Lanza siempre indicando que use el método <see cref="Create"/>.</exception>
-    public SeatNumber()
-    {
-        //throw new InvalidOperationException("Use the static Create method to instantiate SeatNumber.");
-    }
-
-    /// <summary>
     /// Constructor privado para inicializar el valor del número de asiento.
     /// </summary>
     /// <param name="value">El valor del número de asiento.</param>

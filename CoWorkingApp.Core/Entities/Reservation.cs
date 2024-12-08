@@ -23,7 +23,7 @@ public class Reservation : EntityBase
     /// <summary>
     /// Obtiene o establece el usuario asociado a la reserva.
     /// </summary>
-    public User User { get; set; }
+    public User User { get; set; } = default!;
 
     /// <summary>
     /// Obtiene o establece el identificador único del asiento asociado a la reserva.
@@ -33,18 +33,13 @@ public class Reservation : EntityBase
     /// <summary>
     /// Obtiene o establece el asiento asociado a la reserva.
     /// </summary>
-    public Seat Seat { get; set; }
+    public Seat Seat { get; set; } = default!;
 
-
-    private Reservation(Guid id, DateTime date, Guid userId, Guid seatId) : base(id)
-    {
-        Date = Date.Create(date).Value;
-        UserId = userId;
-        SeatId = seatId;
-        //User = default!;
-        //Seat = default!;
-    }
+    /// <summary>
+    /// Constructor sin parámetros requerido por Entity Framework Core.
+    /// </summary>
     private Reservation() : base() { }
+
 
     /// <summary>
     /// Constructor privado para inicializar una reserva con un identificador especificado.

@@ -30,16 +30,6 @@ public readonly record struct LastName
     private const string Pattern = @"^[a-zA-ZáéíóúÁÉÍÓÚñÑçÇüÜàÀèÈìÌòÒùÙâêÊîôûäëïöüß]+(?:\s[a-zA-ZáéíóúÁÉÍÓÚñÑçÇüÜàÀèÈìÌòÒùÙâêÊîôûäëïöüß]+)*$";
 
     /// <summary>
-    /// Constructor sin parámetros que lanza una excepción.
-    /// Use el método estático <see cref="Create"/> para instanciar <see cref="LastName"/>.
-    /// </summary>
-    /// <exception cref="InvalidOperationException">Lanza siempre indicando que use el método <see cref="Create"/>.</exception>
-    public LastName()
-    {
-        //throw new InvalidOperationException("Use the static Create method to instantiate LastName.");
-    }
-
-    /// <summary>
     /// Constructor privado para inicializar el valor del apellido.
     /// </summary>
     /// <param name="value">El valor del apellido.</param>

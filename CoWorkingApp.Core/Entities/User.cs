@@ -13,34 +13,22 @@ public class User : EntityBase
     /// <summary>
     /// Obtiene o establece el nombre completo del usuario.
     /// </summary>
-    public FullName Name { get; set; }
+    public FullName Name { get; set; } = default!;
 
     /// <summary>
     /// Obtiene o establece las credenciales del usuario (correo electrónico y contraseña).
     /// </summary>
-    public CredentialsWithEmailAndPassword Credentials { get; set; }
+    public CredentialsWithEmailAndPassword Credentials { get; set; } = default!;
 
     /// <summary>
     /// Obtiene o establece la colección de reservas asociadas al usuario.
     /// </summary>
     public ICollection<Reservation> Reservations { get; set; } = [];
 
-    public User() : base() { }
-
-
     /// <summary>
-    /// Constructor público para inicializar un usuario con identificadores y valores básicos.
+    /// Constructor sin parámetros requerido por Entity Framework Core.
     /// </summary>
-    /// <param name="id">El identificador del usuario.</param>
-    /// <param name="firstName">El primer nombre del usuario.</param>
-    /// <param name="lastName">El apellido del usuario.</param>
-    /// <param name="email">El correo electrónico del usuario.</param>
-    /// <param name="password">La contraseña del usuario.</param>
-    public User(Guid id, string firstName, string lastName, string email, string password) : base(id)
-    {
-        Name = FullName.Create(firstName, lastName).Value; 
-        Credentials = CredentialsWithEmailAndPassword.Create(email, password).Value;
-    }
+    private User() : base() { }
 
     /// <summary>
     /// Constructor privado para inicializar un usuario con un identificador especificado.

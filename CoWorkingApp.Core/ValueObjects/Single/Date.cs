@@ -14,16 +14,6 @@ public readonly record struct Date
     public DateTime Value { get; }
 
     /// <summary>
-    /// Constructor sin parámetros que lanza una excepción.
-    /// Use el método estático <see cref="Create"/> para instanciar <see cref="Date"/>.
-    /// </summary>
-    /// <exception cref="InvalidOperationException">Lanza siempre indicando que use el método <see cref="Create"/>.</exception>
-    public Date()
-    {
-        //throw new InvalidOperationException("Use the static Create method to instantiate Date.");
-    }
-
-    /// <summary>
     /// Constructor privado para inicializar la fecha.
     /// </summary>
     /// <param name="value">El valor de la fecha.</param>

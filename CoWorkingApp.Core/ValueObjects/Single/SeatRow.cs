@@ -14,16 +14,6 @@ public readonly record struct SeatRow
     public string Value { get; }
 
     /// <summary>
-    /// Constructor sin parámetros que lanza una excepción.
-    /// Use el método estático <see cref="Create"/> para instanciar <see cref="SeatRow"/>.
-    /// </summary>
-    /// <exception cref="InvalidOperationException">Lanza siempre indicando que use el método <see cref="Create"/>.</exception>
-    public SeatRow()
-    {
-        //throw new InvalidOperationException("Use the static Create method to instantiate SeatRow.");
-    }
-
-    /// <summary>
     /// Constructor privado para inicializar el valor de la fila del asiento.
     /// </summary>
     /// <param name="value">El valor de la fila del asiento.</param>

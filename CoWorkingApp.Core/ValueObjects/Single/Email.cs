@@ -30,16 +30,6 @@ public readonly record struct Email
     private const string EmailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
 
     /// <summary>
-    /// Constructor sin parámetros que lanza una excepción.
-    /// Use el método estático <see cref="Create"/> para instanciar <see cref="Email"/>.
-    /// </summary>
-    /// <exception cref="InvalidOperationException">Lanza siempre indicando que use el método <see cref="Create"/>.</exception>
-    public Email()
-    {
-        //throw new InvalidOperationException("Use the static Create method to instantiate Email.");
-    }
-
-    /// <summary>
     /// Constructor privado para inicializar el valor del correo electrónico.
     /// </summary>
     /// <param name="value">El valor del correo electrónico.</param>

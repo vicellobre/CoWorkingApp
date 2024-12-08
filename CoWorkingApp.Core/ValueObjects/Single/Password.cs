@@ -31,16 +31,6 @@ public readonly record struct Password
     private const string PasswordPattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$";
 
     /// <summary>
-    /// Constructor sin parámetros que lanza una excepción.
-    /// Use el método estático <see cref="Create"/> para instanciar <see cref="Password"/>.
-    /// </summary>
-    /// <exception cref="InvalidOperationException">Lanza siempre indicando que use el método <see cref="Create"/>.</exception>
-    public Password()
-    {
-        //throw new InvalidOperationException("Use the static Create method to instantiate Password.");
-    }
-
-    /// <summary>
     /// Constructor privado para inicializar el valor de la contraseña.
     /// </summary>
     /// <param name="value">El valor de la contraseña.</param>
