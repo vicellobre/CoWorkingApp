@@ -1,4 +1,6 @@
-﻿namespace CoWorkingApp.Core.Primitives;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CoWorkingApp.Core.Primitives;
 
 /// <summary>
 /// Clase base abstracta que representa una entidad con un identificador único de tipo GUID.
@@ -10,7 +12,8 @@ public abstract class EntityBase : IEquatable<EntityBase>
     /// Identificador único de la entidad.
     /// Este campo se inicializa al momento de creación y no puede modificarse.
     /// </summary>
-    public Guid Id { get; private init; }
+    [Key]
+    public Guid Id { get; init; }
 
     // Constructores
     /// <summary>

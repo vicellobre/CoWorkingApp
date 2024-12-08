@@ -20,7 +20,7 @@ public readonly record struct Date
     /// <exception cref="InvalidOperationException">Lanza siempre indicando que use el método <see cref="Create"/>.</exception>
     public Date()
     {
-        throw new InvalidOperationException("Use the static Create method to instantiate Date.");
+        //throw new InvalidOperationException("Use the static Create method to instantiate Date.");
     }
 
     /// <summary>
@@ -51,7 +51,7 @@ public readonly record struct Date
     /// Devuelve una representación en cadena de la fecha.
     /// </summary>
     /// <returns>La fecha como una cadena.</returns>
-    public override string ToString() => Value.ToString("o");
+    public override string ToString() => Value.ToString();//"o"
 
     /// <summary>
     /// Define una conversión implícita de <see cref="Date"/> a <see cref="DateTime"/>.

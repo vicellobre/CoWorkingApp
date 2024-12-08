@@ -12,7 +12,7 @@ public class FirstNameConverter : ValueConverter<FirstName, string>
     /// Inicializa una nueva instancia de la clase <see cref="FirstNameConverter"/>.
     /// </summary>
     public FirstNameConverter() : base(
-        firstName => firstName,
+        firstName => firstName.Value,
         value => FirstName.Create(value).Value)
     {
     }

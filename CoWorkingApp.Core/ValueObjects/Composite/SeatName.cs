@@ -46,7 +46,7 @@ public record struct SeatName
     /// <exception cref="InvalidOperationException">Lanza siempre indicando que use el método <see cref="Create"/>.</exception>
     public SeatName()
     {
-        throw new InvalidOperationException("Use the static Create method to instantiate SeatName.");
+        //throw new InvalidOperationException("Use the static Create method to instantiate SeatName.");
     }
 
     /// <summary>

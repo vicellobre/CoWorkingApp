@@ -18,6 +18,8 @@ public sealed record class CredentialsWithEmailAndPassword
     /// </summary>
     public Password Password { get; set; }
 
+    public string Value => $"{Email.Value}  {Password.Value}";
+
     /// <summary>
     /// Constructor protegido sin parámetros.
     /// </summary>
@@ -61,11 +63,11 @@ public sealed record class CredentialsWithEmailAndPassword
     /// Devuelve una representación en cadena de las credenciales del usuario.
     /// </summary>
     /// <returns>Una cadena que representa las credenciales del usuario.</returns>
-    public override string ToString() => $"{Email.Value} / ******";
+    public override string ToString() => Value;
 
     /// <summary>
     /// Define una conversión implícita de <see cref="CredentialsWithEmailAndPassword"/> a <see cref="string"/>.
     /// </summary>
     /// <param name="credentials">El valor de <see cref="CredentialsWithEmailAndPassword"/> a convertir.</param>
-    public static implicit operator string(CredentialsWithEmailAndPassword credentials) => credentials.ToString();
+    public static implicit operator string(CredentialsWithEmailAndPassword credentials) => credentials.Value;
 }

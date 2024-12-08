@@ -60,7 +60,7 @@ public class SeatRepository : RepositoryGeneric<Seat>, ISeatRepository
     /// <param name="cancellationToken">Token de cancelación opcional para la operación asincrónica.</param>
     /// <returns>True si el nombre es único; de lo contrario, false.</returns>
     public async Task<bool> IsNameUniqueAsync(SeatName name, CancellationToken cancellationToken = default) =>
-        await Set.AnyAsync(s => s.Name == name, cancellationToken);
+        !await Set.AnyAsync(s => s.Name == name, cancellationToken);
 
     // Puedes implementar otros métodos específicos para SeatRepository si es necesario
 }

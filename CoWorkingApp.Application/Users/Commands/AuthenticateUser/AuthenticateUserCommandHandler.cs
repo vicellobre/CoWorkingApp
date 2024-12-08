@@ -35,7 +35,7 @@ public sealed class AuthenticateUserCommandHandler : ICommandHandler<Authenticat
         var passwordResult = Password.Create(request.Password);
 
         var user = await _userRepository.AuthenticateAsync(emailResult.Value, passwordResult.Value, cancellationToken);
-        if (user == null)
+        if (user is null)
         {
             return Result.Failure<AuthenticateUserCommandResponse>(Errors.User.InvalidCredentials);
         }

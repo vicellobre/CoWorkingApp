@@ -1,7 +1,13 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using CoWorkingApp.API.Configurations;
+using CoWorkingApp.API.Extensions;
+using CoWorkingApp.Core.Entities;
+using CoWorkingApp.Persistence.Constants;
+using CoWorkingApp.Persistence.Context;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
@@ -10,11 +16,6 @@ using Microsoft.OData.ModelBuilder;
 using Microsoft.OpenApi.Models;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using CoWorkingApp.API.Configurations;
-using CoWorkingApp.Core.Entities;
-using CoWorkingApp.Infrastructure.Adapters;
-using CoWorkingApp.API.Extensions;
-using CoWorkingApp.Persistence.Context;
 
 namespace CoWorkingApp.API;
 
@@ -57,12 +58,14 @@ public class Startup
 
         // Configuración del contexto de la base de datos
         services.AddDbContext<CoWorkingContext>(options =>
-        {
-            options.UseSqlServer(connectionString);
-        });
+            options.UseSqlServer(connectionString,
+            sqlOptions => sqlOptions.MigrationsAssembly("CoWorkingApp.Persistence")));
 
         // Agrega dependencias adicionales
         services.AddDependency();
+
+        // Configuración de MediatR
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Application.AssemblyReference.Assembly));
 
         // Configuración CORS
         services.AddCors(options =>
@@ -77,9 +80,6 @@ public class Startup
 
         // Configuración de autenticación JWT
         services.AddTokenAuthentication(_configuration);
-
-        // Configuración de AutoMapper y registro del perfil de mapeo
-        services.AddAutoMapper(typeof(MappingProfile));
 
         // Configuración de protección de datos con encriptador
         services.AddDataProtection()
@@ -170,9 +170,9 @@ public class Startup
         var odataBuilder = new ODataConventionModelBuilder();
 
         // Agrega entidades al modelo EDM
-        odataBuilder.EntitySet<User>("Users");
-        odataBuilder.EntitySet<Seat>("Seats");
-        odataBuilder.EntitySet<Reservation>("Reservations");
+        odataBuilder.EntitySet<Seat>(TableNames.Seats);
+        odataBuilder.EntitySet<User>(TableNames.Users);
+        odataBuilder.EntitySet<Reservation>(TableNames.Reservations);
 
         return odataBuilder.GetEdmModel();
     }

@@ -3,20 +3,20 @@
 /// <summary>
 /// Proporciona los nombres de las tablas utilizadas en la persistencia de datos.
 /// </summary>
-internal static class TableNames
+public static class TableNames
 {
     /// <summary>
     /// El nombre de la tabla de usuarios.
     /// </summary>
-    internal const string Users = nameof(Users);
+    public const string Users = nameof(Users);
 
     /// <summary>
     /// El nombre de la tabla de asientos.
     /// </summary>
-    internal const string Seats = nameof(Seats);
+    public const string Seats = nameof(Seats);
 
     /// <summary>
     /// El nombre de la tabla de reservas.
     /// </summary>
-    internal const string Reservations = nameof(Reservations);
+    public const string Reservations = nameof(Reservations);
 }

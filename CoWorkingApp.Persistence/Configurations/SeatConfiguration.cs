@@ -19,6 +19,9 @@ public class SeatConfiguration : IEntityTypeConfiguration<Seat>
     /// <param name="builder">El constructor de la entidad <see cref="Seat"/>.</param>
     public void Configure(EntityTypeBuilder<Seat> builder)
     {
+        // Ignorar la colección Reservations en la entidad Seat
+        //builder.Ignore(s => s.Reservations);
+
         builder.ToTable(TableNames.Seats);
         builder.HasKey(s => s.Id);
         
@@ -33,11 +36,19 @@ public class SeatConfiguration : IEntityTypeConfiguration<Seat>
                .IsRequired()
                .HasConversion(new DescriptionConverter())
                .HasMaxLength(Description.MaxLength);
-               
+
         builder.HasIndex(s => s.Name)
                .IsUnique();
 
-        // Ignorar la colección Reservations en la entidad Seat
-        builder.Ignore(s => s.Reservations);
+        // Configuración de la navegación de reservas
+        //builder.HasMany(s => s.Reservations)
+        //       .WithOne(r => r.Seat)
+        //       .HasForeignKey(r => r.SeatId)
+        //       .OnDelete(DeleteBehavior.Cascade);
+
+        // Configuración de la navegación de reservas sin referencias circulares
+        builder.Navigation(s => s.Reservations)
+               .AutoInclude(false); // Evitar la carga automática de la colección
     }
 }
+

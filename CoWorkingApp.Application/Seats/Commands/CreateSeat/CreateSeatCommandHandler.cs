@@ -44,7 +44,8 @@ public sealed class CreateSeatCommandHandler : ICommandHandler<CreateSeatCommand
             request.Description);
 
         Seat seat = seatResult.Value;
-        if (!await _seatRepository.IsNameUniqueAsync(seat.Name, cancellationToken))
+        bool isUnique = await _seatRepository.IsNameUniqueAsync(seat.Name, cancellationToken);
+        if (!isUnique)
         {
             return Result.Failure<CreateSeatCommandResponse>(Errors.Seat.NameAlreadyInUse);
         }

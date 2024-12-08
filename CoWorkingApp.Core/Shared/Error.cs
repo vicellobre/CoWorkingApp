@@ -15,6 +15,8 @@ public readonly record struct Error
     /// </summary>
     public string Message { get; init; }
 
+    public ErrorType Type { get; init; }
+
     /// <summary>
     /// Constructor por defecto que lanza una excepción. 
     /// Use el método estático <see cref="Create"/> para instanciar <see cref="Error"/>.

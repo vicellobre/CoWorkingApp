@@ -25,6 +25,23 @@ public class User : EntityBase
     /// </summary>
     public ICollection<Reservation> Reservations { get; set; } = [];
 
+    public User() : base() { }
+
+
+    /// <summary>
+    /// Constructor público para inicializar un usuario con identificadores y valores básicos.
+    /// </summary>
+    /// <param name="id">El identificador del usuario.</param>
+    /// <param name="firstName">El primer nombre del usuario.</param>
+    /// <param name="lastName">El apellido del usuario.</param>
+    /// <param name="email">El correo electrónico del usuario.</param>
+    /// <param name="password">La contraseña del usuario.</param>
+    public User(Guid id, string firstName, string lastName, string email, string password) : base(id)
+    {
+        Name = FullName.Create(firstName, lastName).Value; 
+        Credentials = CredentialsWithEmailAndPassword.Create(email, password).Value;
+    }
+
     /// <summary>
     /// Constructor privado para inicializar un usuario con un identificador especificado.
     /// </summary>

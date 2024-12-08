@@ -6,6 +6,11 @@
     },
     "identityapp1": {
       "type": "identityapp"
+    },
+    "mssql1": {
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:ConnectionCoWorking",
+      "dynamicId": null
     }
   }
 }

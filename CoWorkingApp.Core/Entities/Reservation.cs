@@ -35,6 +35,17 @@ public class Reservation : EntityBase
     /// </summary>
     public Seat Seat { get; set; }
 
+
+    private Reservation(Guid id, DateTime date, Guid userId, Guid seatId) : base(id)
+    {
+        Date = Date.Create(date).Value;
+        UserId = userId;
+        SeatId = seatId;
+        //User = default!;
+        //Seat = default!;
+    }
+    private Reservation() : base() { }
+
     /// <summary>
     /// Constructor privado para inicializar una reserva con un identificador especificado.
     /// </summary>

@@ -17,4 +17,8 @@
     <ProjectReference Include="..\CoWorkingApp.Core\CoWorkingApp.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

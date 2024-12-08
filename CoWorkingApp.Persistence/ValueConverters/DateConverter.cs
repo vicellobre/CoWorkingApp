@@ -12,7 +12,7 @@ public class DateConverter : ValueConverter<Date, DateTime>
     /// Inicializa una nueva instancia de la clase <see cref="DateConverter"/>.
     /// </summary>
     public DateConverter() : base(
-        date => date,
+        date => date.Value,
         dateTime => Date.Create(dateTime).Value)
     {
     }

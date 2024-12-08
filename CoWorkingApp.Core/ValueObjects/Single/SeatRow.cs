@@ -20,7 +20,7 @@ public readonly record struct SeatRow
     /// <exception cref="InvalidOperationException">Lanza siempre indicando que use el método <see cref="Create"/>.</exception>
     public SeatRow()
     {
-        throw new InvalidOperationException("Use the static Create method to instantiate SeatRow.");
+        //throw new InvalidOperationException("Use the static Create method to instantiate SeatRow.");
     }
 
     /// <summary>

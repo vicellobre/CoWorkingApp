@@ -1,4 +1,5 @@
 ﻿using CoWorkingApp.Core.Entities;
+using CoWorkingApp.Persistence.Configurations;
 using Microsoft.EntityFrameworkCore;
 
 namespace CoWorkingApp.Persistence.Context;

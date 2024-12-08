@@ -12,7 +12,7 @@ public class EmailConverter : ValueConverter<Email, string>
     /// Inicializa una nueva instancia de la clase <see cref="EmailConverter"/>.
     /// </summary>
     public EmailConverter() : base(
-        email => email,//Permite que Email sea almacenado como una cadena en la base de datos.
+        email => email.Value,//Permite que Email sea almacenado como una cadena en la base de datos.
         value => Email.Create(value).Value)//Permite que una cadena recuperada de la base de datos sea convertida nuevamente a un Email
     {
     }

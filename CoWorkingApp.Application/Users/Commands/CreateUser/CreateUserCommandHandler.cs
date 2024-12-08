@@ -43,7 +43,8 @@ public sealed class CreateUserCommandHandler : ICommandHandler<CreateUserCommand
             request.Password);
 
         User user = userResult.Value;
-        if (!await _userRepository.IsEmailUniqueAsync(user.Credentials.Email, cancellationToken))
+        bool isUnique = await _userRepository.IsEmailUniqueAsync(user.Credentials.Email, cancellationToken);
+        if (!isUnique)
         {
             return Result.Failure<CreateUserCommandResponse>(Errors.User.EmailAlreadyInUse);
         }

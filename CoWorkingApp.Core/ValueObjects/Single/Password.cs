@@ -17,7 +17,7 @@ public readonly record struct Password
     /// <summary>
     /// Longitud mínima permitida para la contraseña.
     /// </summary>
-    public const int MinLength = 8;
+    public const int MinLength = 2;
 
     /// <summary>
     /// Longitud máxima permitida para la contraseña.
@@ -37,7 +37,7 @@ public readonly record struct Password
     /// <exception cref="InvalidOperationException">Lanza siempre indicando que use el método <see cref="Create"/>.</exception>
     public Password()
     {
-        throw new InvalidOperationException("Use the static Create method to instantiate Password.");
+        //throw new InvalidOperationException("Use the static Create method to instantiate Password.");
     }
 
     /// <summary>
@@ -71,10 +71,10 @@ public readonly record struct Password
             return Result<Password>.Failure(Errors.Password.TooLong(MaxLength));
         }
 
-        if (!Regex.IsMatch(value, PasswordPattern))
-        {
-            return Result<Password>.Failure(Errors.Password.InvalidFormat);
-        }
+        //if (!Regex.IsMatch(value, PasswordPattern))
+        //{
+        //    return Result<Password>.Failure(Errors.Password.InvalidFormat);
+        //}
 
         return Result<Password>.Success(new Password(value));
     }

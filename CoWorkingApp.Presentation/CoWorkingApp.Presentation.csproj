@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CoWorkingApp.Application\CoWorkingApp.Application.csproj" />
+    <ProjectReference Include="..\CoWorkingApp.Infrastructure\CoWorkingApp.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

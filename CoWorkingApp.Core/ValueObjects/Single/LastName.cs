@@ -36,7 +36,7 @@ public readonly record struct LastName
     /// <exception cref="InvalidOperationException">Lanza siempre indicando que use el método <see cref="Create"/>.</exception>
     public LastName()
     {
-        throw new InvalidOperationException("Use the static Create method to instantiate LastName.");
+        //throw new InvalidOperationException("Use the static Create method to instantiate LastName.");
     }
 
     /// <summary>

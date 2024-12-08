@@ -58,8 +58,8 @@ public sealed class CreateReservationCommandHandler : ICommandHandler<CreateRese
 
         Reservation reservation = reservationResult.Value;
 
-        bool isNotAvailable = !await _seatRepository.IsAvailable(request.SeatId, reservation.Date, cancellationToken);
-        if (isNotAvailable)
+        bool isAvailable = await _seatRepository.IsAvailable(request.SeatId, reservation.Date, cancellationToken);
+        if (!isAvailable)
         {
             return Result.Failure<CreateReservationCommandResponse>(Errors.Seat.NotAvailable(request.SeatId, request.Date));
         }

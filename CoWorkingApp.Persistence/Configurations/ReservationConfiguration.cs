@@ -22,8 +22,8 @@ public class ReservationConfiguration : IEntityTypeConfiguration<Reservation>
 
         // Configuración de la fecha de la reserva con DateConverter
         builder.Property(r => r.Date)
-               .IsRequired()
-               .HasConversion(new DateConverter());
+               .HasConversion(new DateConverter())
+               .IsRequired();
 
         // Relación con User
         builder.HasOne(r => r.User)

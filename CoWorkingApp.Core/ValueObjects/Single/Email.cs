@@ -36,7 +36,7 @@ public readonly record struct Email
     /// <exception cref="InvalidOperationException">Lanza siempre indicando que use el método <see cref="Create"/>.</exception>
     public Email()
     {
-        throw new InvalidOperationException("Use the static Create method to instantiate Email.");
+        //throw new InvalidOperationException("Use the static Create method to instantiate Email.");
     }
 
     /// <summary>

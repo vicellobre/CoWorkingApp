@@ -38,6 +38,19 @@ public class Seat : EntityBase
     }
 
     /// <summary>
+    /// Constructor público para inicializar un asiento con identificadores y valores básicos.
+    /// </summary>
+    /// <param name="id">El identificador del asiento.</param>
+    /// <param name="number">El número del asiento.</param>
+    /// <param name="row">La fila del asiento.</param>
+    /// <param name="description">La descripción del asiento.</param>
+    public Seat(Guid id, string number, string row, string description) : base(id)
+    {
+        Name = SeatName.Create(number, row).Value;
+        Description = Description.Create(description).Value;
+    }
+
+    /// <summary>
     /// Crea una nueva instancia de <see cref="Seat"/> con los valores especificados.
     /// </summary>
     /// <param name="id">El identificador del asiento.</param>

@@ -12,7 +12,7 @@ public class PasswordConverter : ValueConverter<Password, string>
     /// Inicializa una nueva instancia de la clase <see cref="PasswordConverter"/>.
     /// </summary>
     public PasswordConverter() : base(
-        password => password,
+        password => password.Value,
         value => Password.Create(value).Value)
     {
     }

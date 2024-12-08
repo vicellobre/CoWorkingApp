@@ -46,8 +46,8 @@ public class UserRepository : RepositoryGeneric<User>, IUserRepository
     /// <param name="email">Dirección de correo electrónico del usuario.</param>
     /// <param name="cancellationToken">Token de cancelación opcional para la operación asincrónica.</param>
     /// <returns>True si el correo electrónico es único, de lo contrario false.</returns>
-    public Task<bool> IsEmailUniqueAsync(Email email, CancellationToken cancellationToken = default) =>
-        Set.AnyAsync(u => u.Credentials.Email == email, cancellationToken);
+    public async Task<bool> IsEmailUniqueAsync(Email email, CancellationToken cancellationToken = default) =>
+        !await Set.AnyAsync(u => u.Credentials.Email == email, cancellationToken);
 
     // Puedes implementar otros métodos específicos para UserRepository si es necesario
 }

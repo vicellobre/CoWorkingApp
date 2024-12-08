@@ -2,6 +2,18 @@
 
 namespace CoWorkingApp.Core.Shared;
 
+public enum ErrorType
+{
+    None,
+    Failure,
+    Unexpected,
+    Validation,
+    Conflict,
+    NotFound,
+    Unauthorized,
+    Forbidden,
+}
+
 /// <summary>
 /// Representa el resultado de una operación que puede ser exitosa o contener un error.
 /// </summary>
