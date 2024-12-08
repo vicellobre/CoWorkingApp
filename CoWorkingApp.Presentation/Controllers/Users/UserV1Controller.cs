@@ -113,6 +113,7 @@ public class UserV1Controller : ApiController
     /// <param name="request">Los datos del usuario a crear.</param>
     /// <returns>El resultado de la operación de creación.</returns>
     [HttpPost("register")]
+    [AllowAnonymous]
     public async Task<IActionResult> Create([FromBody] UserRequest request)
     {
         try
