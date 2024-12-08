@@ -101,6 +101,9 @@ public class Startup
             options.Filters.Add(new AuthorizeFilter(policy));
         });
 
+        // Agrega el servicio de Problem Details
+        services.AddProblemDetails();
+
         // Configuración para habilitar la caché de respuestas
         services.AddResponseCaching();
 
@@ -187,8 +190,11 @@ public class Startup
         // Configuración específica para entornos de desarrollo
         if (env.IsDevelopment())
         {
-            app.UseExceptionHandler("/error");
+            app.UseDeveloperExceptionPage();
+            //app.UseExceptionHandler("/error");
         }
+        app.UseExceptionHandler("/Home/Error");
+        app.UseHsts();
 
         // Habilita Swagger
         app.UseSwagger(options =>
@@ -208,6 +214,7 @@ public class Startup
 
         // Redirige el tráfico HTTP a HTTPS
         app.UseHttpsRedirection();
+        app.UseStaticFiles();
 
         // Configuración del enrutamiento de solicitudes
         app.UseRouting();
@@ -227,5 +234,7 @@ public class Startup
         {
             endpoints.MapControllers();
         });
+
+        //app.UseProblemDetails();
     }
 }
