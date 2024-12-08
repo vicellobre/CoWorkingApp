@@ -27,7 +27,8 @@ public readonly record struct FirstName
     /// <summary>
     /// Patrón de expresión regular para validar el formato del nombre.
     /// </summary>
-    private const string Pattern = @"^[a-zA-ZáéíóúÁÉÍÓÚñÑçÇüÜàÀèÈìÌòÒùÙâêÊîôûäëïöüß]+(?:\s[a-zA-ZáéíóúÁÉÍÓÚñÑçÇüÜàÀèÈìÌòÒùÙâêÊîôûäëïöüß]+)*$";
+    private const string Pattern = @"^[a-zA-ZáéíóúÁÉÍÓÚñÑçÇüÜàÀèÈìÌòÒùÙâêÊîôûäëïöüß\s]+$";
+
 
     /// <summary>
     /// Constructor privado para inicializar el valor del nombre.

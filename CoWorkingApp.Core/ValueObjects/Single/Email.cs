@@ -27,7 +27,7 @@ public readonly record struct Email
     /// <summary>
     /// Patrón de expresión regular para validar el formato del correo electrónico.
     /// </summary>
-    private const string EmailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+    private const string EmailPattern = @"^[^@]+@[^@]+$";
 
     /// <summary>
     /// Constructor privado para inicializar el valor del correo electrónico.
