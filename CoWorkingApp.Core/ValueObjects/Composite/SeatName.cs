@@ -20,9 +20,19 @@ public record struct SeatName
     private const int ExpectedPartCount = 2;
 
     /// <summary>
+    /// Longitud mínima permitida para el nombre.
+    /// </summary>
+    public const int MinLength = 3;
+
+    /// <summary>
     /// Longitud máxima permitida para el nombre.
     /// </summary>
     public const int MaxLength = 50;
+
+    /// <summary>
+    /// Patrón que requiere que el nombre contenga el separador y haya algo antes y después del separador.
+    /// </summary>
+    public const string Pattern = @"^[^" + Separator + @"]+" + Separator + @"[^" + Separator + @"]+$";
 
     /// <summary>
     /// Obtiene o establece el número del asiento.
@@ -71,13 +81,13 @@ public record struct SeatName
         var seatRowResult = SeatRow.Create(seatRow);
         if (seatRowResult.IsFailure)
         {
-            return Result<SeatName>.Failure(seatRowResult.FirstError);
+            return Result<SeatName>.Failure(seatRowResult.Errors);
         }
 
         var seatNumberResult = SeatNumber.Create(seatNumber);
         if (seatNumberResult.IsFailure)
         {
-            return Result<SeatName>.Failure(seatNumberResult.FirstError);
+            return Result<SeatName>.Failure(seatNumberResult.Errors);
         }
 
         return Result<SeatName>.Success(new SeatName(seatRowResult.Value, seatNumberResult.Value));
