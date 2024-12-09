@@ -1,14 +1,16 @@
 ﻿using CoWorkingApp.Core.Extensions;
+using CoWorkingApp.Core.Primitives;
 using ERRORS = CoWorkingApp.Core.DomainErrors.Errors;
 
 namespace CoWorkingApp.Core.Shared;
 
 /// <summary>
 /// Representa el resultado de una operación que puede ser exitosa o contener uno o más errores,
-/// con un valor resultante.
+/// con un valor resultante. 
+/// <para>Implementa <see cref="IResult{T}"/>.</para>
 /// </summary>
 /// <typeparam name="TValue">El tipo del valor resultante.</typeparam>
-public readonly record struct Result<TValue>
+public readonly record struct Result<TValue> : IResult<TValue>
 {
     /// <summary>
     /// El valor resultante de la operación.
@@ -40,6 +42,7 @@ public readonly record struct Result<TValue>
     /// Obtiene el primer error en la colección de errores.
     /// </summary>
     public Error FirstError => Errors.IsEmpty() ? ERRORS.None : Errors.First();
+
 
     /// <summary>
     /// Constructor por defecto que lanza una excepción.

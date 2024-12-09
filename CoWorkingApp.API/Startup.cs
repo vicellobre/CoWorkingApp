@@ -3,6 +3,8 @@ using CoWorkingApp.API.Extensions;
 using CoWorkingApp.Core.Entities;
 using CoWorkingApp.Persistence.Constants;
 using CoWorkingApp.Persistence.Context;
+using FluentValidation;
+
 //using Hellang.Middleware.ProblemDetails;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -70,6 +72,11 @@ public class Startup
 
         // Configuración de MediatR
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Application.AssemblyReference.Assembly));
+
+        // Configuración de FluentValidation
+        services.AddValidatorsFromAssembly(
+            Application.AssemblyReference.Assembly,
+            includeInternalTypes: true);
 
         // Configuración CORS
         services.AddCors(options =>

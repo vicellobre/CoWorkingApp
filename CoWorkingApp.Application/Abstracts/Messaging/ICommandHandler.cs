@@ -8,9 +8,7 @@ namespace CoWorkingApp.Application.Abstracts.Messaging;
 /// <typeparam name="TCommand">El tipo del comando.</typeparam>
 /// <seealso cref="ICommand"/>
 public interface ICommandHandler<TCommand> : MediatR.IRequestHandler<TCommand, Result>
-    where TCommand : ICommand
-{
-}
+    where TCommand : ICommand;
 
 /// <summary>
 /// Interfaz para manejar comandos con un tipo de retorno especificado.
@@ -19,6 +17,4 @@ public interface ICommandHandler<TCommand> : MediatR.IRequestHandler<TCommand, R
 /// <typeparam name="TResponse">El tipo de la respuesta.</typeparam>
 /// <seealso cref="ICommand{TResponse}"/>
 public interface ICommandHandler<TCommand, TResponse> : MediatR.IRequestHandler<TCommand, Result<TResponse>>
-    where TCommand : ICommand<TResponse>
-{
-}
+    where TCommand : ICommand<TResponse>;

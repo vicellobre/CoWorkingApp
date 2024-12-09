@@ -1,12 +1,14 @@
 ﻿using CoWorkingApp.Core.Extensions;
+using CoWorkingApp.Core.Primitives;
 using ERRORS = CoWorkingApp.Core.DomainErrors.Errors;
 
 namespace CoWorkingApp.Core.Shared;
 
 /// <summary>
 /// Representa el resultado de una operación que puede ser exitosa o contener un error.
+/// Implementa <see cref="IResult"/>.
 /// </summary>
-public readonly struct Result
+public readonly struct Result : IResult
 {
     /// <summary>
     /// Colección de errores asociados con el resultado.
@@ -128,6 +130,12 @@ public readonly struct Result
     /// <returns>Una nueva instancia de la estructura <see cref="Result"/> que representa un resultado fallido.</returns>
     public static Result Failure(Error error) => new(false, error);
 
+    /// <summary>
+    /// Crea un resultado fallido con la colección de errores especificada.
+    /// </summary>
+    /// <param name="errors">La colección de errores resultantes de la operación.</param>
+    /// <returns>Una nueva instancia de la estructura <see cref="Result"/> que representa un resultado fallido.</returns>
+    public static Result Failure(ICollection<Error> errors) => new(false, errors);
 
     /// <summary>
     /// Crea un resultado fallido con la excepción especificada,

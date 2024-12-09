@@ -9,6 +9,4 @@ namespace CoWorkingApp.Application.Abstracts.Messaging;
 /// <typeparam name="TResponse">El tipo de la respuesta.</typeparam>
 /// <seealso cref="IQuery{TResponse}"/>
 public interface IQueryHandler<TQuery, TResponse> : MediatR.IRequestHandler<TQuery, Result<TResponse>>
-    where TQuery : IQuery<TResponse>
-{
-}
+    where TQuery : IQuery<TResponse>;
