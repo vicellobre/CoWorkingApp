@@ -28,7 +28,7 @@ public readonly record struct Password
     /// Patrón de expresión regular para validar el formato de la contraseña.
     /// Debe contener al menos una letra minúscula, una letra mayúscula, un dígito y un carácter especial.
     /// </summary>
-    private const string PasswordPattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).*$";
+    public const string Pattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).*$";
 
     /// <summary>
     /// Constructor privado para inicializar el valor de la contraseña.
@@ -61,10 +61,10 @@ public readonly record struct Password
             return Result<Password>.Failure(Errors.Password.TooLong(MaxLength));
         }
 
-        if (!Regex.IsMatch(value, PasswordPattern))
-        {
-            return Result<Password>.Failure(Errors.Password.InvalidFormat);
-        }
+        //if (!Regex.IsMatch(value, PasswordPattern))
+        //{
+        //    return Result<Password>.Failure(Errors.Password.InvalidFormat);
+        //}
 
         return Result<Password>.Success(new Password(value));
     }

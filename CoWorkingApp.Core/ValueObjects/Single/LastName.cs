@@ -27,7 +27,7 @@ public readonly record struct LastName
     /// <summary>
     /// Patrón de expresión regular para validar el formato del apellido.
     /// </summary>
-    private const string Pattern = @"^[a-zA-ZáéíóúÁÉÍÓÚñÑçÇüÜàÀèÈìÌòÒùÙâêÊîôûäëïöüß\s]+$";
+    public const string Pattern = @"^[a-zA-ZáéíóúÁÉÍÓÚñÑçÇüÜàÀèÈìÌòÒùÙâêÊîôûäëïöüß\s]+$";
 
     /// <summary>
     /// Constructor privado para inicializar el valor del apellido.
