@@ -1,14 +1,12 @@
 ﻿using CoWorkingApp.API.Configurations;
 using CoWorkingApp.API.Extensions;
+using CoWorkingApp.Application.Behaviors;
 using CoWorkingApp.Core.Entities;
 using CoWorkingApp.Persistence.Constants;
 using CoWorkingApp.Persistence.Context;
 using FluentValidation;
-
-//using Hellang.Middleware.ProblemDetails;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
@@ -74,9 +72,8 @@ public class Startup
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Application.AssemblyReference.Assembly));
 
         // Configuración de FluentValidation
-        services.AddValidatorsFromAssembly(
-            Application.AssemblyReference.Assembly,
-            includeInternalTypes: true);
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
+        services.AddValidatorsFromAssembly(Application.AssemblyReference.Assembly, includeInternalTypes: true);
 
         // Configuración CORS
         services.AddCors(options =>

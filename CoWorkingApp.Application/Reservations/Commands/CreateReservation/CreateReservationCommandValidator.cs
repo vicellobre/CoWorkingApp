@@ -5,7 +5,7 @@ namespace CoWorkingApp.Application.Reservations.Commands.CreateReservation;
 /// <summary>
 /// Validador para el comando <see cref="CreateReservationCommand"/>.
 /// </summary>
-internal class CreateReservationCommandValidator : AbstractValidator<CreateReservationCommand>
+public class CreateReservationCommandValidator : AbstractValidator<CreateReservationCommand>
 {
     /// <summary>
     /// Inicializa una nueva instancia de la clase <see cref="CreateReservationCommandValidator"/>.

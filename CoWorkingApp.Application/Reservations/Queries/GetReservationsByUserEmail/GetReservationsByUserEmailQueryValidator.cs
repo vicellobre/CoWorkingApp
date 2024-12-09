@@ -6,7 +6,7 @@ namespace CoWorkingApp.Application.Reservations.Queries.GetReservationsByUserEma
 /// <summary>
 /// Validador para la consulta <see cref="GetReservationsByUserEmailQuery"/>.
 /// </summary>
-internal class GetReservationsByUserEmailQueryValidator : AbstractValidator<GetReservationsByUserEmailQuery>
+public class GetReservationsByUserEmailQueryValidator : AbstractValidator<GetReservationsByUserEmailQuery>
 {
     /// <summary>
     /// Inicializa una nueva instancia de la clase <see cref="GetReservationsByUserEmailQueryValidator"/>.
