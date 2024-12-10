@@ -1,4 +1,6 @@
 ﻿using CoWorkingApp.Application.Abstracts.Messaging;
+using CoWorkingApp.Application.Contracts;
+using CoWorkingApp.Core.Extensions;
 
 namespace CoWorkingApp.Application.Users.Commands.AuthenticateUser;
 
@@ -7,6 +9,18 @@ namespace CoWorkingApp.Application.Users.Commands.AuthenticateUser;
 /// </summary>
 /// <param name="Email">El correo electrónico del usuario.</param>
 /// <param name="Password">La contraseña del usuario.</param>
-public readonly record struct AuthenticateUserCommand(
+public record struct AuthenticateUserCommand(
     string Email,
-    string Password) : ICommand<AuthenticateUserCommandResponse>;
+    string Password) : ICommand<AuthenticateUserCommandResponse>, IInputFilter
+{
+    /// <summary>
+    /// Filtra y normaliza el correo electrónico del usuario.
+    /// </summary>
+    public void Filter()
+    {
+        Email = Email
+            .GetValueOrDefault(string.Empty)
+            .Trim()
+            .ToLowerInvariant();
+    }
+}

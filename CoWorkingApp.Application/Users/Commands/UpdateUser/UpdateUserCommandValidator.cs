@@ -6,7 +6,7 @@ namespace CoWorkingApp.Application.Users.Commands.UpdateUser;
 /// <summary>
 /// Validador para el comando <see cref="UpdateUserCommand"/>.
 /// </summary>
-public class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
+internal class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
 {
     /// <summary>
     /// Inicializa una nueva instancia de la clase <see cref="UpdateUserCommandValidator"/>.

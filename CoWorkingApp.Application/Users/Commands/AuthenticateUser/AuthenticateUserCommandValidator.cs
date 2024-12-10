@@ -7,7 +7,7 @@ namespace CoWorkingApp.Application.Users.Commands.AuthenticateUser;
 /// <summary>
 /// Validador para el comando <see cref="AuthenticateUserCommand"/>.
 /// </summary>
-public class AuthenticateUserCommandValidator : AbstractValidator<AuthenticateUserCommand>
+internal class AuthenticateUserCommandValidator : AbstractValidator<AuthenticateUserCommand>
 {
     /// <summary>
     /// Inicializa una nueva instancia de la clase <see cref="AuthenticateUserCommandValidator"/>.

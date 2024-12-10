@@ -81,8 +81,8 @@ public class ValidationPipelineBehavior<TRequest, TResponse> : IPipelineBehavior
         object result = typeof(Result<>)
             .GetGenericTypeDefinition()
             .MakeGenericType(typeof(TResult).GenericTypeArguments[0])
-            .GetMethod(nameof(Result.Failure), new[] { typeof(ICollection<Error>) })!
-            .Invoke(null, new object[] { errors })!;
+            .GetMethod(nameof(Result.Failure), [typeof(ICollection<Error>)])!
+            .Invoke(null, [errors])!;
 
         return (TResult)result;
     }

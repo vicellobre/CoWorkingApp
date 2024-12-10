@@ -7,7 +7,7 @@ namespace CoWorkingApp.Application.Seats.Commands.UpdateSeat;
 /// <summary>
 /// Validador para el comando <see cref="UpdateSeatCommand"/>.
 /// </summary>
-public class UpdateSeatCommandValidator : AbstractValidator<UpdateSeatCommand>
+internal class UpdateSeatCommandValidator : AbstractValidator<UpdateSeatCommand>
 {
     /// <summary>
     /// Inicializa una nueva instancia de la clase <see cref="UpdateSeatCommandValidator"/>.

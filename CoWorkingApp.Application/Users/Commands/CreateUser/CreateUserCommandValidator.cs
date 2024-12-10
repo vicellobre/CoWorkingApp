@@ -6,7 +6,7 @@ namespace CoWorkingApp.Application.Users.Commands.CreateUser;
 /// <summary>
 /// Validador para el comando <see cref="CreateUserCommand"/>.
 /// </summary>
-public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
+internal class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
 {
     /// <summary>
     /// Inicializa una nueva instancia de la clase <see cref="CreateUserCommandValidator"/>.

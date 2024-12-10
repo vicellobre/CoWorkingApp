@@ -70,10 +70,15 @@ public class Startup
 
         // Configuración de MediatR
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Application.AssemblyReference.Assembly));
+        
+        // MediatR with FluentValidation
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(InputFilterBehavior<,>));
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
 
         // Configuración de FluentValidation
-        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
         services.AddValidatorsFromAssembly(Application.AssemblyReference.Assembly, includeInternalTypes: true);
+
+
 
         // Configuración CORS
         services.AddCors(options =>

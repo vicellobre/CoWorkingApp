@@ -6,7 +6,7 @@ namespace CoWorkingApp.Application.Users.Queries.GetUserByEmail;
 /// <summary>
 /// Validador para la consulta <see cref="GetUserByEmailQuery"/>.
 /// </summary>
-public class GetUserByEmailQueryValidator : AbstractValidator<GetUserByEmailQuery>
+internal class GetUserByEmailQueryValidator : AbstractValidator<GetUserByEmailQuery>
 {
     /// <summary>
     /// Inicializa una nueva instancia de la clase <see cref="GetUserByEmailQueryValidator"/>.

@@ -6,7 +6,7 @@ namespace CoWorkingApp.Application.Reservations.Queries.GetReservationsBySeatNam
 /// <summary>
 /// Validador para la consulta <see cref="GetReservationsBySeatNameQuery"/>.
 /// </summary>
-public class GetReservationsBySeatNameQueryValidator : AbstractValidator<GetReservationsBySeatNameQuery>
+internal class GetReservationsBySeatNameQueryValidator : AbstractValidator<GetReservationsBySeatNameQuery>
 {
     /// <summary>
     /// Inicializa una nueva instancia de la clase <see cref="GetReservationsBySeatNameQueryValidator"/>.
