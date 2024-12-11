@@ -1,6 +1,8 @@
 ﻿using CoWorkingApp.Core.DomainErrors;
+using CoWorkingApp.Core.Extensions;
 using CoWorkingApp.Core.Shared;
 using CoWorkingApp.Core.ValueObjects.Single;
+using System.Text.RegularExpressions;
 
 namespace CoWorkingApp.Core.ValueObjects.Composite;
 
@@ -13,11 +15,6 @@ public record struct SeatName
     /// El carácter separador utilizado en el nombre del asiento.
     /// </summary>
     private const string Separator = "-";
-
-    /// <summary>
-    /// El número esperado de partes en el nombre del asiento.
-    /// </summary>
-    private const int ExpectedPartCount = 2;
 
     /// <summary>
     /// Longitud mínima permitida para el nombre.
@@ -78,19 +75,23 @@ public record struct SeatName
     /// <returns>Un resultado que contiene una instancia de <see cref="SeatName"/> si es exitoso; de lo contrario, contiene un error.</returns>
     public static Result<SeatName> Create(string? seatRow, string? seatNumber)
     {
+        List<Error> errors = [];
+
         var seatRowResult = SeatRow.Create(seatRow);
         if (seatRowResult.IsFailure)
         {
-            return Result<SeatName>.Failure(seatRowResult.Errors);
+            errors.AddRange(seatRowResult.Errors);
         }
 
         var seatNumberResult = SeatNumber.Create(seatNumber);
         if (seatNumberResult.IsFailure)
         {
-            return Result<SeatName>.Failure(seatNumberResult.Errors);
+            errors.AddRange(seatNumberResult.Errors);
         }
 
-        return Result<SeatName>.Success(new SeatName(seatRowResult.Value, seatNumberResult.Value));
+        return errors.IsEmpty()
+            ? Result<SeatName>.Success(new(seatRowResult.Value, seatNumberResult.Value))
+            : Result<SeatName>.Failure(errors);
     }
 
     /// <summary>
@@ -100,18 +101,22 @@ public record struct SeatName
     /// <returns>Un resultado que contiene una instancia de <see cref="SeatName"/> si es exitoso; de lo contrario, contiene un error.</returns>
     public static Result<SeatName> ConvertFromString(string value)
     {
-        if (!value.Contains(Separator))
+        if (string.IsNullOrWhiteSpace(value))
         {
-            return Result.Failure<SeatName>(Errors.SeatName.InvalidFormat);
+            return Result<SeatName>.Failure(Errors.SeatName.IsNullOrEmpty);
+        }
+
+        if (!Regex.IsMatch(value, Pattern))
+        {
+            return Result<SeatName>.Failure(Errors.SeatName.InvalidFormat);
         }
 
         var parts = value.Split(Separator);
-        if (parts.Length != ExpectedPartCount)
-        {
-            return Result.Failure<SeatName>(Errors.SeatName.InvalidFormat);
-        }
+        var seatNameResult = Create(parts.First(), parts.Last());
 
-        return Create(parts.First(), parts.Last());
+        return seatNameResult.IsSuccess
+            ? Result<SeatName>.Success(seatNameResult.Value)
+            : Result<SeatName>.Failure(seatNameResult.Errors);
     }
 
     /// <summary>

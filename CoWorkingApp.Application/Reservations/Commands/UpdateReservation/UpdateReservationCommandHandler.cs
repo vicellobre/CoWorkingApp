@@ -71,11 +71,7 @@ public sealed class UpdateReservationCommandHandler : ICommandHandler<UpdateRese
 
         if (reservation.Date != request.Date)
         {
-            var changeDateResult = reservation.ChangeDate(request.Date);
-            if (changeDateResult.IsFailure)
-            {
-                return Result.Failure<UpdateReservationCommandResponse>(changeDateResult.Errors); ;
-            }
+            reservation.ChangeDate(request.Date);
         }
 
         bool isAvailable = await _seatRepository.IsAvailable(reservation.SeatId, reservation.Date, cancellationToken);

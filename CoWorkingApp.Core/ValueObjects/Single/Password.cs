@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using CoWorkingApp.Core.DomainErrors;
+using CoWorkingApp.Core.Extensions;
 using CoWorkingApp.Core.Shared;
 
 namespace CoWorkingApp.Core.ValueObjects.Single;
@@ -51,22 +52,26 @@ public readonly record struct Password
             return Result<Password>.Failure(Errors.Password.IsNullOrEmpty);
         }
 
+        List<Error> errors = [];
+
         if (value.Length < MinLength)
         {
-            return Result<Password>.Failure(Errors.Password.TooShort(MinLength));
+            errors.Add(Errors.Password.TooShort(MinLength));
         }
 
         if (value.Length > MaxLength)
         {
-            return Result<Password>.Failure(Errors.Password.TooLong(MaxLength));
+            errors.Add(Errors.Password.TooLong(MaxLength));
         }
 
-        //if (!Regex.IsMatch(value, PasswordPattern))
-        //{
-        //    return Result<Password>.Failure(Errors.Password.InvalidFormat);
-        //}
+        if (!Regex.IsMatch(value, Pattern))
+        {
+            errors.Add(Errors.Password.InvalidFormat);
+        }
 
-        return Result<Password>.Success(new Password(value));
+        return errors.IsEmpty()
+            ? Result<Password>.Success(new(value))
+            : Result<Password>.Failure(errors);
     }
 
     /// <summary>

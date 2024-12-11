@@ -86,7 +86,7 @@ public class Reservation : EntityBase
         var dateResult = Date.Create(newDate);
         if (dateResult.IsFailure)
         {
-            return Result.Failure(dateResult.FirstError);
+            return Result.Failure(dateResult.Errors);
         }
 
         Date = dateResult.Value;

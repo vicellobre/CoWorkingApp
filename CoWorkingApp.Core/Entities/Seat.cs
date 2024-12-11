@@ -63,7 +63,7 @@ public class Seat : EntityBase
         var seatNameResult = SeatName.Create(number, row);
         if (seatNameResult.IsFailure)
         {
-            return Result<Seat>.Failure(seatNameResult.FirstError);
+            return Result<Seat>.Failure(seatNameResult.Errors);
         }
 
         var descriptionResult = Description.Create(description);

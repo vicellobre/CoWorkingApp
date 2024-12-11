@@ -34,7 +34,7 @@ public readonly record struct SeatRow
             return Result<SeatRow>.Failure(Errors.SeatRow.IsNullOrEmpty);
         }
 
-        return Result<SeatRow>.Success(new SeatRow(value));
+        return Result<SeatRow>.Success(new(value));
     }
 
     /// <summary>

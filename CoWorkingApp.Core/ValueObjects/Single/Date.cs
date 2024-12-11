@@ -34,7 +34,7 @@ public readonly record struct Date
             return Result<Date>.Failure(Errors.Date.Invalid);
         }
 
-        return Result<Date>.Success(new Date(value));
+        return Result<Date>.Success(new(value));
     }
 
     /// <summary>

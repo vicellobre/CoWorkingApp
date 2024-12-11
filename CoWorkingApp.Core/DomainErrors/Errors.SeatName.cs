@@ -8,13 +8,18 @@ namespace CoWorkingApp.Core.DomainErrors;
 public static partial class Errors
 {
     /// <summary>
-    /// 
+    /// Errores relacionados con los nombres de asientos.
     /// </summary>
     public static class SeatName
     {
         /// <summary>
-        /// 
+        /// Error para formato inválido.
         /// </summary>
         public static readonly Error InvalidFormat = Error.Validation("InvalidFormat", "The value must be in the format 'Row-Number'.");
+
+        /// <summary>
+        /// Error para valor nulo o vacío.
+        /// </summary>
+        public static readonly Error IsNullOrEmpty = Error.Validation("IsNullOrEmpty", "The value cannot be null or empty.");
     }
 }

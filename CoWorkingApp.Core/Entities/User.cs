@@ -1,7 +1,7 @@
-﻿using CoWorkingApp.Core.Primitives;
+﻿using CoWorkingApp.Core.Extensions;
+using CoWorkingApp.Core.Primitives;
 using CoWorkingApp.Core.Shared;
 using CoWorkingApp.Core.ValueObjects.Composite;
-using CoWorkingApp.Core.ValueObjects.Single;
 
 namespace CoWorkingApp.Core.Entities;
 
@@ -53,19 +53,23 @@ public class User : EntityBase
     /// <returns>Un resultado que contiene una instancia de <see cref="User"/> si es exitoso; de lo contrario, contiene un error.</returns>
     public static Result<User> Create(Guid id, string? firstName, string? lastName, string? email, string? password)
     {
+        List<Error> errors = [];
+
         var fullNameResult = FullName.Create(firstName, lastName);
         if (fullNameResult.IsFailure)
         {
-            return Result<User>.Failure(fullNameResult.FirstError);
+            errors.AddRange(fullNameResult.Errors);
         }
 
         var credentialsResult = CredentialsWithEmailAndPassword.Create(email, password);
         if (credentialsResult.IsFailure)
         {
-            return Result<User>.Failure(credentialsResult.FirstError);
+            errors.AddRange(credentialsResult.Errors);
         }
 
-        return Result<User>.Success(new User(id, fullNameResult.Value, credentialsResult.Value));
+        return errors.IsEmpty()
+            ? Result<User>.Success(new User(id, fullNameResult.Value, credentialsResult.Value))
+            : Result<User>.Failure(errors);
     }
 
     /// <summary>
@@ -79,7 +83,7 @@ public class User : EntityBase
         var fullNameResult = FullName.Create(firstName, lastName);
         if (fullNameResult.IsFailure)
         {
-            return Result.Failure(fullNameResult.FirstError);
+            return Result.Failure(fullNameResult.Errors);
         }
 
         Name = fullNameResult.Value;
@@ -93,16 +97,10 @@ public class User : EntityBase
     /// <returns>Un resultado que indica si la operación fue exitosa.</returns>
     public Result ChangeEmail(string email)
     {
-        var emailResult = Email.Create(email);
-        if (emailResult.IsFailure)
-        {
-            return Result.Failure(emailResult.FirstError);
-        }
-
-        var credentialsResult = CredentialsWithEmailAndPassword.Create(emailResult.Value, Credentials.Password.Value);
+        var credentialsResult = CredentialsWithEmailAndPassword.Create(email, Credentials.Password);
         if (credentialsResult.IsFailure)
         {
-            return Result.Failure(credentialsResult.FirstError);
+            return Result.Failure(credentialsResult.Errors);
         }
 
         Credentials = credentialsResult.Value;
@@ -116,16 +114,10 @@ public class User : EntityBase
     /// <returns>Un resultado que indica si la operación fue exitosa.</returns>
     public Result ChangePassword(string password)
     {
-        var passwordResult = Password.Create(password);
-        if (passwordResult.IsFailure)
-        {
-            return Result.Failure(passwordResult.FirstError);
-        }
-
-        var credentialsResult = CredentialsWithEmailAndPassword.Create(Credentials.Email.Value, passwordResult.Value);
+        var credentialsResult = CredentialsWithEmailAndPassword.Create(Credentials.Email, password);
         if (credentialsResult.IsFailure)
         {
-            return Result.Failure(credentialsResult.FirstError);
+            return Result.Failure(credentialsResult.Errors);
         }
 
         Credentials = credentialsResult.Value;

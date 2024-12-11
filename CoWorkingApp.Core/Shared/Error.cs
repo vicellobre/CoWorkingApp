@@ -23,9 +23,9 @@ public readonly record struct Error
     public ErrorType Type { get; init; }
 
     /// <summary>
-    /// 
+    /// Una colección de errores adicionales que proporcionan más contexto sobre el error principal.
     /// </summary>
-    public ICollection<Error>? Stack { get; init; }
+    public ICollection<Error>? StackTrace { get; init; }
 
     /// <summary>
     /// Constructor por defecto que lanza una excepción. 
@@ -59,7 +59,7 @@ public readonly record struct Error
         Code = !string.IsNullOrWhiteSpace(code) ? code : string.Empty;
         Message = !string.IsNullOrWhiteSpace(message) ? message : string.Empty;
         Type = type;
-        Stack = stack;
+        StackTrace = stack ?? [];
     }
 
     /// <summary>
@@ -70,6 +70,14 @@ public readonly record struct Error
     /// <param name="type">El tipo del error.</param>
     /// <returns>Una nueva instancia de la estructura <see cref="Error"/>.</returns>
     public static Error Create(string? code, string? message, ErrorType type, ICollection<Error>? stack = null) => new(code, message, type, stack);
+
+    /// <summary>
+    /// Crea una nueva instancia de la estructura <see cref="Error"/> con una pila de errores.
+    /// </summary>
+    /// <param name="error">El error existente.</param>
+    /// <param name="stack">La pila de errores asociados opcional.</param>
+    /// <returns>Una nueva instancia de la estructura <see cref="Error"/> con la pila de errores.</returns>
+    public static Error WithStack(Error error, ICollection<Error>? stack) => new(error.Code, error.Message, error.Type, stack);
 
     /// <summary>
     /// Crea una nueva instancia de la estructura <see cref="Error"/> de tipo <see cref="ErrorType.Failure"/> con el código y mensaje especificados.

@@ -2,8 +2,6 @@
 using CoWorkingApp.Core.Contracts.Repositories;
 using CoWorkingApp.Core.Contracts.UnitOfWork;
 using CoWorkingApp.Core.DomainErrors;
-using CoWorkingApp.Core.Entities;
-using CoWorkingApp.Core.Extensions;
 using CoWorkingApp.Core.Shared;
 using CoWorkingApp.Core.ValueObjects.Composite;
 

@@ -47,16 +47,18 @@ public sealed record class FullName
     /// <returns>Un resultado que contiene una instancia de <see cref="FullName"/> si es exitoso; de lo contrario, contiene un error.</returns>
     public static Result<FullName> Create(string? firstName, string? lastName)
     {
+        List<Error> errors = [];
+
         var firstNameResult = FirstName.Create(firstName);
         if (firstNameResult.IsFailure)
         {
-            return Result<FullName>.Failure(firstNameResult.FirstError);
+            errors.AddRange(firstNameResult.Errors);
         }
 
         var lastNameResult = LastName.Create(lastName);
         if (lastNameResult.IsFailure)
         {
-            return Result<FullName>.Failure(lastNameResult.FirstError);
+            errors.AddRange(lastNameResult.Errors);
         }
 
         return Result<FullName>.Success(new FullName(firstNameResult.Value, lastNameResult.Value));

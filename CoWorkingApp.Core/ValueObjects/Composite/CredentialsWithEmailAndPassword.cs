@@ -1,4 +1,5 @@
-﻿using CoWorkingApp.Core.Shared;
+﻿using CoWorkingApp.Core.Extensions;
+using CoWorkingApp.Core.Shared;
 using CoWorkingApp.Core.ValueObjects.Single;
 
 namespace CoWorkingApp.Core.ValueObjects.Composite;
@@ -44,19 +45,23 @@ public sealed record class CredentialsWithEmailAndPassword
     /// <returns>Un resultado que contiene una instancia de <see cref="CredentialsWithEmailAndPassword"/> si es exitoso; de lo contrario, contiene un error.</returns>
     public static Result<CredentialsWithEmailAndPassword> Create(string? email, string? password)
     {
+        List<Error> errors = [];
+
         var emailResult = Email.Create(email);
         if (emailResult.IsFailure)
         {
-            return Result<CredentialsWithEmailAndPassword>.Failure(emailResult.FirstError);
+            errors.AddRange(emailResult.Errors);
         }
 
         var passwordResult = Password.Create(password);
         if (passwordResult.IsFailure)
         {
-            return Result<CredentialsWithEmailAndPassword>.Failure(passwordResult.FirstError);
+            errors.AddRange(passwordResult.Errors);
         }
 
-        return Result<CredentialsWithEmailAndPassword>.Success(new CredentialsWithEmailAndPassword(emailResult.Value, passwordResult.Value));
+        return errors.IsEmpty()
+            ? Result<CredentialsWithEmailAndPassword>.Success(new(emailResult.Value, passwordResult.Value))
+            : Result<CredentialsWithEmailAndPassword>.Failure(errors);
     }
 
     /// <summary>

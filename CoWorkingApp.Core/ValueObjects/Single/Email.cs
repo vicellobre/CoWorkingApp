@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using CoWorkingApp.Core.DomainErrors;
+using CoWorkingApp.Core.Extensions;
 using CoWorkingApp.Core.Shared;
 
 namespace CoWorkingApp.Core.ValueObjects.Single;
@@ -50,22 +51,26 @@ public readonly record struct Email
             return Result<Email>.Failure(Errors.Email.IsNullOrEmpty);
         }
 
+        List<Error> errors = [];
+
         if (value.Length < MinLength)
         {
-            return Result<Email>.Failure(Errors.Email.TooShort(MinLength));
+            errors.Add(Errors.Email.TooShort(MinLength));
         }
 
         if (value.Length > MaxLength)
         {
-            return Result<Email>.Failure(Errors.Email.TooLong(MaxLength));
+            errors.Add(Errors.Email.TooLong(MaxLength));
         }
 
         if (!Regex.IsMatch(value, EmailPattern))
         {
-            return Result<Email>.Failure(Errors.Email.InvalidFormat);
+            errors.Add(Errors.Email.InvalidFormat);
         }
 
-        return Result<Email>.Success(new Email(value));
+        return errors.IsEmpty()
+            ? Result<Email>.Success(new Email(value))
+            : Result<Email>.Failure(errors);
     }
 
     /// <summary>

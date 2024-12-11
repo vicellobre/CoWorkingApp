@@ -33,11 +33,11 @@ public sealed class GetAllUsersQueryHandler : IQueryHandler<GetAllUsersQuery, IE
     public async Task<Result<IEnumerable<GetAllUsersQueryResponse>>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
     {
         var users = await _userRepository.GetAllAsNoTrackingAsync(cancellationToken);
-
         if (users == null)
         {
             return Result.Success<IEnumerable<GetAllUsersQueryResponse>>([]);
         }
+
         return users.Select(user => (GetAllUsersQueryResponse)user).ToList();
     }
 }
