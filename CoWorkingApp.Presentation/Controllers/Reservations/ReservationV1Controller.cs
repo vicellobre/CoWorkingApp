@@ -3,7 +3,9 @@ using CoWorkingApp.Application.Reservations.Commands.DeleteReservation;
 using CoWorkingApp.Application.Reservations.Commands.UpdateReservation;
 using CoWorkingApp.Application.Reservations.Queries.GetAllReservations;
 using CoWorkingApp.Application.Reservations.Queries.GetReservationById;
+using CoWorkingApp.Application.Reservations.Queries.GetReservationByUserId;
 using CoWorkingApp.Application.Reservations.Queries.GetReservationsByDate;
+using CoWorkingApp.Application.Reservations.Queries.GetReservationsBySeatId;
 using CoWorkingApp.Core.Extensions;
 using CoWorkingApp.Presentation.Abstracts;
 using CoWorkingApp.Presentation.DTOs.Reservations;
@@ -80,39 +82,39 @@ public class ReservationV1Controller : ApiController
             onFailure: error => HandleFailure(response.FirstError));
     }
 
-    ///// <summary>
-    ///// 
-    ///// </summary>
-    ///// <param name="userId"></param>
-    ///// <returns></returns>
-    //[HttpGet("byuser/{userId}")]
-    //public async Task<IActionResult> GetByUserId(Guid userId)
-    //{
-    //        GetReservationsByUserIdQuery query = new(userId);
+    /// <summary>
+    /// Obtiene las reservas por el identificador del usuario.
+    /// </summary>
+    /// <param name="userId">El identificador del usuario.</param>
+    /// <returns>Un <see cref="IActionResult"/> que contiene las reservas del usuario o un error si no se encuentran.</returns>
+    [HttpGet("byuser/{userId}")]
+    public async Task<IActionResult> GetByUserId(Guid userId)
+    {
+        GetReservationsByUserIdQuery query = new(userId);
 
-    //        var response = await _sender.Send(query);
+        var response = await _sender.Send(query);
 
-    //        return response.IsSuccess
-    //            ? Ok(response.Value)
-    //            : NotFound(response.FirstError);
-    //}
+        return response.IsSuccess
+            ? Ok(response.Value)
+            : NotFound(response.FirstError);
+    }
 
-    ///// <summary>
-    ///// 
-    ///// </summary>
-    ///// <param name="seatId"></param>
-    ///// <returns></returns>
-    //[HttpGet("byseat/{seatId}")]
-    //public async Task<IActionResult> GetBySeatId(Guid seatId)
-    //{
-    //        GetReservationsBySeatIdQuery query = new(seatId);
+    /// <summary>
+    /// Obtiene las reservas por el identificador del asiento.
+    /// </summary>
+    /// <param name="seatId">El identificador del asiento.</param>
+    /// <returns>Un <see cref="IActionResult"/> que contiene las reservas del asiento o un error si no se encuentran.</returns>
+    [HttpGet("byseat/{seatId}")]
+    public async Task<IActionResult> GetBySeatId(Guid seatId)
+    {
+        GetReservationsBySeatIdQuery query = new(seatId);
 
-    //        var response = await _sender.Send(query);
+        var response = await _sender.Send(query);
 
-    //        return response.IsSuccess
-    //            ? Ok(response.Value)
-    //            : NotFound(response.FirstError);
-    //}
+        return response.IsSuccess
+            ? Ok(response.Value)
+            : NotFound(response.FirstError);
+    }
 
     /// <summary>
     /// Crea una nueva reserva.
