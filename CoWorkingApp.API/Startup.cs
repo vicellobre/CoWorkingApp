@@ -1,4 +1,4 @@
-﻿using CoWorkingApp.API.Configurations;
+using CoWorkingApp.API.Configurations;
 using CoWorkingApp.API.Extensions;
 using CoWorkingApp.Application.Behaviors;
 using CoWorkingApp.Core.Entities;
@@ -20,6 +20,10 @@ using Microsoft.OpenApi.Models;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.Identity.Web;
+using Microsoft.Identity.Web.UI;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
 namespace CoWorkingApp.API;
 
@@ -47,12 +51,13 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         // Detectar si se ejecuta en un contenedor Docker
-        var isRunningInContainer = Environment.GetEnvironmentVariable("RUNNING_IN_CONTAINER") == "true";
+        //var isRunningInContainer = Environment.GetEnvironmentVariable("RUNNING_IN_CONTAINER") == "true";
 
         // Seleccionar la cadena de conexión adecuada
-        var connectionString = isRunningInContainer
-            ? _configuration.GetConnectionString("ConnectionCoWorking_Container")
-            : _configuration.GetConnectionString("ConnectionCoWorking");
+        var connectionString = _configuration.GetConnectionString("ConnectionCoWorking");
+            //isRunningInContainer
+            //? _configuration.GetConnectionString("ConnectionCoWorking_Container")
+            //: _configuration.GetConnectionString("ConnectionCoWorking");
 
         // Verificar si la cadena de conexión es null
         if (string.IsNullOrEmpty(connectionString))
@@ -64,6 +69,8 @@ public class Startup
         services.AddDbContext<CoWorkingContext>(options =>
             options.UseSqlServer(connectionString,
             sqlOptions => sqlOptions.MigrationsAssembly("CoWorkingApp.Persistence")));
+
+        Console.WriteLine(connectionString);
 
         // Agrega dependencias adicionales
         services.AddDependency();
@@ -115,7 +122,6 @@ public class Startup
         });
 
         // Adds services for using Problem Details format
-        //ProblemDetailsExtensions.AddProblemDetails(services);
         services.AddProblemDetails(options =>
         {
             options.CustomizeProblemDetails = context =>
@@ -129,20 +135,6 @@ public class Startup
                 context.ProblemDetails.Extensions.TryAdd("traceId", activity?.Id);
             };
         });
-
-        //ProblemDetailsExtensions.AddProblemDetails(services, options =>
-        //{
-        //    options.CustomizeProblemDetails = context =>
-        //    {
-        //        context.ProblemDetails.Instance =
-        //            $"{context.HttpContext.Request.Method} {context.HttpContext.Request.Path}";
-
-        //        context.ProblemDetails.Extensions.TryAdd("requestId", context.HttpContext.TraceIdentifier);
-
-        //        var activity = context.HttpContext.Features.Get<IHttpActivityFeature>()?.Activity;
-        //        context.ProblemDetails.Extensions.TryAdd("traceId", activity?.Id);
-        //    };
-        //});
 
         // Configuración para habilitar la caché de respuestas
         services.AddResponseCaching();
@@ -202,6 +194,7 @@ public class Startup
                 .Expand()
                 .SetMaxTop(100);
         });
+            services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme);
     }
 
     /// <summary>

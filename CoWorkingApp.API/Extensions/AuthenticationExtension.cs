@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using CoWorkingApp.Application.Behaviors;
+using CoWorkingApp.Persistence.Context;
+using FluentValidation;
+using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
@@ -64,6 +69,58 @@ public static class AuthenticationExtension
                 }
             };
         });
+
+        return services;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="services"></param>
+    /// <param name="configuration"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException"></exception>
+    public static IServiceCollection AddDataBase(this IServiceCollection services, IConfiguration configuration)
+    {
+        // Detectar si se ejecuta en un contenedor Docker
+        //var isRunningInContainer = Environment.GetEnvironmentVariable("RUNNING_IN_CONTAINER") == "true";
+
+        // Seleccionar la cadena de conexión adecuada
+        //var connectionString = isRunningInContainer
+        //? _configuration.GetConnectionString("ConnectionCoWorking_Container")
+        //: _configuration.GetConnectionString("ConnectionCoWorking");
+
+
+        var connectionString = configuration.GetConnectionString("ConnectionCoWorking");
+        if (string.IsNullOrEmpty(connectionString))
+        {
+            throw new InvalidOperationException("The connection string is not configured correctly.");
+        }
+
+        // Configuración del contexto de la base de datos
+        services.AddDbContext<CoWorkingContext>(options =>
+            options.UseSqlServer(connectionString,
+            sqlOptions => sqlOptions.MigrationsAssembly("CoWorkingApp.Persistence")));
+
+        return services;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="services"></param>
+    /// <returns></returns>
+    public static IServiceCollection AddFeaturesWithValidations(this IServiceCollection services)
+    {
+        // Configuración de MediatR
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Application.AssemblyReference.Assembly));
+
+        // MediatR with FluentValidation
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(InputFilterBehavior<,>));
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
+
+        // Configuración de FluentValidation
+        services.AddValidatorsFromAssembly(Application.AssemblyReference.Assembly, includeInternalTypes: true);
 
         return services;
     }

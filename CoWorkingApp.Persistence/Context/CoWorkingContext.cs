@@ -1,5 +1,4 @@
 ﻿using CoWorkingApp.Core.Entities;
-using CoWorkingApp.Persistence.Configurations;
 using Microsoft.EntityFrameworkCore;
 
 namespace CoWorkingApp.Persistence.Context;
@@ -34,6 +33,9 @@ public class CoWorkingContext : DbContext
     /// Método que se llama al crear el modelo de la base de datos y define las configuraciones adicionales.
     /// </summary>
     /// <param name="modelBuilder">Constructor del modelo de la base de datos.</param>
-    protected override void OnModelCreating(ModelBuilder modelBuilder) =>
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
         modelBuilder.ApplyConfigurationsFromAssembly(AssemblyReference.Assembly);
+        base.OnModelCreating(modelBuilder);
+    }
 }
