@@ -31,7 +31,7 @@ public sealed class GetReservationByIdQueryHandler : IQueryHandler<GetReservatio
     public async Task<Result<GetReservationByIdQueryResponse>> Handle(GetReservationByIdQuery request, CancellationToken cancellationToken)
     {
         var reservation = await _reservationRepository.GetByIdAsNoTrackingAsync(request.ReservationId, cancellationToken);
-        if (reservation == null)
+        if (reservation is null)
         {
             return Result.Failure<GetReservationByIdQueryResponse>(Errors.Reservation.NotFound(request.ReservationId));
         }

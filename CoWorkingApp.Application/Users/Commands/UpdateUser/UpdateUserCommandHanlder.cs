@@ -35,7 +35,7 @@ public sealed class UpdateUserCommandHandler : ICommandHandler<UpdateUserCommand
     public async Task<Result<UpdateUserCommandResponse>> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetByIdAsync(request.UserId, cancellationToken);
-        if (user == null)
+        if (user is null)
         {
             return Result.Failure<UpdateUserCommandResponse>(Errors.User.NotFound(request.UserId));
         }

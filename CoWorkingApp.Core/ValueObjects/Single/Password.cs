@@ -18,7 +18,7 @@ public readonly record struct Password
     /// <summary>
     /// Longitud mínima permitida para la contraseña.
     /// </summary>
-    public const int MinLength = 2;
+    public const int MinLength = 4;
 
     /// <summary>
     /// Longitud máxima permitida para la contraseña.

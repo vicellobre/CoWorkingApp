@@ -50,5 +50,13 @@ public interface IReservationRepository : IRepository<Reservation>
     /// <returns>Una colección de reservaciones de la entidad <see cref="Reservation"/> asociadas al asiento con el nombre especificado.</returns>
     Task<IEnumerable<Reservation>> GetBySeatNameAsNoTrackingAsync(SeatName seatName, CancellationToken cancellationToken = default);
 
+    /// <summary>
+    /// Obtiene una reserva completa de la entidad <see cref="Reservation"/> por su identificador de manera asincrónica sin realizar seguimiento de cambios.
+    /// </summary>
+    /// <param name="id">El identificador único de la reserva.</param>
+    /// <param name="cancellationToken">Token de cancelación opcional para la operación asincrónica.</param>
+    /// <returns>La reserva completa de la entidad <see cref="Reservation"/> con información detallada del usuario y del asiento asociados, o null si no se encuentra ninguna reserva con el ID especificado.</returns>
+    Task<Reservation?> GetByIdCompleteAsNoTrackingAsyn(Guid id, CancellationToken cancellationToken = default);
+
     // Otros métodos específicos para ReservationRepository
 }

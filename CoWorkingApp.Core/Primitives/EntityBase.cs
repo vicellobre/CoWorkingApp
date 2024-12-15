@@ -32,7 +32,12 @@ public abstract class EntityBase : IEquatable<EntityBase>
     /// <returns>Devuelve <c>true</c> si ambas entidades son iguales; de lo contrario, <c>false</c>.</returns>
     public static bool operator ==(EntityBase? first, EntityBase? second)
     {
-        return first is not null && second is not null && first.Equals(second);
+        if (first is null || second is null)
+        {
+            return false;
+        }
+
+        return first.Equals(second);
     }
 
     /// <summary>
@@ -58,6 +63,11 @@ public abstract class EntityBase : IEquatable<EntityBase>
             return false;
         }
 
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
+
         if (other.GetType() != GetType())
         {
             return false;
@@ -73,22 +83,12 @@ public abstract class EntityBase : IEquatable<EntityBase>
     /// <returns>Devuelve <c>true</c> si el objeto es una entidad y es igual a esta instancia; de lo contrario, <c>false</c>.</returns>
     public override bool Equals(object? obj)
     {
-        if (obj is null)
+        if (obj is EntityBase other)
         {
-            return false;
+            return Equals(other);
         }
 
-        if (obj is not EntityBase entity)
-        {
-            return false;
-        }
-
-        if (obj.GetType() != GetType())
-        {
-            return false;
-        }
-
-        return entity.Id == Id;
+        return false;
     }
 
     /// <summary>

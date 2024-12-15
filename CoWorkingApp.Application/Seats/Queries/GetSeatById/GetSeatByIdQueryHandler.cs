@@ -31,7 +31,7 @@ public sealed class GetSeatByIdQueryHandler : IQueryHandler<GetSeatByIdQuery, Ge
     public async Task<Result<GetSeatByIdQueryResponse>> Handle(GetSeatByIdQuery request, CancellationToken cancellationToken)
     {
         var seat = await _seatRepository.GetByIdAsNoTrackingAsync(request.SeatId, cancellationToken);
-        if (seat == null)
+        if (seat is null)
         {
             return Result.Failure<GetSeatByIdQueryResponse>(Errors.Seat.NotFound(request.SeatId));
         }

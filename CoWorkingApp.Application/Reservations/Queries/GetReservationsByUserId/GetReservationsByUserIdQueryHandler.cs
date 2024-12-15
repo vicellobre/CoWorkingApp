@@ -2,7 +2,7 @@
 using CoWorkingApp.Core.Contracts.Repositories;
 using CoWorkingApp.Core.Shared;
 
-namespace CoWorkingApp.Application.Reservations.Queries.GetReservationByUserId;
+namespace CoWorkingApp.Application.Reservations.Queries.GetReservationsByUserId;
 
 /// <summary>
 /// Manejador para la consulta de obtener reservas por identificador de usuario.

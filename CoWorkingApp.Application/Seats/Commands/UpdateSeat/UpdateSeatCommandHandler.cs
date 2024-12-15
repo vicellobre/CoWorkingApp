@@ -36,7 +36,7 @@ public sealed class UpdateSeatCommandHandler : ICommandHandler<UpdateSeatCommand
     public async Task<Result<UpdateSeatCommandResponse>> Handle(UpdateSeatCommand request, CancellationToken cancellationToken)
     {
         var seat = await _seatRepository.GetByIdAsync(request.SeatId, cancellationToken);
-        if (seat == null)
+        if (seat is null)
         {
             return Result.Failure<UpdateSeatCommandResponse>(Errors.Seat.NotFound(request.SeatId));
         }

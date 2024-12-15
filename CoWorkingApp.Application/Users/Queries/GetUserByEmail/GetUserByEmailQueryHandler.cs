@@ -34,7 +34,7 @@ public sealed class GetUserByEmailQueryHandler : IQueryHandler<GetUserByEmailQue
         var emailResult = Email.Create(request.Email);
 
         var user = await _userRepository.GetByEmailAsync(emailResult.Value, cancellationToken);
-        if (user == null)
+        if (user is null)
         {
             return Result.Failure<GetUserByEmailResponse>(Errors.User.EmailNotExist(request.Email));
         }

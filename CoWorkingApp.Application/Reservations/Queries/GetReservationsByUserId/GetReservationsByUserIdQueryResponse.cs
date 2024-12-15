@@ -1,7 +1,7 @@
 ﻿using CoWorkingApp.Core.Entities;
 using CoWorkingApp.Core.Shared;
 
-namespace CoWorkingApp.Application.Reservations.Queries.GetReservationByUserId;
+namespace CoWorkingApp.Application.Reservations.Queries.GetReservationsByUserId;
 
 /// <summary>
 /// Representa la respuesta para la consulta de obtener reservas por identificador de usuario.

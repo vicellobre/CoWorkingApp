@@ -1,6 +1,6 @@
 ﻿using CoWorkingApp.Application.Abstracts.Messaging;
 
-namespace CoWorkingApp.Application.Reservations.Queries.GetReservationByUserId;
+namespace CoWorkingApp.Application.Reservations.Queries.GetReservationsByUserId;
 
 /// <summary>
 /// Consulta para obtener las reservas por el identificador del usuario.

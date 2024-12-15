@@ -58,6 +58,22 @@ public class Reservation : EntityBase
     }
 
     /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="date"></param>
+    /// <param name="userId"></param>
+    /// <param name="seatId"></param>
+    private Reservation(Guid id, Date date, Guid userId, Guid seatId) : base(id)
+    {
+        Date = date;
+        UserId = userId;
+        //User = user;
+        SeatId = seatId;
+        //Seat = seat;
+    }
+
+    /// <summary>
     /// Crea una nueva instancia de <see cref="Reservation"/> con los valores especificados.
     /// </summary>
     /// <param name="id">El identificador de la reserva.</param>
@@ -74,6 +90,25 @@ public class Reservation : EntityBase
         }
 
         return Result<Reservation>.Success(new Reservation(id, dateResult.Value, user, seat));
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="date"></param>
+    /// <param name="userId"></param>
+    /// <param name="seatId"></param>
+    /// <returns></returns>
+    public static Result<Reservation> Create(Guid id, DateTime date, Guid userId, Guid seatId)
+    {
+        var dateResult = Date.Create(date);
+        if (dateResult.IsFailure)
+        {
+            return Result<Reservation>.Failure(dateResult.FirstError);
+        }
+
+        return Result<Reservation>.Success(new Reservation(id, dateResult.Value, userId, seatId));
     }
 
     /// <summary>

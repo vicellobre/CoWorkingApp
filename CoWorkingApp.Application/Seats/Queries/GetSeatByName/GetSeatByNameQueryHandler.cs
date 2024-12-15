@@ -35,7 +35,7 @@ public sealed class GetSeatByNameQueryHandler : IQueryHandler<GetSeatByNameQuery
         SeatName name = SeatName.ConvertFromString(request.Name).Value;
 
         var seat = await _seatRepository.GetByNameAsync(name, cancellationToken);
-        if (seat == null)
+        if (seat is null)
         {
             return Result.Failure<GetSeatByNameQueryResponse>(Errors.Seat.NameNotExist(request.Name));
         }

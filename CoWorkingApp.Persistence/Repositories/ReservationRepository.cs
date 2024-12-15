@@ -26,8 +26,8 @@ public class ReservationRepository : RepositoryGeneric<Reservation>, IReservatio
     public override async Task<IEnumerable<Reservation>> GetAllAsNoTrackingAsync(CancellationToken cancellationToken = default) =>
         await Set
             .AsNoTracking()
-            .Include(r => r.User) // Incluir información detallada del usuario asociado a la reserva
-            .Include(r => r.Seat) // Incluir información detallada del asiento asociado a la reserva
+            .Include(r => r.User)
+            .Include(r => r.Seat)
             .ToListAsync(cancellationToken);
 
     /// <summary>
@@ -38,8 +38,8 @@ public class ReservationRepository : RepositoryGeneric<Reservation>, IReservatio
     /// <returns>La reserva de la entidad <see cref="Reservation"/> con información detallada del usuario y del asiento asociados, o null si no se encuentra ninguna reserva con el ID especificado.</returns>
     public override async Task<Reservation?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default) =>
         await Set
-            .Include(r => r.User) // Incluir información detallada del usuario asociado a la reserva
-            .Include(r => r.Seat) // Incluir información detallada del asiento asociado a la reserva
+            .Include(r => r.User)
+            .Include(r => r.Seat)
             .FirstOrDefaultAsync(r => r.Id == id, cancellationToken);
 
     /// <summary>
@@ -51,8 +51,8 @@ public class ReservationRepository : RepositoryGeneric<Reservation>, IReservatio
     public async Task<IEnumerable<Reservation>> GetByUserIdAsNoTrackingAsync(Guid userId, CancellationToken cancellationToken = default) =>
         await Set
             .AsNoTracking()
-            .Include(r => r.User) // Incluir información detallada del usuario asociado a la reserva
-            .Include(r => r.Seat) // Incluir información detallada del asiento asociado a la reserva
+            .Include(r => r.User)
+            .Include(r => r.Seat)
             .Where(r => r.UserId == userId)
             .ToListAsync(cancellationToken);
 
@@ -65,8 +65,8 @@ public class ReservationRepository : RepositoryGeneric<Reservation>, IReservatio
     public async Task<IEnumerable<Reservation>> GetBySeatIdAsNoTrackingAsync(Guid seatId, CancellationToken cancellationToken = default) =>
         await Set
             .AsNoTracking()
-            .Include(r => r.User) // Incluir información detallada del usuario asociado a la reserva
-            .Include(r => r.Seat) // Incluir información detallada del asiento asociado a la reserva
+            .Include(r => r.User)
+            .Include(r => r.Seat)
             .Where(r => r.SeatId == seatId)
             .ToListAsync(cancellationToken);
 
@@ -79,8 +79,8 @@ public class ReservationRepository : RepositoryGeneric<Reservation>, IReservatio
     public async Task<IEnumerable<Reservation>> GetByDateAsNoTrackingAsync(Date date, CancellationToken cancellationToken = default) =>
         await Set
             .AsNoTracking()
-            .Include(r => r.User) // Incluir información detallada del usuario asociado a la reserva
-            .Include(r => r.Seat) // Incluir información detallada del asiento asociado a la reserva
+            .Include(r => r.User)
+            .Include(r => r.Seat)
             .Where(r => r.Date == date)
             .ToListAsync(cancellationToken);
 
@@ -93,8 +93,8 @@ public class ReservationRepository : RepositoryGeneric<Reservation>, IReservatio
     public async Task<IEnumerable<Reservation>> GetByUserEmailAsNoTrackingAsync(Email email, CancellationToken cancellationToken = default) =>
         await Set
             .AsNoTracking()
-            .Include(r => r.User) // Incluir información detallada del usuario asociado a la reserva
-            .Include(r => r.Seat) // Incluir información detallada del asiento asociado a la reserva
+            .Include(r => r.User)
+            .Include(r => r.Seat)
             .Where(r => r.User.Credentials.Email == email) // Verifica que User y Email no sean null
             .ToListAsync(cancellationToken);
 
@@ -107,10 +107,23 @@ public class ReservationRepository : RepositoryGeneric<Reservation>, IReservatio
     public async Task<IEnumerable<Reservation>> GetBySeatNameAsNoTrackingAsync(SeatName seatName, CancellationToken cancellationToken = default) =>
         await Set
             .AsNoTracking()
-            .Include(r => r.User) // Incluir información detallada del usuario asociado a la reserva
-            .Include(r => r.Seat) // Incluir información detallada del asiento asociado a la reserva
+            .Include(r => r.User)
+            .Include(r => r.Seat)
             .Where(r => r.Seat.Name == seatName)
             .ToListAsync(cancellationToken);
+
+    /// <summary>
+    /// Obtiene una reserva completa de la entidad <see cref="Reservation"/> por su identificador de manera asincrónica sin realizar seguimiento de cambios.
+    /// </summary>
+    /// <param name="id">El identificador único de la reserva.</param>
+    /// <param name="cancellationToken">Token de cancelación opcional para la operación asincrónica.</param>
+    /// <returns>La reserva completa de la entidad <see cref="Reservation"/> con información detallada del usuario y del asiento asociados, o null si no se encuentra ninguna reserva con el ID especificado.</returns>
+    public async Task<Reservation?> GetByIdCompleteAsNoTrackingAsyn(Guid id, CancellationToken cancellationToken = default) =>
+        await Set
+            .AsNoTracking()
+            .Include(r => r.User)
+            .Include(r => r.Seat)
+            .FirstOrDefaultAsync(r => r.Id == id, cancellationToken);
 
     // Implementa otros métodos específicos para ReservationRepository
 }
