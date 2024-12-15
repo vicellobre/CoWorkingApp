@@ -102,6 +102,26 @@ public class UserV1Controller : ApiController
             onFailure: error => HandleFailure(response.FirstError));
     }
 
+    ///// <summary>
+    ///// Crea un nuevo usuario.
+    ///// </summary>
+    ///// <param name="request">Los datos del usuario a crear.</param>
+    ///// <returns>El resultado de la operación de creación.</returns>
+    //[HttpPost("register")]
+    //[AllowAnonymous]
+    //public async Task<ActionResult<CreateUserResponse>> Create([FromBody] CreateUserRequest request)
+    //{
+    //    CreateUserCommand command = (CreateUserCommand)request;
+
+    //    var result = await _sender.Send(command);
+
+    //    CreateUserResponse response = (CreateUserResponse)result.Value;
+
+    //    return result.Match(
+    //        onSuccess: _ => Ok(response),
+    //        onFailure: error => HandleFailure<CreateUserResponse>(result.FirstError));
+    //}
+
     /// <summary>
     /// Actualiza un usuario existente.
     /// </summary>

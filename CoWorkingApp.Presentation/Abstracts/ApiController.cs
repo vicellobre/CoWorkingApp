@@ -49,4 +49,32 @@ public abstract class ApiController : ControllerBase
             detail: error.Message
         );
     }
+
+    /// <summary>
+    /// Maneja un error y devuelve una respuesta HTTP adecuada basada en el tipo de error.
+    /// </summary>
+    /// <typeparam name="T">El tipo de datos contenidos en el resultado.</typeparam>
+    /// <param name="error">El <see cref="Error"/> que contiene información sobre el error ocurrido.</param>
+    /// <returns>Un <see cref="ActionResult{T}"/> que representa la respuesta HTTP adecuada para el error.</returns>
+    protected ActionResult<T> HandleFailure<T>(Error error)
+    {
+        int statusCode = error.Type switch
+        {
+            ErrorType.Validation => StatusCodes.Status400BadRequest,
+            ErrorType.NotFound => StatusCodes.Status404NotFound,
+            ErrorType.Conflict => StatusCodes.Status409Conflict,
+            ErrorType.Unauthorized => StatusCodes.Status401Unauthorized,
+            ErrorType.Forbidden => StatusCodes.Status403Forbidden,
+            ErrorType.Exception => StatusCodes.Status500InternalServerError,
+            _ => StatusCodes.Status400BadRequest,
+        };
+
+        return Problem(
+            title: error.Code,
+            type: error.Type.ToString(),
+            statusCode: statusCode,
+            detail: error.Message
+        );
+    }
+
 }
