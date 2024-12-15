@@ -1,5 +1,5 @@
-﻿using CoWorkingApp.API.Infrastructure.Context;
-using CoWorkingApp.Core.Domain.Entities;
+﻿using CoWorkingApp.Core.Entities;
+using CoWorkingApp.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace CoWorkingApp.Tests
