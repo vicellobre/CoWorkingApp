@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using CoWorkingApp.API.Infrastructure.Adapters;
-using CoWorkingApp.Core.Application.Contracts.Adapters;
+using CoWorkingApp.Application.Contracts.Adapters;
+using CoWorkingApp.Infrastructure.Adapters;
 using Moq;
 
 namespace CoWorkingApp.Tests.Infrastructure.Adapters

@@ -26,17 +26,19 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CoWorkingApp.API\CoWorkingApp.API.csproj" />
+    <ProjectReference Include="..\CoWorkingApp.Application\CoWorkingApp.Application.csproj" />
     <ProjectReference Include="..\CoWorkingApp.Core\CoWorkingApp.Core.csproj" />
+    <ProjectReference Include="..\CoWorkingApp.Infrastructure\CoWorkingApp.Infrastructure.csproj" />
+    <ProjectReference Include="..\CoWorkingApp.Persistence\CoWorkingApp.Persistence.csproj" />
+    <ProjectReference Include="..\CoWorkingApp.Presentation\CoWorkingApp.Presentation.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Core\Application\Services\" />
-    <Folder Include="Core\Domain\Entities\" />
-    <Folder Include="Core\Domain\DTOs\" />
-    <Folder Include="Infrastructure\Controllers\" />
+    <Folder Include="Core\Entities\" />
+    <Folder Include="Application\DTOs\" />
+    <Folder Include="Presentation\Controllers\" />
     <Folder Include="Infrastructure\Adapters\" />
-    <Folder Include="Infrastructure\Repositories\" />
-    <Folder Include="Infrastructure\UnitOfWorks\" />
+    <Folder Include="Persistence\Repositories\" />
     <Folder Include="ClassData\" />
   </ItemGroup>
 

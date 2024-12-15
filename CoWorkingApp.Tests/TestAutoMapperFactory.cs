@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using CoWorkingApp.API.Infrastructure.Adapters;
+using CoWorkingApp.Infrastructure.Adapters;
 
 namespace CoWorkingApp.Tests
 {
