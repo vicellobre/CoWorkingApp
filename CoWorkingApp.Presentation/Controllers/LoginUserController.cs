@@ -39,7 +39,6 @@ public class LoginUserController : ApiController
     /// <returns>ActionResult con el token generado o un mensaje de error.</returns>
     [HttpPost]
     [AllowAnonymous] // Permite el acceso a este método sin autenticación
-    [Route("validateuser")]
     public async Task<IActionResult> Login([FromBody] UserRequest request)
     {
         try
