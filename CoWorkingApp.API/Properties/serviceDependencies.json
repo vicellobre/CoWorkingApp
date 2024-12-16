@@ -9,7 +9,6 @@
       "type": "mssql"
     },
     "identityapp1": {
-      "ignored": "true",
       "type": "identityapp"
     }
   }
