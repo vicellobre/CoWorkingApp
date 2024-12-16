@@ -1,16 +1,16 @@
 {
   "dependencies": {
-    "mssql1": {
-      "type": "mssql",
-      "connectionId": "ConnectionStrings:ConnectionCoWorking",
+    "secrets1": {
+      "type": "secrets",
       "dynamicId": null
     },
-    "identityapp1": {
-      "type": "identityapp"
+    "mssql1": {
+      "ignored": "true",
+      "type": "mssql"
     },
-    "mssql2": {
-      "type": "mssql",
-      "connectionId": "ConnectionStrings:ConectionAzureDB"
+    "identityapp1": {
+      "ignored": "true",
+      "type": "identityapp"
     }
   }
 }
