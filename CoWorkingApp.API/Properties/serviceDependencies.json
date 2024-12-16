@@ -4,12 +4,13 @@
       "type": "secrets",
       "dynamicId": null
     },
-    "mssql1": {
-      "ignored": "true",
-      "type": "mssql"
-    },
     "identityapp1": {
       "type": "identityapp"
+    },
+    "mssql1": {
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:ConnectionAzureDB",
+      "dynamicId": null
     }
   }
 }
