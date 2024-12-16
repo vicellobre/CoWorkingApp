@@ -3,6 +3,10 @@
     "secrets1": {
       "type": "secrets.user",
       "dynamicId": null
+    },
+    "identityapp1": {
+      "connectionInfo": "Registro de la aplicación: ViceLlobre, Inquilino: Default Directory (vicentellobregatjrhotmail.onmicrosoft.com - Microsoft Entra ID)",
+      "type": "identityapp.default"
     }
   }
 }
