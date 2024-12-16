@@ -1,20 +1,15 @@
-﻿using CoWorkingApp.Application.Behaviors;
-using CoWorkingApp.Persistence.Context;
-using FluentValidation;
-using MediatR;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
-namespace CoWorkingApp.API.Extensions;
+namespace CoWorkingApp.API.Extensions.ServiceCollection;
 
 /// <summary>
-/// Clase de extensión para configurar la autenticación mediante token en la aplicación.
+/// Contiene métodos de extensión para la colección de servicios.
 /// </summary>
 [ExcludeFromCodeCoverage]
-public static class AuthenticationExtension
+public static partial class ServiceCollectionExtensions
 {
     /// <summary>
     /// Método para agregar la autenticación mediante token a la colección de servicios.
@@ -22,7 +17,7 @@ public static class AuthenticationExtension
     /// <param name="services">Colección de servicios de la aplicación.</param>
     /// <param name="configuration">Configuración de la aplicación.</param>
     /// <returns>Colección de servicios con la autenticación mediante token agregada.</returns>
-    public static IServiceCollection AddTokenAuthentication(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddTokenAuthenticationService(this IServiceCollection services, IConfiguration configuration)
     {
         // Clave secreta para firmar y validar el token
         var secretKey = configuration["Auth:Jwt:SecretKey"] ?? throw new ArgumentNullException();
@@ -69,58 +64,6 @@ public static class AuthenticationExtension
                 }
             };
         });
-
-        return services;
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="services"></param>
-    /// <param name="configuration"></param>
-    /// <returns></returns>
-    /// <exception cref="InvalidOperationException"></exception>
-    public static IServiceCollection AddDataBase(this IServiceCollection services, IConfiguration configuration)
-    {
-        // Detectar si se ejecuta en un contenedor Docker
-        //var isRunningInContainer = Environment.GetEnvironmentVariable("RUNNING_IN_CONTAINER") == "true";
-
-        // Seleccionar la cadena de conexión adecuada
-        //var connectionString = isRunningInContainer
-        //? _configuration.GetConnectionString("ConnectionCoWorking_Container")
-        //: _configuration.GetConnectionString("ConnectionCoWorking");
-
-
-        var connectionString = configuration.GetConnectionString("ConnectionCoWorking");
-        if (string.IsNullOrEmpty(connectionString))
-        {
-            throw new InvalidOperationException("The connection string is not configured correctly.");
-        }
-
-        // Configuración del contexto de la base de datos
-        services.AddDbContext<CoWorkingContext>(options =>
-            options.UseSqlServer(connectionString,
-            sqlOptions => sqlOptions.MigrationsAssembly("CoWorkingApp.Persistence")));
-
-        return services;
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="services"></param>
-    /// <returns></returns>
-    public static IServiceCollection AddFeaturesWithValidations(this IServiceCollection services)
-    {
-        // Configuración de MediatR
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Application.AssemblyReference.Assembly));
-
-        // MediatR with FluentValidation
-        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(InputFilterBehavior<,>));
-        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
-
-        // Configuración de FluentValidation
-        services.AddValidatorsFromAssembly(Application.AssemblyReference.Assembly, includeInternalTypes: true);
 
         return services;
     }
