@@ -1,15 +1,6 @@
-using CoWorkingApp.API;
-using System.Diagnostics.CodeAnalysis;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.Identity.Web;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using CoWorkingApp.API.Extensions.HostBuilder;
 
-[ExcludeFromCodeCoverage]
-internal class Program
-{
-    private static void Main(string[] args)
-    {
-
-        HostBuilderHelper.CreateHostBuilder(args).Build().Run();
-    }
-}
+Host.CreateDefaultBuilder(args)
+            .ConfigureHost()
+            .Build()
+            .Run();

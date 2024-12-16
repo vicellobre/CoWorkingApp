@@ -5,22 +5,20 @@ using CoWorkingApp.Infrastructure.Services;
 using CoWorkingApp.Persistence.Context;
 using CoWorkingApp.Persistence.Repositories;
 using CoWorkingApp.Persistence.UnitOfWorks;
-using System.Diagnostics.CodeAnalysis;
 
-namespace CoWorkingApp.API.Extensions;
+namespace CoWorkingApp.API.Extensions.ServiceCollection;
 
 /// <summary>
-/// Clase estática para configurar la inyección de dependencias en la aplicación.
+/// Contiene métodos de extensión para la configuración de servicios de la colección.
 /// </summary>
-[ExcludeFromCodeCoverage]
-public static class IoC
+public static partial class ServiceCollectionExtensions
 {
     /// <summary>
     /// Método de extensión para agregar las dependencias necesarias a la colección de servicios.
     /// </summary>
     /// <param name="services">Colección de servicios de la aplicación.</param>
     /// <returns>Colección de servicios con las nuevas dependencias agregadas.</returns>
-    public static IServiceCollection AddDependency(this IServiceCollection services)
+    public static IServiceCollection AddDependencyService(this IServiceCollection services)
     {
         // Inyectar UnitOfWork
         services.AddScoped<IUnitOfWork>(p => new UnitOfWork(p.GetRequiredService<CoWorkingContext>()));
