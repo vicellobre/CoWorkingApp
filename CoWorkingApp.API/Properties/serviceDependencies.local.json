@@ -6,6 +6,8 @@
     },
     "identityapp1": {
       "connectionInfo": "Registro de la aplicación: ViceLlobre, Inquilino: Default Directory (vicentellobregatjrhotmail.onmicrosoft.com - Microsoft Entra ID)",
+      "secretStore": null,
+      "resourceId": null,
       "type": "identityapp.default"
     }
   }
