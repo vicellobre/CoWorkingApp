@@ -1,4 +1,4 @@
-﻿using CoWorkingApp.Application.DTOs;
+﻿using CoWorkingApp.Presentation.DTOs.Users;
 
 namespace CoWorkingApp.Tests.Application.DTOs
 {
@@ -21,7 +21,7 @@ namespace CoWorkingApp.Tests.Application.DTOs
             // ARRANGE & ACT: Prepara el entorno de prueba creando una instancia de UserResponse con los datos proporcionados
             var userResponse = new UserResponse
             {
-                Name = name,
+                FirstName = name,
                 LastName = lastname,
                 Email = email,
             };
@@ -29,11 +29,11 @@ namespace CoWorkingApp.Tests.Application.DTOs
             // ASSERT: Realiza las acciones de prueba y verifica los resultados
             Assert.NotNull(userResponse); // Verifica que la instancia de UserResponse no sea nula
 
-            Assert.NotEmpty(userResponse.Name); // Verifica que el nombre no esté vacío
+            Assert.NotEmpty(userResponse.FirstName); // Verifica que el nombre no esté vacío
             Assert.NotEmpty(userResponse.LastName); // Verifica que el apellido no esté vacío
             Assert.NotEmpty(userResponse.Email); // Verifica que el correo electrónico no esté vacío
 
-            Assert.Equal(name, userResponse.Name); // Verifica que el nombre coincida con el valor proporcionado
+            Assert.Equal(name, userResponse.FirstName); // Verifica que el nombre coincida con el valor proporcionado
             Assert.Equal(lastname, userResponse.LastName); // Verifica que el apellido coincida con el valor proporcionado
             Assert.Equal(email, userResponse.Email); // Verifica que el correo electrónico coincida con el valor proporcionado
         }
