@@ -18,7 +18,7 @@ public readonly record struct FirstName
     /// <summary>
     /// Longitud mínima permitida para el nombre.
     /// </summary>
-    public const int MinLength = 1;
+    public const int MinLength = 2;
 
     /// <summary>
     /// Longitud máxima permitida para el nombre.
