@@ -47,21 +47,17 @@ public record struct SeatName
     public readonly string Value => $"{Row.Value}{Separator}{Number.Value}";
 
     /// <summary>
-    /// Constructor sin parámetros que lanza una excepción.
+    /// Constructor sin parámetros.
     /// Use el método estático <see cref="Create"/> para instanciar <see cref="SeatName"/>.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Lanza siempre indicando que use el método <see cref="Create"/>.</exception>
-    public SeatName()
-    {
-        //throw new InvalidOperationException("Use the static Create method to instantiate SeatName.");
-    }
+    public SeatName() { }
 
     /// <summary>
     /// Constructor privado para inicializar el nombre del asiento.
     /// </summary>
     /// <param name="seatNumber">El número del asiento.</param>
     /// <param name="seatRow">La fila del asiento.</param>
-    private SeatName(SeatRow seatRow, SeatNumber seatNumber)
+    private SeatName(SeatRow seatRow, SeatNumber seatNumber) : this()
     {
         Row = seatRow;
         Number = seatNumber;
@@ -99,7 +95,7 @@ public record struct SeatName
     /// </summary>
     /// <param name="value">El valor en cadena para convertir.</param>
     /// <returns>Un resultado que contiene una instancia de <see cref="SeatName"/> si es exitoso; de lo contrario, contiene un error.</returns>
-    public static Result<SeatName> ConvertFromString(string value)
+    public static Result<SeatName> ConvertFromString(string? value)
     {
         if (string.IsNullOrWhiteSpace(value))
         {

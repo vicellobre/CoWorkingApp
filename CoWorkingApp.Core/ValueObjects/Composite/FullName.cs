@@ -1,4 +1,5 @@
-﻿using CoWorkingApp.Core.Shared;
+﻿using CoWorkingApp.Core.Extensions;
+using CoWorkingApp.Core.Shared;
 using CoWorkingApp.Core.ValueObjects.Single;
 
 namespace CoWorkingApp.Core.ValueObjects.Composite;
@@ -33,7 +34,7 @@ public sealed record class FullName
     /// </summary>
     /// <param name="firstName">El nombre del usuario.</param>
     /// <param name="lastName">El apellido del usuario.</param>
-    private FullName(FirstName firstName, LastName lastName) : base()
+    private FullName(FirstName firstName, LastName lastName) : this()
     {
         FirstName = firstName;
         LastName = lastName;
@@ -61,7 +62,9 @@ public sealed record class FullName
             errors.AddRange(lastNameResult.Errors);
         }
 
-        return Result<FullName>.Success(new FullName(firstNameResult.Value, lastNameResult.Value));
+        return errors.IsEmpty()
+            ? Result<FullName>.Success(new FullName(firstNameResult.Value, lastNameResult.Value))
+            : Result<FullName>.Failure(errors);
     }
 
     /// <summary>
