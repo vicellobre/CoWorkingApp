@@ -41,8 +41,7 @@ public readonly record struct Result<TValue> : IResult<TValue>
     /// <summary>
     /// Obtiene el primer error en la colección de errores.
     /// </summary>
-    public Error FirstError => Errors.IsEmpty() ? ERRORS.None : Errors.First();
-
+    public Error FirstError => IsFailure ? Errors.First() : ERRORS.None;
 
     /// <summary>
     /// Constructor por defecto que lanza una excepción.

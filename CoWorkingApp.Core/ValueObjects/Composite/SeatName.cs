@@ -110,9 +110,7 @@ public record struct SeatName
         var parts = value.Split(Separator);
         var seatNameResult = Create(parts.First(), parts.Last());
 
-        return seatNameResult.IsSuccess
-            ? Result<SeatName>.Success(seatNameResult.Value)
-            : Result<SeatName>.Failure(seatNameResult.Errors);
+        return Result<SeatName>.Success(seatNameResult.Value);
     }
 
     /// <summary>
