@@ -55,26 +55,6 @@ public static class ResultExtensions
     /// <returns>Una nueva instancia de la estructura <see cref="Result{TValue}"/>.</returns>
     public static Result<TValue> ToResult<TValue>(this Error[] errors) => errors;
 
-    /// <summary>
-    /// Ejecuta una de las funciones proporcionadas dependiendo del estado del <see cref="Result"/>.
-    /// </summary>
-    /// <typeparam name="TValue">El tipo del valor resultante de la operación.</typeparam>
-    /// <param name="result">El resultado de la operación que se va a evaluar.</param>
-    /// <param name="onSuccess">Función a ejecutar si el resultado es exitoso.</param>
-    /// <param name="onFailure">Función a ejecutar si el resultado es fallido, que recibe el primer error como parámetro.</param>
-    /// <returns>El valor retornado por la función <paramref name="onSuccess"/> si la operación fue exitosa, o por la función <paramref name="onFailure"/> si la operación falló.</returns>
-    public static TValue Match<TValue>(this Result result, Func<TValue> onSuccess, Func<Error, TValue> onFailure) =>
-        result.IsSuccess ? onSuccess() : onFailure(result.FirstError);
-
-    /// <summary>
-    /// Ejecuta una de las funciones proporcionadas dependiendo del estado del <see cref="Result{TValue}"/>.
-    /// </summary>
-    /// <param name="result">El resultado de la operación que se va a evaluar.</param>
-    /// <param name="onSuccess">Función a ejecutar si el resultado es exitoso, que recibe el valor como parámetro.</param>
-    /// <param name="onFailure">Función a ejecutar si el resultado es fallido, que recibe el primer error como parámetro.</param>
-    /// <returns>El valor retornado por la función <paramref name="onSuccess"/> si la operación fue exitosa, o por la función <paramref name="onFailure"/> si la operación falló.</returns>
-    public static TValue Match<TValue>(this Result<TValue> result, Func<TValue, TValue> onSuccess, Func<Error, TValue> onFailure) =>
-        result.IsSuccess ? onSuccess(result.Value) : onFailure(result.FirstError);
 
     /// <summary>
     /// Ejecuta una de las funciones proporcionadas dependiendo del estado del <see cref="Result{TValue}"/>.
