@@ -15,6 +15,7 @@ public sealed class CreateReservationCommandHandler : ICommandHandler<CreateRese
     private readonly IUnitOfWork _unitOfWork;
     private readonly IUserRepository _userRepository;
     private readonly ISeatRepository _seatRepository;
+    private readonly IReservationRepository _reservationRepository;
 
     /// <summary>
     /// Inicializa una nueva instancia de la clase <see cref="CreateReservationCommandHandler"/>.
@@ -23,11 +24,12 @@ public sealed class CreateReservationCommandHandler : ICommandHandler<CreateRese
     /// <param name="userRepository">El repositorio de usuarios.</param>
     /// <param name="seatRepository">El repositorio de asientos.</param>
     /// <exception cref="ArgumentNullException">Lanzado cuando alguno de los repositorios o la unidad de trabajo es null.</exception>
-    public CreateReservationCommandHandler(IUnitOfWork unitOfWork, IUserRepository userRepository, ISeatRepository seatRepository)
+    public CreateReservationCommandHandler(IUnitOfWork unitOfWork, IUserRepository userRepository, ISeatRepository seatRepository, IReservationRepository reservationRepository)
     {
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
         _seatRepository = seatRepository ?? throw new ArgumentNullException(nameof(seatRepository));
+        _reservationRepository = reservationRepository ?? throw new ArgumentNullException(nameof(reservationRepository));
     }
 
     /// <summary>
@@ -55,6 +57,12 @@ public sealed class CreateReservationCommandHandler : ICommandHandler<CreateRese
             request.Date,
             user,
             seat);
+        //var reservationResult = Reservation.Create(
+        //    Guid.NewGuid(),
+        //    request.Date,
+        //    request.UserId,
+        //    request.SeatId);
+
 
         Reservation reservation = reservationResult.Value;
 
@@ -64,6 +72,7 @@ public sealed class CreateReservationCommandHandler : ICommandHandler<CreateRese
             return Result.Failure<CreateReservationCommandResponse>(Errors.Seat.NotAvailable(request.SeatId, request.Date));
         }
 
+        //_reservationRepository.Add(reservation);
         user.AddReservation(reservation);
 
         await _unitOfWork.CommitAsync(cancellationToken);

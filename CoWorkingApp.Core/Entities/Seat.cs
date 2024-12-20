@@ -26,6 +26,11 @@ public class Seat : EntityBase
     public List<Reservation> Reservations { get; set; } = [];
 
     /// <summary>
+    /// Constructor sin parámetros requerido por Entity Framework Core.
+    /// </summary>
+    private Seat() : base() { }
+
+    /// <summary>
     /// Constructor privado para inicializar un asiento con un identificador especificado.
     /// </summary>
     /// <param name="id">El identificador del asiento.</param>
@@ -44,9 +49,9 @@ public class Seat : EntityBase
     /// <param name="number">El número del asiento.</param>
     /// <param name="row">La fila del asiento.</param>
     /// <param name="description">La descripción del asiento.</param>
-    public Seat(Guid id, string number, string row, string description) : base(id)
+    public Seat(Guid id, string row, string number, string description) : base(id)
     {
-        Name = SeatName.Create(number, row).Value;
+        Name = SeatName.Create(row, number).Value;
         Description = Description.Create(description).Value;
     }
 
@@ -54,13 +59,13 @@ public class Seat : EntityBase
     /// Crea una nueva instancia de <see cref="Seat"/> con los valores especificados.
     /// </summary>
     /// <param name="id">El identificador del asiento.</param>
-    /// <param name="number">El número del asiento.</param>
     /// <param name="row">La fila del asiento.</param>
+    /// <param name="number">El número del asiento.</param>
     /// <param name="description">La descripción del asiento.</param>
     /// <returns>Un resultado que contiene una instancia de <see cref="Seat"/> si es exitoso; de lo contrario, contiene un error.</returns>
-    public static Result<Seat> Create(Guid id, string number, string row, string description)
+    public static Result<Seat> Create(Guid id, string row, string number, string description)
     {
-        var seatNameResult = SeatName.Create(number, row);
+        var seatNameResult = SeatName.Create(row, number);
         if (seatNameResult.IsFailure)
         {
             return Result<Seat>.Failure(seatNameResult.Errors);
@@ -79,7 +84,7 @@ public class Seat : EntityBase
     /// <returns>Un resultado que indica si la operación fue exitosa.</returns>
     public Result ChangeName(string number, string row)
     {
-        var seatNameResult = SeatName.Create(number, row);
+        var seatNameResult = SeatName.Create(row, number);
         if (seatNameResult.IsFailure)
         {
             return Result.Failure(seatNameResult.FirstError);

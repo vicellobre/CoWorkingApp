@@ -91,23 +91,23 @@ public record struct SeatName
     }
 
     /// <summary>
-    /// Convierte una cadena en una instancia de <see cref="SeatName"/>.
+    /// Crea desde una cadena una instancia de <see cref="SeatName"/>.
     /// </summary>
-    /// <param name="value">El valor en cadena para convertir.</param>
+    /// <param name="name">El nombre en cadena para crear.</param>
     /// <returns>Un resultado que contiene una instancia de <see cref="SeatName"/> si es exitoso; de lo contrario, contiene un error.</returns>
-    public static Result<SeatName> ConvertFromString(string? value)
+    public static Result<SeatName> CreateFromString(string? name)
     {
-        if (string.IsNullOrWhiteSpace(value))
+        if (string.IsNullOrWhiteSpace(name))
         {
             return Result<SeatName>.Failure(Errors.SeatName.IsNullOrEmpty);
         }
 
-        if (!Regex.IsMatch(value, Pattern))
+        if (!Regex.IsMatch(name, Pattern))
         {
             return Result<SeatName>.Failure(Errors.SeatName.InvalidFormat);
         }
 
-        var parts = value.Split(Separator);
+        var parts = name.Split(Separator);
         var seatNameResult = Create(parts.First(), parts.Last());
 
         return Result<SeatName>.Success(seatNameResult.Value);

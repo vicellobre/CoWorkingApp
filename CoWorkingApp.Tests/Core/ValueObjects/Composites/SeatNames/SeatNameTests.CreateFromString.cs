@@ -5,16 +5,16 @@ namespace CoWorkingApp.Tests.Core.ValueObjects.Composites.SeatNames;
 
 public partial class SeatNameTests
 {
-    public class ConvertFromStringTests
+    public class CreateFromStringTests
     {
         [Fact]
-        public void ConvertFromString_ShouldReturnFailure_WhenValueIsNullOrEmpty()
+        public void CreateFromString_ShouldReturnFailure_WhenValueIsNullOrEmpty()
         {
             // Arrange
             string? value = null;
 
             // Act
-            var result = SeatName.ConvertFromString(value);
+            var result = SeatName.CreateFromString(value);
 
             // Assert
             Assert.False(result.IsSuccess);
@@ -22,13 +22,13 @@ public partial class SeatNameTests
         }
 
         [Fact]
-        public void ConvertFromString_ShouldReturnFailure_WhenValueIsInvalidFormat()
+        public void CreateFromString_ShouldReturnFailure_WhenValueIsInvalidFormat()
         {
             // Arrange
             var value = "InvalidFormat";
 
             // Act
-            var result = SeatName.ConvertFromString(value);
+            var result = SeatName.CreateFromString(value);
 
             // Assert
             Assert.False(result.IsSuccess);
@@ -36,13 +36,13 @@ public partial class SeatNameTests
         }
 
         [Fact]
-        public void ConvertFromString_ShouldReturnFailure_WhenSeatRowIsInvalid()
+        public void CreateFromString_ShouldReturnFailure_WhenSeatRowIsInvalid()
         {
             // Arrange
             var value = "-A1";
 
             // Act
-            var result = SeatName.ConvertFromString(value);
+            var result = SeatName.CreateFromString(value);
 
             // Assert
             Assert.False(result.IsSuccess);
@@ -50,13 +50,13 @@ public partial class SeatNameTests
         }
 
         [Fact]
-        public void ConvertFromString_ShouldReturnFailure_WhenSeatNumberIsInvalid()
+        public void CreateFromString_ShouldReturnFailure_WhenSeatNumberIsInvalid()
         {
             // Arrange
             var value = "1-";
 
             // Act
-            var result = SeatName.ConvertFromString(value);
+            var result = SeatName.CreateFromString(value);
 
             // Assert
             Assert.False(result.IsSuccess);
@@ -64,13 +64,13 @@ public partial class SeatNameTests
         }
 
         [Fact]
-        public void ConvertFromString_ShouldReturnSuccess_WhenValueIsValid()
+        public void CreateFromString_ShouldReturnSuccess_WhenValueIsValid()
         {
             // Arrange
             var value = "1-A1";
 
             // Act
-            var result = SeatName.ConvertFromString(value);
+            var result = SeatName.CreateFromString(value);
 
             // Assert
             Assert.True(result.IsSuccess);

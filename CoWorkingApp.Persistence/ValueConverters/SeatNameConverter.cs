@@ -13,7 +13,7 @@ public class SeatNameConverter : ValueConverter<SeatName, string>
     /// </summary>
     public SeatNameConverter() : base(
         seatName => seatName.ToString(),
-        value => SeatName.ConvertFromString(value).Value)
+        value => SeatName.CreateFromString(value).Value)
     {
     }
 }

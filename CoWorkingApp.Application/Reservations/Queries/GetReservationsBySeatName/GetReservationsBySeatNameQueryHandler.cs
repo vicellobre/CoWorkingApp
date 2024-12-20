@@ -34,7 +34,7 @@ public sealed class GetReservationsBySeatNameQueryHandler : IQueryHandler<GetRes
     /// <returns>Una colección de respuestas de la consulta para obtener las reservas por el nombre del asiento.</returns>
     public async Task<Result<IEnumerable<GetReservationsBySeatNameQueryResponse>>> Handle(GetReservationsBySeatNameQuery request, CancellationToken cancellationToken)
     {
-        SeatName seatName = SeatName.ConvertFromString(request.SeatName).Value;
+        SeatName seatName = SeatName.CreateFromString(request.SeatName).Value;
 
         bool notFound = await _seatRepository.GetByNameAsync(seatName, cancellationToken) is null;
         if (notFound)

@@ -55,7 +55,6 @@ public static class ResultExtensions
     /// <returns>Una nueva instancia de la estructura <see cref="Result{TValue}"/>.</returns>
     public static Result<TValue> ToResult<TValue>(this Error[] errors) => errors;
 
-
     /// <summary>
     /// Ejecuta una de las funciones proporcionadas dependiendo del estado del <see cref="Result{TValue}"/>.
     /// </summary>
