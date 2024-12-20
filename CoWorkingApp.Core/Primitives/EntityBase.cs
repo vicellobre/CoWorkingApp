@@ -32,6 +32,11 @@ public abstract class EntityBase : IEquatable<EntityBase>
     /// <returns>Devuelve <c>true</c> si ambas entidades son iguales; de lo contrario, <c>false</c>.</returns>
     public static bool operator ==(EntityBase? first, EntityBase? second)
     {
+        if (first is null && second is null)
+        {
+            return true;
+        }
+
         if (first is null || second is null)
         {
             return false;
@@ -63,14 +68,14 @@ public abstract class EntityBase : IEquatable<EntityBase>
             return false;
         }
 
-        if (ReferenceEquals(this, other))
-        {
-            return true;
-        }
-
         if (other.GetType() != GetType())
         {
             return false;
+        }
+
+        if (ReferenceEquals(this, other))
+        {
+            return true;
         }
 
         return other.Id == Id;

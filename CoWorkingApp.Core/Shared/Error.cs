@@ -25,7 +25,7 @@ public readonly record struct Error
     /// <summary>
     /// Una colección de errores adicionales que proporcionan más contexto sobre el error principal.
     /// </summary>
-    public ICollection<Error>? StackTrace { get; init; }
+    public IReadOnlyCollection<Error>? StackTrace { get; init; }
 
     /// <summary>
     /// Constructor por defecto que lanza una excepción. 
@@ -44,7 +44,7 @@ public readonly record struct Error
     /// <param name="message">El mensaje descriptivo del error.</param>
     /// <param name="type">El tipo del error.</param>
     /// <exception cref="ArgumentNullException">Se lanza cuando el código o el mensaje son nulos.</exception>
-    private Error(string? code, string? message, ErrorType type, ICollection<Error>? stack = null)
+    private Error(string? code, string? message, ErrorType type, IReadOnlyCollection<Error>? stack = null)
     {
         if (code is null)
         {
@@ -69,7 +69,7 @@ public readonly record struct Error
     /// <param name="message">El mensaje descriptivo del error.</param>
     /// <param name="type">El tipo del error.</param>
     /// <returns>Una nueva instancia de la estructura <see cref="Error"/>.</returns>
-    public static Error Create(string? code, string? message, ErrorType type, ICollection<Error>? stack = null) => new(code, message, type, stack);
+    public static Error Create(string? code, string? message, ErrorType type, IReadOnlyCollection<Error>? stack = null) => new(code, message, type, stack);
 
     /// <summary>
     /// Crea una nueva instancia de la estructura <see cref="Error"/> con una pila de errores.
@@ -77,7 +77,7 @@ public readonly record struct Error
     /// <param name="error">El error existente.</param>
     /// <param name="stack">La pila de errores asociados opcional.</param>
     /// <returns>Una nueva instancia de la estructura <see cref="Error"/> con la pila de errores.</returns>
-    public static Error WithStack(Error error, ICollection<Error>? stack) => new(error.Code, error.Message, error.Type, stack);
+    public static Error WithStack(Error error, IReadOnlyCollection<Error>? stack) => new(error.Code, error.Message, error.Type, stack);
 
     /// <summary>
     /// Crea una nueva instancia de la estructura <see cref="Error"/> de tipo <see cref="ErrorType.Failure"/> con el código y mensaje especificados.
@@ -85,7 +85,7 @@ public readonly record struct Error
     /// <param name="code">El código del error.</param>
     /// <param name="message">El mensaje descriptivo del error.</param>
     /// <returns>Una nueva instancia de la estructura <see cref="Error"/>.</returns>
-    public static Error Failure(string? code, string? message, ICollection<Error>? stack = null) => new(code, message, ErrorType.Failure, stack);
+    public static Error Failure(string? code, string? message, IReadOnlyCollection<Error>? stack = null) => new(code, message, ErrorType.Failure, stack);
 
     /// <summary>
     /// Crea una nueva instancia de la estructura <see cref="Error"/> de tipo <see cref="ErrorType.Unexpected"/> con el código y mensaje especificados.
@@ -93,7 +93,7 @@ public readonly record struct Error
     /// <param name="code">El código del error.</param>
     /// <param name="message">El mensaje descriptivo del error.</param>
     /// <returns>Una nueva instancia de la estructura <see cref="Error"/>.</returns>
-    public static Error Unexpected(string? code, string? message, ICollection<Error>? stack = null) => new(code, message, ErrorType.Unexpected, stack);
+    public static Error Unexpected(string? code, string? message, IReadOnlyCollection<Error>? stack = null) => new(code, message, ErrorType.Unexpected, stack);
 
     /// <summary>
     /// Crea una nueva instancia de la estructura <see cref="Error"/> de tipo <see cref="ErrorType.Validation"/> con el código y mensaje especificados.
@@ -101,7 +101,7 @@ public readonly record struct Error
     /// <param name="code">El código del error.</param>
     /// <param name="message">El mensaje descriptivo del error.</param>
     /// <returns>Una nueva instancia de la estructura <see cref="Error"/>.</returns>
-    public static Error Validation(string? code, string? message, ICollection<Error>? stack = null) => new(code, message, ErrorType.Validation, stack);
+    public static Error Validation(string? code, string? message, IReadOnlyCollection<Error>? stack = null) => new(code, message, ErrorType.Validation, stack);
 
     /// <summary>
     /// Crea una nueva instancia de la estructura <see cref="Error"/> de tipo <see cref="ErrorType.Conflict"/> con el código y mensaje especificados.
@@ -109,7 +109,7 @@ public readonly record struct Error
     /// <param name="code">El código del error.</param>
     /// <param name="message">El mensaje descriptivo del error.</param>
     /// <returns>Una nueva instancia de la estructura <see cref="Error"/>.</returns>
-    public static Error Conflict(string? code, string? message, ICollection<Error>? stack = null) => new(code, message, ErrorType.Conflict, stack);
+    public static Error Conflict(string? code, string? message, IReadOnlyCollection<Error>? stack = null) => new(code, message, ErrorType.Conflict, stack);
 
     /// <summary>
     /// Crea una nueva instancia de la estructura <see cref="Error"/> de tipo <see cref="ErrorType.NotFound"/> con el código y mensaje especificados.
@@ -117,7 +117,7 @@ public readonly record struct Error
     /// <param name="code">El código del error.</param>
     /// <param name="message">El mensaje descriptivo del error.</param>
     /// <returns>Una nueva instancia de la estructura <see cref="Error"/>.</returns>
-    public static Error NotFound(string? code, string? message, ICollection<Error>? stack = null) => new(code, message, ErrorType.NotFound, stack);
+    public static Error NotFound(string? code, string? message, IReadOnlyCollection<Error>? stack = null) => new(code, message, ErrorType.NotFound, stack);
 
     /// <summary>
     /// Crea una nueva instancia de la estructura <see cref="Error"/> de tipo <see cref="ErrorType.Unauthorized"/> con el código y mensaje especificados.
@@ -125,7 +125,7 @@ public readonly record struct Error
     /// <param name="code">El código del error.</param>
     /// <param name="message">El mensaje descriptivo del error.</param>
     /// <returns>Una nueva instancia de la estructura <see cref="Error"/>.</returns>
-    public static Error Unauthorized(string? code, string? message, ICollection<Error>? stack = null) => new(code, message, ErrorType.Unauthorized, stack);
+    public static Error Unauthorized(string? code, string? message, IReadOnlyCollection<Error>? stack = null) => new(code, message, ErrorType.Unauthorized, stack);
 
     /// <summary>
     /// Crea una nueva instancia de la estructura <see cref="Error"/> de tipo <see cref="ErrorType.Forbidden"/> con el código y mensaje especificados.
@@ -133,7 +133,7 @@ public readonly record struct Error
     /// <param name="code">El código del error.</param>
     /// <param name="message">El mensaje descriptivo del error.</param>
     /// <returns>Una nueva instancia de la estructura <see cref="Error"/>.</returns>
-    public static Error Forbidden(string? code, string? message, ICollection<Error>? stack = null) => new(code, message, ErrorType.Forbidden, stack);
+    public static Error Forbidden(string? code, string? message, IReadOnlyCollection<Error>? stack = null) => new(code, message, ErrorType.Forbidden, stack);
 
     /// <summary>
     /// Crea una nueva instancia de la estructura <see cref="Error"/> de tipo <see cref="ErrorType.Exception"/> con el código y mensaje especificados.
@@ -141,5 +141,5 @@ public readonly record struct Error
     /// <param name="code">El código del error.</param>
     /// <param name="message">El mensaje descriptivo del error.</param>
     /// <returns>Una nueva instancia de la estructura <see cref="Error"/>.</returns>
-    public static Error Exception(string? code, string? message, ICollection<Error>? stack = null) => new(code, message, ErrorType.Exception, stack);
+    public static Error Exception(string? code, string? message, IReadOnlyCollection<Error>? stack = null) => new(code, message, ErrorType.Exception, stack);
 }

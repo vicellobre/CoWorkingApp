@@ -40,7 +40,6 @@ public class Reservation : EntityBase
     /// </summary>
     private Reservation() : base() { }
 
-
     /// <summary>
     /// Constructor privado para inicializar una reserva con un identificador especificado.
     /// </summary>

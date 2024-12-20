@@ -41,7 +41,7 @@ public sealed class UpdateSeatCommandHandler : ICommandHandler<UpdateSeatCommand
             return Result.Failure<UpdateSeatCommandResponse>(Errors.Seat.NotFound(request.SeatId));
         }
 
-        SeatName name = SeatName.ConvertFromString(request.Name).Value;
+        SeatName name = SeatName.CreateFromString(request.Name).Value;
         seat.ChangeName(name.Number, name.Row);
         seat.ChangeDescription(request.Description);
 

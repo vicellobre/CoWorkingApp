@@ -18,7 +18,7 @@ public readonly struct Result : IResult
     /// <summary>
     /// El primer error en la colección de errores, o un error vacío si la colección está vacía.
     /// </summary>
-    public Error FirstError => Errors.IsEmpty() ? ERRORS.None : Errors.First();
+    public Error FirstError => IsSuccess ? ERRORS.None : Errors.First();
 
     /// <summary>
     /// Indica si el resultado es exitoso.
@@ -79,7 +79,7 @@ public readonly struct Result : IResult
         {
             throw new InvalidOperationException();
         }
-
+     
         if (!isSuccess && error == ERRORS.None)
         {
             throw new InvalidOperationException();
@@ -121,7 +121,7 @@ public readonly struct Result : IResult
     /// Crea un resultado exitoso sin valor asociado.
     /// </summary>
     /// <returns>Una nueva instancia de la estructura <see cref="Result"/> que representa un resultado exitoso.</returns>
-    public static Result Success() => new(true, ERRORS.None);
+    public static Result Success() => new(true, ERRORS.EmptyErrors);
 
     /// <summary>
     /// Crea un resultado fallido con el error especificado.
