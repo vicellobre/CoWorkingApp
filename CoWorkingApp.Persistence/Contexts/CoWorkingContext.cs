@@ -1,7 +1,7 @@
 ﻿using CoWorkingApp.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace CoWorkingApp.Persistence.Context;
+namespace CoWorkingApp.Persistence.Contexts;
 
 /// <summary>
 /// Clase que representa el contexto de la base de datos para la aplicación CoWorking.
@@ -36,6 +36,6 @@ public class CoWorkingContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(AssemblyReference.Assembly);
-        base.OnModelCreating(modelBuilder);
+        //base.OnModelCreating(modelBuilder);
     }
 }

@@ -1,4 +1,4 @@
-﻿using CoWorkingApp.Persistence.Context;
+﻿using CoWorkingApp.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 
 namespace CoWorkingApp.API.Extensions.ServiceCollection;
@@ -25,7 +25,7 @@ public static partial class ServiceCollectionExtensions
 
         services.AddDbContext<CoWorkingContext>(options =>
             options.UseSqlServer(connectionString,
-            sqlOptions => sqlOptions.MigrationsAssembly("CoWorkingApp.Persistence")));
+            sqlOptions => sqlOptions.MigrationsAssembly(typeof(CoWorkingContext).Assembly.FullName)));
 
         return services;
     }
