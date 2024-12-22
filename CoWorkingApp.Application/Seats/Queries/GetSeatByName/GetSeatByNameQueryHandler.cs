@@ -32,7 +32,7 @@ public sealed class GetSeatByNameQueryHandler : IQueryHandler<GetSeatByNameQuery
     /// <exception cref="NotImplementedException"></exception>
     public async Task<Result<GetSeatByNameQueryResponse>> Handle(GetSeatByNameQuery request, CancellationToken cancellationToken)
     {
-        SeatName name = SeatName.ConvertFromString(request.Name).Value;
+        SeatName name = SeatName.CreateFromString(request.Name).Value;
 
         var seat = await _seatRepository.GetByNameAsync(name, cancellationToken);
         if (seat is null)

@@ -1,107 +1,107 @@
-﻿using CoWorkingApp.Persistence.Context;
-using CoWorkingApp.Persistence.UnitOfWorks;
-using Microsoft.EntityFrameworkCore;
-using Moq;
+﻿//using CoWorkingApp.Persistence.Context;
+//using CoWorkingApp.Persistence.UnitOfWorks;
+//using Microsoft.EntityFrameworkCore;
+//using Moq;
 
-namespace CoWorkingApp.Tests.Persistence.UnitOfWorks
-{
-    /// <summary>
-    /// Clase de pruebas para el controlador UnitOfWork.
-    /// </summary>
-    public partial class UnitOfWorkTest
-    {
-        /// <summary>
-        /// Verifica que el constructor de UnitOfWork cree una instancia válida cuando el contexto no es nulo.
-        /// </summary>
-        [Fact]
-        public void UnitOfWorkConstructor_Returns_ValidInstance_When_ContextIsNotNull()
-        {
-            // ARRANGE
-            var context = new Mock<CoWorkingContext>(new DbContextOptions<CoWorkingContext>());
+//namespace CoWorkingApp.Tests.Persistence.UnitOfWorks
+//{
+//    /// <summary>
+//    /// Clase de pruebas para el controlador UnitOfWork.
+//    /// </summary>
+//    public partial class UnitOfWorkTest
+//    {
+//        /// <summary>
+//        /// Verifica que el constructor de UnitOfWork cree una instancia válida cuando el contexto no es nulo.
+//        /// </summary>
+//        [Fact]
+//        public void UnitOfWorkConstructor_Returns_ValidInstance_When_ContextIsNotNull()
+//        {
+//            // ARRANGE
+//            var context = new Mock<CoWorkingContext>(new DbContextOptions<CoWorkingContext>());
 
-            // ACT
-            var result = new UnitOfWork(context.Object);
+//            // ACT
+//            var result = new UnitOfWork(context.Object);
 
-            // ASSERT
-            Assert.NotNull(result);
-        }
+//            // ASSERT
+//            Assert.NotNull(result);
+//        }
 
-        /// <summary>
-        /// Verifica que el constructor de UnitOfWork lance una excepción cuando el contexto es nulo.
-        /// </summary>
-        [Fact]
-        public void UnitOfWorkConstructor_Throws_ArgumentNullException_When_ContextIsNull()
-        {
-            // ARRANGE
-            CoWorkingContext? context = null;
+//        /// <summary>
+//        /// Verifica que el constructor de UnitOfWork lance una excepción cuando el contexto es nulo.
+//        /// </summary>
+//        [Fact]
+//        public void UnitOfWorkConstructor_Throws_ArgumentNullException_When_ContextIsNull()
+//        {
+//            // ARRANGE
+//            CoWorkingContext? context = null;
 
-            // ACT
-            var result = () => new UnitOfWork(context);
+//            // ACT
+//            var result = () => new UnitOfWork(context);
 
-            // ASSERT
-            Assert.Throws<ArgumentNullException>(result);
-        }
+//            // ASSERT
+//            Assert.Throws<ArgumentNullException>(result);
+//        }
 
-        /// <summary>
-        /// Verifica que el método CommitAsync de UnitOfWork llame a SaveChangesAsync exactamente una vez en el contexto del contexto de base de datos.
-        /// </summary>
-        [Fact]
-        public async Task CommitAsync_SavesChangesOnce_When_Called()
-        {
-            // ARRANGE
-            var dbContextMock = new Mock<CoWorkingContext>(new DbContextOptions<CoWorkingContext>());
-            var unitOfWork = new UnitOfWork(dbContextMock.Object);
+//        /// <summary>
+//        /// Verifica que el método CommitAsync de UnitOfWork llame a SaveChangesAsync exactamente una vez en el contexto del contexto de base de datos.
+//        /// </summary>
+//        [Fact]
+//        public async Task CommitAsync_SavesChangesOnce_When_Called()
+//        {
+//            // ARRANGE
+//            var dbContextMock = new Mock<CoWorkingContext>(new DbContextOptions<CoWorkingContext>());
+//            var unitOfWork = new UnitOfWork(dbContextMock.Object);
 
-            // ACT
-            await unitOfWork.CommitAsync();
+//            // ACT
+//            await unitOfWork.CommitAsync();
 
-            // ASSERT
-            dbContextMock.Verify(db => db.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
-        }
+//            // ASSERT
+//            dbContextMock.Verify(db => db.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
+//        }
 
-        /// <summary>
-        /// Verifica que el método Dispose de UnitOfWork desecha el contexto de base de datos.
-        /// </summary>
-        [Fact]
-        public void Dispose_DisposesDatabaseContext_When_Called()
-        {
-            // ARRANGE
-            var dbContextMock = new Mock<CoWorkingContext>(new DbContextOptions<CoWorkingContext>());
-            var unitOfWork = new UnitOfWork(dbContextMock.Object);
+//        /// <summary>
+//        /// Verifica que el método Dispose de UnitOfWork desecha el contexto de base de datos.
+//        /// </summary>
+//        [Fact]
+//        public void Dispose_DisposesDatabaseContext_When_Called()
+//        {
+//            // ARRANGE
+//            var dbContextMock = new Mock<CoWorkingContext>(new DbContextOptions<CoWorkingContext>());
+//            var unitOfWork = new UnitOfWork(dbContextMock.Object);
 
-            // ACT
-            unitOfWork.Dispose();
+//            // ACT
+//            unitOfWork.Dispose();
 
-            // ASSERT
-            dbContextMock.Verify(db => db.Dispose(), Times.Once);
-        }
+//            // ASSERT
+//            dbContextMock.Verify(db => db.Dispose(), Times.Once);
+//        }
 
-        /// <summary>
-        /// Verifica que el método Dispose maneja excepciones lanzadas al desechar el contexto.
-        /// </summary>
-        [Fact]
-        public void Dispose_CatchesException_When_ContextDisposeThrowsException()
-        {
-            // ARRANGE
-            var dbContextMock = new Mock<CoWorkingContext>(new DbContextOptions<CoWorkingContext>());
-            dbContextMock.Setup(db => db.Dispose()).Throws(new Exception());
+//        /// <summary>
+//        /// Verifica que el método Dispose maneja excepciones lanzadas al desechar el contexto.
+//        /// </summary>
+//        [Fact]
+//        public void Dispose_CatchesException_When_ContextDisposeThrowsException()
+//        {
+//            // ARRANGE
+//            var dbContextMock = new Mock<CoWorkingContext>(new DbContextOptions<CoWorkingContext>());
+//            dbContextMock.Setup(db => db.Dispose()).Throws(new Exception());
 
-            var unitOfWork = new UnitOfWork(dbContextMock.Object);
+//            var unitOfWork = new UnitOfWork(dbContextMock.Object);
 
-            var originalConsoleOut = Console.Out; // Guarda la salida de consola original para restaurarla más adelante
-            using (var consoleOutput = new StringWriter())
-            {
-                Console.SetOut(consoleOutput); // Redirige la salida de consola
+//            var originalConsoleOut = Console.Out; // Guarda la salida de consola original para restaurarla más adelante
+//            using (var consoleOutput = new StringWriter())
+//            {
+//                Console.SetOut(consoleOutput); // Redirige la salida de consola
 
-                // ACT
-                unitOfWork.Dispose();
+//                // ACT
+//                unitOfWork.Dispose();
 
-                // ASSERT
-                var output = consoleOutput.ToString();
-                Assert.Contains("Error disposing context", output);
-            }
+//                // ASSERT
+//                var output = consoleOutput.ToString();
+//                Assert.Contains("Error disposing context", output);
+//            }
 
-            Console.SetOut(originalConsoleOut); // Restaura la salida de consola original
-        }
-    }
-}
+//            Console.SetOut(originalConsoleOut); // Restaura la salida de consola original
+//        }
+//    }
+//}

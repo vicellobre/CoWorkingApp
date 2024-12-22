@@ -31,7 +31,7 @@ public sealed record class CredentialsWithEmailAndPassword
     /// </summary>
     /// <param name="email">El correo electrónico del usuario.</param>
     /// <param name="password">La contraseña del usuario.</param>
-    private CredentialsWithEmailAndPassword(Email email, Password password) : base()
+    private CredentialsWithEmailAndPassword(Email email, Password password) : this()
     {
         Email = email;
         Password = password;

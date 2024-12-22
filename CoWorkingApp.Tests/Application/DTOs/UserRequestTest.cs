@@ -1,4 +1,4 @@
-﻿using CoWorkingApp.Application.DTOs;
+﻿using CoWorkingApp.Presentation.DTOs.Users;
 
 namespace CoWorkingApp.Tests.Application.DTOs
 {
@@ -22,7 +22,7 @@ namespace CoWorkingApp.Tests.Application.DTOs
             // ARRANGE & ACT: Prepara el entorno de prueba creando una instancia de UserRequest con los datos proporcionados
             var userRequest = new UserRequest
             {
-                Name = name,
+                FirstName = name,
                 LastName = lastname,
                 Email = email,
                 Password = password
@@ -31,12 +31,12 @@ namespace CoWorkingApp.Tests.Application.DTOs
             // ASSERT: Realiza las acciones de prueba y verifica los resultados
             Assert.NotNull(userRequest); // Verifica que la instancia de UserRequest no sea nula
 
-            Assert.NotEmpty(userRequest.Name); // Verifica que el nombre no esté vacío
+            Assert.NotEmpty(userRequest.FirstName); // Verifica que el nombre no esté vacío
             Assert.NotEmpty(userRequest.LastName); // Verifica que el apellido no esté vacío
             Assert.NotEmpty(userRequest.Email); // Verifica que el correo electrónico no esté vacío
             Assert.NotEmpty(userRequest.Password); // Verifica que la contraseña no esté vacía
 
-            Assert.Equal(name, userRequest.Name); // Verifica que el nombre coincida con el valor proporcionado
+            Assert.Equal(name, userRequest.FirstName); // Verifica que el nombre coincida con el valor proporcionado
             Assert.Equal(lastname, userRequest.LastName); // Verifica que el apellido coincida con el valor proporcionado
             Assert.Equal(email, userRequest.Email); // Verifica que el correo electrónico coincida con el valor proporcionado
             Assert.Equal(password, userRequest.Password); // Verifica que la contraseña coincida con el valor proporcionado

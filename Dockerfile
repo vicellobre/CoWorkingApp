@@ -5,7 +5,11 @@ WORKDIR /src
 # Copiar los archivos necesarios para restaurar dependencias
 COPY *.sln ./
 COPY CoWorkingApp.API/*.csproj ./CoWorkingApp.API/
+COPY CoWorkingApp.Application/*.csproj ./CoWorkingApp.Application/
 COPY CoWorkingApp.Core/*.csproj ./CoWorkingApp.Core/
+COPY CoWorkingApp.Infrastructure/*.csproj ./CoWorkingApp.Infrastructure/
+COPY CoWorkingApp.Persistence/*.csproj ./CoWorkingApp.Persistence/
+COPY CoWorkingApp.Presentation/*.csproj ./CoWorkingApp.Presentation/
 
 # Restaurar dependencias
 RUN dotnet restore ./CoWorkingApp.API/CoWorkingApp.API.csproj
@@ -17,7 +21,7 @@ WORKDIR /src
 # Copiar el resto del código fuente
 COPY . ./
 
-# Instalar herramientas EF Core
+# Instalar herramientas EF Core en la etapa final
 RUN dotnet tool install --global dotnet-ef
 
 # Agregar el directorio de herramientas globales a la PATH
@@ -29,6 +33,8 @@ RUN dotnet publish ./CoWorkingApp.API/CoWorkingApp.API.csproj -c Release -o /app
 # Etapa final (final)
 FROM build AS final
 WORKDIR /app
+
+# Crear los directorios necesarios antes de copiar
 COPY --from=build /app/publish ./
 
 # Copiar el script de arranque

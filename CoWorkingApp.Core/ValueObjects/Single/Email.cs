@@ -18,7 +18,7 @@ public readonly record struct Email
     /// <summary>
     /// Longitud mínima permitida para el correo electrónico.
     /// </summary>
-    public const int MinLength = 5;
+    public const int MinLength = 8;
 
     /// <summary>
     /// Longitud máxima permitida para el correo electrónico.

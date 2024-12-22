@@ -36,11 +36,11 @@ public sealed class CreateSeatCommandHandler : ICommandHandler<CreateSeatCommand
     /// <returns>La respuesta del comando de creación del asiento.</returns>
     public async Task<Result<CreateSeatCommandResponse>> Handle(CreateSeatCommand request, CancellationToken cancellationToken)
     {
-        SeatName name = SeatName.ConvertFromString(request.Name).Value;
+        SeatName name = SeatName.CreateFromString(request.Name).Value;
         var seatResult = Seat.Create(
             Guid.NewGuid(),
-            name.Number,
             name.Row,
+            name.Number,
             request.Description);
 
         Seat seat = seatResult.Value;

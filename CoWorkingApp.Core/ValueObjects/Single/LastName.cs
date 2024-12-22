@@ -18,7 +18,7 @@ public readonly record struct LastName
     /// <summary>
     /// Longitud mínima permitida para el apellido.
     /// </summary>
-    public const int MinLength = 1;
+    public const int MinLength = 2;
 
     /// <summary>
     /// Longitud máxima permitida para el apellido.

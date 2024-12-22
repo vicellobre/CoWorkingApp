@@ -1,4 +1,4 @@
-﻿using CoWorkingApp.Application.DTOs;
+﻿using CoWorkingApp.Presentation.DTOs.Seats;
 
 namespace CoWorkingApp.Tests.Application.DTOs
 {

@@ -7,13 +7,13 @@ namespace CoWorkingApp.Tests.ClassData
     /// </summary>
     public class InvalidReservationRequestClassData : IEnumerable<object[]>
     {
-        private readonly List<object[]> _data = new List<object[]>()
-        {
-            new object[] { DateTime.Today.AddDays(-1) },
-            new object[] { DateTime.Today.AddMinutes(-1) },
-            new object[] { DateTime.Today.AddHours(-1) },
-            new object[] { DateTime.Now.AddDays(-1) },
-        };
+        private readonly List<object[]> _data =
+        [
+            [DateTime.Today.AddDays(-1)],
+            [DateTime.Today.AddMinutes(-1)],
+            [DateTime.Today.AddHours(-1)],
+            [DateTime.Now.AddDays(-1)],
+        ];
 
         public IEnumerator<object[]> GetEnumerator()
         {
