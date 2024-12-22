@@ -16,8 +16,6 @@ public static partial class HostBuilderExtensions
     public static IHostBuilder ConfigureHost(this IHostBuilder hostBuilder)
     {
         return hostBuilder.ConfigureWebHostDefaults(webBuilder =>
-        {
-            webBuilder.UseStartup<Startup>();
-        });
+            webBuilder.UseStartup<Startup>());
     }
 }

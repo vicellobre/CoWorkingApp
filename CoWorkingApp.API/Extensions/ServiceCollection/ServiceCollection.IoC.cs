@@ -2,7 +2,7 @@
 using CoWorkingApp.Core.Contracts.Repositories;
 using CoWorkingApp.Core.Contracts.UnitOfWork;
 using CoWorkingApp.Infrastructure.Services;
-using CoWorkingApp.Persistence.Context;
+using CoWorkingApp.Persistence.Contexts;
 using CoWorkingApp.Persistence.Repositories;
 using CoWorkingApp.Persistence.UnitOfWorks;
 

@@ -20,10 +20,10 @@ services:
             start_period: 10s
 
     api:
-        # build:
-        #     context: .
-        #     dockerfile: Dockerfile
-        image: vicellobre/coworking-app:latest  # Reemplaza con tu imagen de Docker Hub
+        build:
+            context: .
+            dockerfile: Dockerfile
+        #image: vicellobre/coworking-app:latest  # Reemplaza con tu imagen de Docker Hub
         container_name: coworking-api
         ports:
             - "8080:8080"  # Mapea el puerto del contenedor al puerto de tu host
@@ -31,6 +31,10 @@ services:
             - ASPNETCORE_ENVIRONMENT=Development
             - ConnectionStrings__ConnectionCoWorking=Server=db;Database=CoWorkingDb;User=sa;Password=Your_password123;MultipleActiveResultSets=True;TrustServerCertificate=True;
             - RUNNING_IN_CONTAINER=true
+            - Auth__Jwt__Audience=
+            - Auth__Jwt__Issuer=
+            - Auth__Jwt__SecretKey=995a2f5bffed19e5ea33ad4e5d6fa2120f956a8df4449ee77030a52fca245f4b
+            - Auth__Jwt__TokenExpirationInMinutes=20
         depends_on:
             db:
                 condition: service_healthy

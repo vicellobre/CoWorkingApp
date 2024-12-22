@@ -1,5 +1,5 @@
 ﻿using CoWorkingApp.Core.Contracts.UnitOfWork;
-using CoWorkingApp.Persistence.Context;
+using CoWorkingApp.Persistence.Contexts;
 
 namespace CoWorkingApp.Persistence.UnitOfWorks;
 
