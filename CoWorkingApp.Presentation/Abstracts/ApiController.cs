@@ -1,80 +1,77 @@
-﻿using CoWorkingApp.Core.Enumerations;
-using CoWorkingApp.Core.Shared;
+﻿using CoWorkingApp.Core.Shared;
+using CoWorkingApp.Presentation.Errors.Extensions;
+using CoWorkingApp.Presentation.Problems;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CoWorkingApp.Presentation.Abstracts;
-
-/// <summary>
-/// Clase base para controladores de la API que proporciona manejo de errores y funcionalidad común.
-/// </summary>
-public abstract class ApiController : ControllerBase
+namespace CoWorkingApp.Presentation.Abstracts
 {
     /// <summary>
-    /// Interfaz para enviar solicitudes (comandos y consultas) a través de MediatR.
+    /// Clase base para controladores de la API que proporciona manejo de errores y funcionalidad común.
     /// </summary>
-    protected readonly ISender _sender;
-
-    /// <summary>
-    /// Inicializa una nueva instancia de la clase <see cref="ApiController"/>.
-    /// </summary>
-    /// <param name="sender">El <see cref="ISender"/> utilizado para enviar solicitudes.</param>
-    /// <exception cref="ArgumentNullException">Se lanza si el <paramref name="sender"/> es <see langword="null"/>.</exception>
-    protected ApiController(ISender sender) : base() => _sender = sender ?? throw new ArgumentNullException(nameof(sender));
-
-    /// <summary>
-    /// Maneja un error y devuelve una respuesta HTTP adecuada basada en el tipo de error.
-    /// </summary>
-    /// <typeparam name="T">El tipo de datos contenidos en el resultado.</typeparam>
-    /// <param name="error">El <see cref="Error"/> que contiene información sobre el error ocurrido.</param>
-    /// <returns>Un <see cref="IActionResult"/> que representa la respuesta HTTP adecuada para el error.</returns>
-    protected IActionResult HandleFailure(Error error)
+    public abstract class ApiController : ControllerBase
     {
-        int statusCode = error.Type switch
+        /// <summary>
+        /// Interfaz para enviar solicitudes (comandos y consultas) a través de MediatR.
+        /// </summary>
+        protected readonly ISender _sender;
+
+        /// <summary>
+        /// Inicializa una nueva instancia de la clase <see cref="ApiController"/>.
+        /// </summary>
+        /// <param name="sender">El <see cref="ISender"/> utilizado para enviar solicitudes.</param>
+        /// <exception cref="ArgumentNullException">Se lanza si el <paramref name="sender"/> es <see langword="null"/>.</exception>
+        protected ApiController(ISender sender) : base() => _sender = sender ?? throw new ArgumentNullException(nameof(sender));
+
+        /// <summary>
+        /// Maneja un error y devuelve una respuesta HTTP adecuada basada en el tipo de error.
+        /// </summary>
+        /// <param name="error">El <see cref="Error"/> que contiene información sobre el error ocurrido.</param>
+        /// <returns>Un <see cref="IActionResult"/> que representa la respuesta HTTP adecuada para el error.</returns>
+        protected IActionResult HandleFailure(Error error) =>
+            Problem(
+                title: error.Code,
+                type: error.Type.ToString(),
+                statusCode: error.Type.ToStatusCode(),
+                detail: error.Message
+            );
+
+        /// <summary>
+        /// Maneja un error y devuelve una respuesta HTTP adecuada basada en el tipo de error.
+        /// </summary>
+        /// <typeparam name="T">El tipo de datos contenidos en el resultado.</typeparam>
+        /// <param name="error">El <see cref="Error"/> que contiene información sobre el error ocurrido.</param>
+        /// <returns>Un <see cref="ActionResult{T}"/> que representa la respuesta HTTP adecuada para el error.</returns>
+        protected ActionResult<T> HandleFailureFromT<T>(Error error) =>
+            Problem(
+                title: error.Code,
+                type: error.Type.ToString(),
+                statusCode: error.Type.ToStatusCode(),
+                detail: error.Message
+            );
+
+        /// <summary>
+        /// Crea una respuesta de problema para un resultado fallido.
+        /// </summary>
+        /// <typeparam name="T">El tipo de resultado esperado.</typeparam>
+        /// <param name="result">El resultado que contiene el estado de éxito o fallo y los errores correspondientes.</param>
+        /// <returns>Un <see cref="ActionResult{T}"/> que contiene la información detallada del problema.</returns>
+        public ActionResult<T> Problem<T>(Result result)
         {
-            ErrorType.Validation => StatusCodes.Status400BadRequest,
-            ErrorType.NotFound => StatusCodes.Status404NotFound,
-            ErrorType.Conflict => StatusCodes.Status409Conflict,
-            ErrorType.Unauthorized => StatusCodes.Status401Unauthorized,
-            ErrorType.Forbidden => StatusCodes.Status403Forbidden,
-            ErrorType.Exception => StatusCodes.Status500InternalServerError,
-            _ => StatusCodes.Status400BadRequest,
-        };
+            var problemDetails = ProblemDetailsFactory.FromResult(result);
+            return new ObjectResult(problemDetails);
+        }
 
-        return Problem(
-            title: error.Code,
-            type: error.Type.ToString(),
-            statusCode: statusCode,
-            detail: error.Message
-        );
-    }
-
-    /// <summary>
-    /// Maneja un error y devuelve una respuesta HTTP adecuada basada en el tipo de error.
-    /// </summary>
-    /// <typeparam name="T">El tipo de datos contenidos en el resultado.</typeparam>
-    /// <param name="error">El <see cref="Error"/> que contiene información sobre el error ocurrido.</param>
-    /// <returns>Un <see cref="ActionResult{T}"/> que representa la respuesta HTTP adecuada para el error.</returns>
-    protected ActionResult<T> HandleFailure<T>(Error error)
-    {
-        int statusCode = error.Type switch
+        /// <summary>
+        /// Crea una respuesta de problema para un error específico.
+        /// </summary>
+        /// <typeparam name="T">El tipo de resultado esperado.</typeparam>
+        /// <param name="error">El error que contiene el código y mensaje del problema.</param>
+        /// <returns>Un <see cref="ActionResult{T}"/> que contiene la información detallada del problema.</returns>
+        public ActionResult<T> Problem<T>(Error error)
         {
-            ErrorType.Validation => StatusCodes.Status400BadRequest,
-            ErrorType.NotFound => StatusCodes.Status404NotFound,
-            ErrorType.Conflict => StatusCodes.Status409Conflict,
-            ErrorType.Unauthorized => StatusCodes.Status401Unauthorized,
-            ErrorType.Forbidden => StatusCodes.Status403Forbidden,
-            ErrorType.Exception => StatusCodes.Status500InternalServerError,
-            _ => StatusCodes.Status400BadRequest,
-        };
-
-        return Problem(
-            title: error.Code,
-            type: error.Type.ToString(),
-            statusCode: statusCode,
-            detail: error.Message
-        );
+            var problemDetails = ProblemDetailsFactory.FromError(error);
+            return new ObjectResult(problemDetails);
+        }
     }
-
 }

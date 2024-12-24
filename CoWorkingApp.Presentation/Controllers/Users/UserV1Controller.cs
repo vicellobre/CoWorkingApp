@@ -107,7 +107,7 @@ public class UserV1Controller : ApiController
     ///// </summary>
     ///// <param name="request">Los datos del usuario a crear.</param>
     ///// <returns>El resultado de la operación de creación.</returns>
-    //[HttpPost("register")]
+    //[HttpPost("register2")]
     //[AllowAnonymous]
     //public async Task<ActionResult<CreateUserResponse>> Create([FromBody] CreateUserRequest request)
     //{
@@ -119,7 +119,7 @@ public class UserV1Controller : ApiController
 
     //    return result.Match(
     //        onSuccess: _ => Ok(response),
-    //        onFailure: error => HandleFailure<CreateUserResponse>(result.FirstError));
+    //        onFailure: error => Problem<CreateUserResponse>(result));
     //}
 
     /// <summary>
