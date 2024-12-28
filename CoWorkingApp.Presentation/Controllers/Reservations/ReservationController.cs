@@ -1,4 +1,5 @@
-﻿using CoWorkingApp.Application.Reservations.Commands.CreateReservation;
+﻿using Asp.Versioning;
+using CoWorkingApp.Application.Reservations.Commands.CreateReservation;
 using CoWorkingApp.Application.Reservations.Commands.DeleteReservation;
 using CoWorkingApp.Application.Reservations.Commands.UpdateReservation;
 using CoWorkingApp.Application.Reservations.Queries.GetAllReservations;
@@ -21,14 +22,15 @@ namespace CoWorkingApp.Presentation.Controllers.Reservations;
 /// </summary>
 [ApiController]
 [AllowAnonymous]
-[Route("api/v1/reservations")]
-public class ReservationV1Controller : ApiController
+[ApiVersion(1)]
+[Route("api/v{v:apiVersion}/reservations")]
+public class ReservationController : ApiController
 {
     /// <summary>
-    /// Inicializa una nueva instancia de la clase <see cref="ReservationV1Controller"/>.
+    /// Inicializa una nueva instancia de la clase <see cref="ReservationController"/>.
     /// </summary>
     /// <param name="sender">El <see cref="ISender"/> utilizado para enviar solicitudes.</param>
-    public ReservationV1Controller(ISender sender) : base(sender) { }
+    public ReservationController(ISender sender) : base(sender) { }
 
     /// <summary>
     /// Obtiene todas las reservas.
