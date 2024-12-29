@@ -29,17 +29,19 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services
+            .AddConfigureOptionsService()
             .AddDatabaseService(_configuration)            // Configura la base de datos
             .AddDependencyService()                        // Configura las dependencias necesarias
             .AddMediatWithValidationService()              // Configura MediatR y FluentValidation
             .AddCorsService()                              // Configura políticas de CORS
-            .AddTokenAuthenticationService(_configuration) // Configura la autenticación mediante tokens
+            .AddTokenAuthenticationService()               // Configura la autenticación mediante tokens
             .AddDataProtectionService()                    // Configura la protección de datos
             .AddProblemDetailsService()                    // Configura ProblemDetails
             .AddResponseCaching()                          // Configura la caché de respuestas
-            .AddSwaggerService(_configuration)             // Configura Swagger
+            .AddSwaggerService()                           // Configura Swagger
             .AddODataServices()                            // Configura OData
             .AddControllersService()                       // Configura los controladores
+            .AddApiVersioningService(_configuration)
             .AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme); // Agrega el esquema de autenticación OpenID Connect
     }
 
@@ -50,6 +52,7 @@ public class Startup
     /// <param name="env">El entorno de alojamiento web.</param>
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
+
         app
             .UseExceptionApp(env)        // Configura el manejo de excepciones
             .UseStatusCodePages()        // Configura las páginas de código de estado

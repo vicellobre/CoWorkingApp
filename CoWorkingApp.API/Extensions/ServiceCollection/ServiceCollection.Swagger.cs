@@ -1,5 +1,4 @@
-﻿using CoWorkingApp.API.Configurations;
-using Microsoft.OpenApi.Models;
+﻿using CoWorkingApp.API.Configurations.Swagger;
 using System.Reflection;
 
 namespace CoWorkingApp.API.Extensions.ServiceCollection;
@@ -13,40 +12,16 @@ public static partial class ServiceCollectionExtensions
     /// Método de extensión para configurar Swagger.
     /// </summary>
     /// <param name="services">La colección de servicios.</param>
-    /// <param name="configuration">La configuración de la aplicación.</param>
     /// <returns>La colección de servicios con la configuración de Swagger agregada.</returns>
-    public static IServiceCollection AddSwaggerService(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddSwaggerService(this IServiceCollection services)
     {
-        services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(options =>
         {
+            options.OperationFilter<SwaggerDefaultValues>();
+
             var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
             options.IncludeXmlComments(xmlPath);
-
-            var swaggerConfig = configuration.GetSection("Swagger").Get<SwaggerConfig>();
-            if (swaggerConfig == null)
-            {
-                throw new ArgumentNullException(nameof(swaggerConfig));
-            }
-
-            options.SwaggerDoc("v1", new OpenApiInfo
-            {
-                Version = swaggerConfig.Version,
-                Title = swaggerConfig.Title,
-                Description = swaggerConfig.Description,
-                Contact = new OpenApiContact
-                {
-                    Name = swaggerConfig.Contact.Name,
-                    Email = swaggerConfig.Contact.Email,
-                    Url = new Uri(swaggerConfig.Contact.Url!)
-                },
-                License = new OpenApiLicense
-                {
-                    Name = swaggerConfig.License.Name,
-                    Url = new Uri(swaggerConfig.License.Url!)
-                }
-            });
         });
 
         return services;

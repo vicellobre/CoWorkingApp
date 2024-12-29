@@ -11,21 +11,23 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
+using Asp.Versioning;
 
-namespace CoWorkingApp.Presentation.Controllers.Users;
+namespace CoWorkingApp.Presentation.Controllers.Users.V1;
 
 /// <summary>
 /// Controlador para manejar las operaciones relacionadas con usuarios en la versión 1 de la API.
 /// </summary>
 [ApiController]
-[Route("api/v1/users")]
-public class UserV1Controller : ApiController
+[ApiVersion(1)]
+[Route("api/v{v:apiVersion}/users")]
+public class UserController : ApiController
 {
     /// <summary>
-    /// Inicializa una nueva instancia de la clase <see cref="UserV1Controller"/>.
+    /// Inicializa una nueva instancia de la clase <see cref="UserController"/>.
     /// </summary>
     /// <param name="sender">El <see cref="ISender"/> utilizado para enviar solicitudes.</param>
-    public UserV1Controller(ISender sender) : base(sender) { }
+    public UserController(ISender sender) : base(sender) { }
 
     /// <summary>
     /// Obtiene todos los usuarios.
@@ -101,26 +103,6 @@ public class UserV1Controller : ApiController
             onSuccess: value => Ok(response.Value),
             onFailure: error => HandleFailure(response.FirstError));
     }
-
-    ///// <summary>
-    ///// Crea un nuevo usuario.
-    ///// </summary>
-    ///// <param name="request">Los datos del usuario a crear.</param>
-    ///// <returns>El resultado de la operación de creación.</returns>
-    //[HttpPost("register2")]
-    //[AllowAnonymous]
-    //public async Task<ActionResult<CreateUserResponse>> Create([FromBody] CreateUserRequest request)
-    //{
-    //    CreateUserCommand command = (CreateUserCommand)request;
-
-    //    var result = await _sender.Send(command);
-
-    //    CreateUserResponse response = (CreateUserResponse)result.Value;
-
-    //    return result.Match(
-    //        onSuccess: _ => Ok(response),
-    //        onFailure: error => Problem<CreateUserResponse>(result));
-    //}
 
     /// <summary>
     /// Actualiza un usuario existente.

@@ -1,4 +1,5 @@
-﻿using CoWorkingApp.Application.Seats.Commands.CreateSeat;
+﻿using Asp.Versioning;
+using CoWorkingApp.Application.Seats.Commands.CreateSeat;
 using CoWorkingApp.Application.Seats.Commands.DeleteSeat;
 using CoWorkingApp.Application.Seats.Commands.UpdateSeat;
 using CoWorkingApp.Application.Seats.Queries.GetAllSeats;
@@ -19,14 +20,15 @@ namespace CoWorkingApp.Presentation.Controllers.Seats;
 /// </summary>
 [ApiController]
 [AllowAnonymous]
-[Route("api/v1/seats")]
-public class SeatV1Controller : ApiController
+[ApiVersion(1)]
+[Route("api/v{v:apiVersion}/seats")]
+public class SeatController : ApiController
 {
     /// <summary>
-    /// Inicializa una nueva instancia de la clase <see cref="SeatV1Controller"/>.
+    /// Inicializa una nueva instancia de la clase <see cref="SeatController"/>.
     /// </summary>
     /// <param name="sender">El <see cref="ISender"/> utilizado para enviar solicitudes.</param>
-    public SeatV1Controller(ISender sender) : base(sender) { }
+    public SeatController(ISender sender) : base(sender) { }
 
     /// <summary>
     /// Obtiene todos los asientos.
