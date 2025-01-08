@@ -21,5 +21,8 @@ public readonly record struct CreateUserCommandResponse(
     /// </summary>
     /// <param name="user">El usuario a convertir.</param>
     public static explicit operator CreateUserCommandResponse(User user) =>
-        new(user.Id, user.Name.FirstName, user.Name.LastName, user.Credentials.Email);
+        new(user.Id,
+            user.Name.FirstName,
+            user.Name.LastName,
+            user.Credentials.Email);
 }

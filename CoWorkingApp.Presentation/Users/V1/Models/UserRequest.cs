@@ -1,6 +1,6 @@
 ﻿using CoWorkingApp.Core.Shared;
 
-namespace CoWorkingApp.Presentation.DTOs.Users;
+namespace CoWorkingApp.Presentation.Users.V1.Models;
 
 /// <summary>
 /// Representa una solicitud de un usuario en el sistema.

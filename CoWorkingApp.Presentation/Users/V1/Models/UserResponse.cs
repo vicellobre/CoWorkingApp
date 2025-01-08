@@ -1,7 +1,7 @@
 ﻿using CoWorkingApp.Application.Users.Commands.AuthenticateUser;
 using CoWorkingApp.Core.Shared;
 
-namespace CoWorkingApp.Presentation.DTOs.Users;
+namespace CoWorkingApp.Presentation.Users.V1.Models;
 
 /// <summary>
 /// Representa la respuesta de un usuario en el sistema.

@@ -1,4 +1,4 @@
-﻿using CoWorkingApp.Core.Entities;
+﻿using CoWorkingApp.Application.Users.DTO;
 using CoWorkingApp.Core.Shared;
 
 namespace CoWorkingApp.Application.Users.Queries.GetAllUsers;
@@ -10,16 +10,4 @@ namespace CoWorkingApp.Application.Users.Queries.GetAllUsers;
 /// <param name="FirstName">El nombre del usuario.</param>
 /// <param name="LastName">El apellido del usuario.</param>
 /// <param name="Email">El correo electrónico del usuario.</param>
-public readonly record struct GetAllUsersQueryResponse(
-    Guid UserId,
-    string FirstName,
-    string LastName,
-    string Email) : IResponse
-{
-    /// <summary>
-    /// Convierte explícitamente un objeto <see cref="User"/> a <see cref="GetAllUsersQueryResponse"/>.
-    /// </summary>
-    /// <param name="user">El usuario a convertir.</param>
-    public static explicit operator GetAllUsersQueryResponse(User user) =>
-        new(user.Id, user.Name.FirstName, user.Name.LastName, user.Credentials.Email);
-}
+public readonly record struct GetAllUsersQueryResponse(IEnumerable<UserDto> Users) : IResponse;

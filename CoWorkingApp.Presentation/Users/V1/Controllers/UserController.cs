@@ -6,14 +6,14 @@ using CoWorkingApp.Application.Users.Queries.GetUserByEmail;
 using CoWorkingApp.Application.Users.Queries.GetUserById;
 using CoWorkingApp.Core.Extensions;
 using CoWorkingApp.Presentation.Abstracts;
-using CoWorkingApp.Presentation.DTOs.Users;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Asp.Versioning;
+using CoWorkingApp.Presentation.Users.V1.Models;
 
-namespace CoWorkingApp.Presentation.Controllers.Users.V1;
+namespace CoWorkingApp.Presentation.Users.V1.Controllers;
 
 /// <summary>
 /// Controlador para manejar las operaciones relacionadas con usuarios en la versión 1 de la API.

@@ -12,12 +12,12 @@ public class JwtOptions
     /// <summary>
     /// Audiencia del token JWT.
     /// </summary>
-    public required string? Audience { get; init; }
+    public required string Audience { get; init; }
 
     /// <summary>
     /// Emisor del token JWT.
     /// </summary>
-    public required string? Issuer { get; init; }
+    public required string Issuer { get; init; }
 
     /// <summary>
     /// Clave secreta utilizada para firmar el token JWT.

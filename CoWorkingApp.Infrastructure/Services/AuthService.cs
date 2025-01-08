@@ -1,7 +1,8 @@
 ﻿using CoWorkingApp.Application.Contracts;
 using CoWorkingApp.Core.ValueObjects.Single;
+using CoWorkingApp.Infrastructure.Options.Jwt;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -14,16 +15,16 @@ namespace CoWorkingApp.Infrastructure.Services;
 /// </summary>
 public class AuthService : IAuthService
 {
-    private readonly IConfiguration _configuration;
+    private readonly JwtOptions _jwtSettings;
 
     /// <summary>
     /// Inicializa una nueva instancia de la clase <see cref="AuthService"/>.
     /// </summary>
-    /// <param name="configuration">Instancia de <see cref="IConfiguration"/> para acceder a la configuración de la aplicación.</param>
-    /// <exception cref="ArgumentNullException">Se lanza si <paramref name="configuration"/> es <see langword="null"/>.</exception>
-    public AuthService(IConfiguration configuration)
+    /// <param name="jwtSettings">Instancia de <see cref="IOptions{JwtOptions}"/> para acceder a la configuración de JWT.</param>
+    /// <exception cref="ArgumentNullException">Se lanza si <paramref name="jwtSettings"/> es <see langword="null"/>.</exception>
+    public AuthService(IOptions<JwtOptions> jwtSettings)
     {
-        _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+        _jwtSettings = jwtSettings.Value ?? throw new ArgumentNullException(nameof(jwtSettings));
     }
 
     /// <summary>
@@ -38,11 +39,6 @@ public class AuthService : IAuthService
     /// </exception>
     public JsonResult BuildToken(FirstName firstName, LastName lastName, Email email)
     {
-        // Obtener el origen del emisor y la audiencia desde la configuración
-        string issuer = _configuration["Auth:Jwt:Issuer"] ?? throw new ArgumentNullException(nameof(issuer), "Issuer cannot be null.");
-        string audience = _configuration["Auth:Jwt:Audience"] ?? throw new ArgumentNullException(nameof(audience), "Audience cannot be null.");
-        string secretKey = _configuration["Auth:Jwt:SecretKey"] ?? throw new ArgumentNullException(nameof(secretKey), "SecretKey cannot be null.");
-
         // Datos a incluir en el token
         var claims = new[]
         {
@@ -52,18 +48,18 @@ public class AuthService : IAuthService
         };
 
         // Generar la clave secreta para firmar el token
-        var key = Encoding.UTF8.GetBytes(secretKey);
+        var key = Encoding.UTF8.GetBytes(_jwtSettings.SecretKey);
         var symmetricSecurityKey = new SymmetricSecurityKey(key);
         var creds = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
 
         // Calcular el tiempo de validez del token
         DateTime now = DateTime.Now;
-        double minutes = Convert.ToDouble(_configuration["Auth:Jwt:TokenExpirationInMinutes"]);
+        double minutes = Convert.ToDouble(_jwtSettings.TokenExpirationInMinutes);
         DateTime expiredDateTime = now.AddMinutes(minutes);
 
         // Generar el token JWT
-        var token = new JwtSecurityToken(issuer,
-                                         audience,
+        var token = new JwtSecurityToken(_jwtSettings.Issuer,
+                                         _jwtSettings.Audience,
                                          claims,
                                          expires: expiredDateTime,
                                          signingCredentials: creds);

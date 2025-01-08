@@ -57,7 +57,18 @@ public abstract class ApiController : ControllerBase
     /// <typeparam name="T">El tipo de resultado esperado.</typeparam>
     /// <param name="result">El resultado que contiene el estado de éxito o fallo y los errores correspondientes.</param>
     /// <returns>Un <see cref="ActionResult{T}"/> que contiene la información detallada del problema.</returns>
-    public ActionResult<T> Problem<T>(Result result)
+    protected ActionResult<T> Problem<T>(Result result)
+    {
+        var problemDetails = ProblemDetailsFactory.FromResult(result);
+        return new ObjectResult(problemDetails);
+    }
+
+    /// <summary>
+    /// Crea una respuesta de problema para un resultado fallido sin tipo específico.
+    /// </summary>
+    /// <param name="result">El resultado que contiene el estado de éxito o fallo y los errores correspondientes.</param>
+    /// <returns>Un <see cref="ActionResult"/> que contiene la información detallada del problema.</returns>
+    protected ActionResult Problem(Result result)
     {
         var problemDetails = ProblemDetailsFactory.FromResult(result);
         return new ObjectResult(problemDetails);
@@ -69,7 +80,7 @@ public abstract class ApiController : ControllerBase
     /// <typeparam name="T">El tipo de resultado esperado.</typeparam>
     /// <param name="error">El error que contiene el código y mensaje del problema.</param>
     /// <returns>Un <see cref="ActionResult{T}"/> que contiene la información detallada del problema.</returns>
-    public ActionResult<T> Problem<T>(Error error)
+    protected ActionResult<T> Problem<T>(Error error)
     {
         var problemDetails = ProblemDetailsFactory.FromError(error);
         return new ObjectResult(problemDetails);

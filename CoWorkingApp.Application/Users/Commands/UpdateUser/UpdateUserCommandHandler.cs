@@ -2,7 +2,10 @@
 using CoWorkingApp.Core.Contracts.Repositories;
 using CoWorkingApp.Core.Contracts.UnitOfWork;
 using CoWorkingApp.Core.DomainErrors;
+using CoWorkingApp.Core.Extensions;
 using CoWorkingApp.Core.Shared;
+using CoWorkingApp.Core.ValueObjects.Composite;
+using CoWorkingApp.Core.ValueObjects.Single;
 
 namespace CoWorkingApp.Application.Users.Commands.UpdateUser;
 
@@ -34,15 +37,40 @@ public sealed class UpdateUserCommandHandler : ICommandHandler<UpdateUserCommand
     /// <returns>La respuesta del comando de actualización del usuario.</returns>
     public async Task<Result<UpdateUserCommandResponse>> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {
+        List<Error> errors = [];
+
+        var fullNameResult = FullName.Create(request.FirstName, request.LastName);
+        if (fullNameResult.IsFailure)
+        {
+            errors.AddRange(fullNameResult.Errors);
+        }
+
+        var emailResult = Email.Create(request.Email);
+        if (emailResult.IsFailure)
+        {
+            errors.AddRange(emailResult.Errors);
+        }
+
+        var passwordResult = Password.Create(request.Password);
+        if (emailResult.IsFailure)
+        {
+            errors.AddRange(emailResult.Errors);
+        }
+
+        if (!errors.IsEmpty())
+        {
+            return Result.Failure<UpdateUserCommandResponse>(errors);
+        }
+
         var user = await _userRepository.GetByIdAsync(request.UserId, cancellationToken);
         if (user is null)
         {
             return Result.Failure<UpdateUserCommandResponse>(Errors.User.NotFound(request.UserId));
         }
 
-        user.ChangeName(request.FirstName, request.LastName);
-        user.ChangeEmail(request.Email);
-        user.ChangePassword(request.Password);
+        user.ChangeName(fullNameResult.Value.FirstName, fullNameResult.Value.LastName);
+        user.ChangeEmail(emailResult.Value);
+        user.ChangePassword(passwordResult.Value);
 
         await _unitOfWork.CommitAsync(cancellationToken);
 

@@ -1,6 +1,6 @@
 ﻿using CoWorkingApp.Application.Users.Commands.CreateUser;
 
-namespace CoWorkingApp.Presentation.Users.CreateUser;
+namespace CoWorkingApp.Presentation.Users.V2.Models.CreateUser;
 
 /// <summary>
 /// Representa la respuesta para la creación de un usuario.

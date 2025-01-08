@@ -2,13 +2,16 @@
 using CoWorkingApp.Application.Contracts;
 using CoWorkingApp.Core.Extensions;
 
-namespace CoWorkingApp.Application.Users.Queries.GetUserByEmail;
+namespace CoWorkingApp.Application.Users.Commands.UpdateUserEmail;
 
 /// <summary>
-/// Consulta para obtener un usuario por su correo electrónico.
+/// Representa un comando para actualizar el correo electrónico de un usuario.
 /// </summary>
-/// <param name="Email">El correo electrónico del usuario.</param>
-public record struct GetUserByEmailQuery(string Email) : IQuery<GetUserByEmailQueryResponse>, IInputFilter
+/// <param name="UserId">El ID del usuario.</param>
+/// <param name="Email">El nuevo correo electrónico del usuario.</param>
+public record struct UpdateUserEmailCommand(
+    Guid UserId,
+    string Email) : ICommand, IInputFilter
 {
     /// <summary>
     /// Filtra y normaliza el correo electrónico del usuario.
