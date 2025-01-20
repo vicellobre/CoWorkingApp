@@ -36,5 +36,10 @@ public static partial class Errors
         /// Error que indica que las credenciales especificadas no son válidas.
         /// </summary>
         public static readonly Error InvalidCredentials = Error.Unauthorized("User.InvalidCredentials", "The specified credentials are invalid.");
+
+        /// <summary>
+        /// Error que indica que no se encontraron usuarios.
+        /// </summary>
+        public static readonly Error NoUsersFound = Error.NotFound("User.NoUsersFound", "No users were found.");
     }
 }

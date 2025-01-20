@@ -1,7 +1,9 @@
 ﻿using CoWorkingApp.Application.Abstracts.Messaging;
 using CoWorkingApp.Application.Users.DTO;
 using CoWorkingApp.Core.Contracts.Repositories;
+using CoWorkingApp.Core.DomainErrors;
 using CoWorkingApp.Core.Shared;
+using Microsoft.IdentityModel.Tokens;
 
 namespace CoWorkingApp.Application.Users.Queries.GetAllUsers;
 
@@ -35,7 +37,12 @@ public sealed class GetAllUsersQueryHandler : IQueryHandler<GetAllUsersQuery, Ge
     {
         var users = await _userRepository.GetAllAsNoTrackingAsync(cancellationToken);
 
-        var userDtos = users?.Select(user => (UserDto)user).ToList() ?? [];
+        if (users.IsNullOrEmpty())
+        {
+            return Result.Failure<GetAllUsersQueryResponse>(Errors.User.NoUsersFound);
+        }
+
+        var userDtos = users.Select(user => (UserDto)user).ToList();
 
         return new GetAllUsersQueryResponse(userDtos);
     }

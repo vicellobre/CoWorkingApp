@@ -2,8 +2,6 @@
 using CoWorkingApp.Application.Users.Commands.AuthenticateUser;
 using CoWorkingApp.Application.Users.Commands.CreateUser;
 using CoWorkingApp.Application.Users.Commands.DeleteUser;
-using CoWorkingApp.Application.Users.Commands.UpdateUserEmail;
-using CoWorkingApp.Application.Users.Commands.UpdateUserPassword;
 using CoWorkingApp.Application.Users.Queries.GetAllUsers;
 using CoWorkingApp.Application.Users.Queries.GetUserByEmail;
 using CoWorkingApp.Application.Users.Queries.GetUserById;
@@ -20,6 +18,7 @@ using CoWorkingApp.Presentation.Users.V2.Models.UpdateUserPassword;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
 
 namespace CoWorkingApp.Presentation.Users.V2.Controllers;
 
@@ -42,6 +41,8 @@ public class UserController : ApiController
     /// </summary>
     /// <returns>Una lista de todos los usuarios.</returns>
     [HttpGet()]
+    [EnableQuery]
+    [AllowAnonymous]
     public async Task<ActionResult<GetAllUsersResponse>> GetAll()
     {
         GetAllUsersQuery query = new();
@@ -52,7 +53,7 @@ public class UserController : ApiController
 
         return result.Match(
             onSuccess: _ => Ok(response),
-            onFailure: error => Problem<GetAllUsersResponse>(result));
+            onFailure: _ => Problem<GetAllUsersResponse>(result));
     }
 
     /// <summary>
@@ -60,7 +61,8 @@ public class UserController : ApiController
     /// </summary>
     /// <param name="id">El ID del usuario.</param>
     /// <returns>Los detalles del usuario.</returns>
-    [HttpGet("{id}")]
+    [HttpGet("{id:guid}")]
+    [ResponseCache(Duration = 60)]
     public async Task<ActionResult<GetUserResponse>> GetById(Guid id)
     {
         GetUserByIdQuery query = new(id);
@@ -71,7 +73,7 @@ public class UserController : ApiController
 
         return result.Match(
             onSuccess: _ => Ok(response),
-            onFailure: error => Problem<GetUserResponse>(result));
+            onFailure: _ => Problem<GetUserResponse>(result));
     }
 
     /// <summary>
@@ -80,6 +82,7 @@ public class UserController : ApiController
     /// <param name="email">El correo electrónico del usuario.</param>
     /// <returns>Los detalles del usuario.</returns>
     [HttpGet("email/{email}")]
+    [ResponseCache(Duration = 60)]
     public async Task<ActionResult<GetUserResponse>> GetByEmail(string email)
     {
         GetUserByEmailQuery query = new(email);
@@ -90,7 +93,7 @@ public class UserController : ApiController
 
         return result.Match(
             onSuccess: _ => Ok(response),
-            onFailure: error => Problem<GetUserResponse>(result));
+            onFailure: _ => Problem<GetUserResponse>(result));
     }
 
     /// <summary>
@@ -114,7 +117,7 @@ public class UserController : ApiController
                 var uri = Url.Action(nameof(GetById), new { id = response.UserId });
                 return Created(uri, response);
             },
-            onFailure: error => Problem<CreateUserResponse>(result));
+            onFailure: _ => Problem<CreateUserResponse>(result));
     }
 
     /// <summary>
@@ -134,7 +137,7 @@ public class UserController : ApiController
 
         return result.Match(
             onSuccess: _ => Ok(response),
-            onFailure: error => Problem<LoginUserResponse>(result));
+            onFailure: _ => Problem<LoginUserResponse>(result));
     }
 
     /// <summary>
@@ -143,7 +146,7 @@ public class UserController : ApiController
     /// <param name="id">El ID del usuario.</param>
     /// <param name="request">Los datos del usuario a actualizar.</param>
     /// <returns>El resultado de la operación de actualización.</returns>
-    [HttpPut("{id}")]
+    [HttpPut("{id:guid}")]
     public async Task<ActionResult> Update(Guid id, [FromBody] UpdateUserRequest request)
     {
         var command = request.ToUpdateUserCommand(id);
@@ -152,7 +155,7 @@ public class UserController : ApiController
 
         return result.Match(
             onSuccess: _ => NoContent(),
-            onFailure: error => Problem(result));
+            onFailure: _ => Problem(result));
     }
 
     /// <summary>
@@ -161,7 +164,7 @@ public class UserController : ApiController
     /// <param name="id">El ID del usuario.</param>
     /// <param name="request">Los nuevos nombres del usuario.</param>
     /// <returns>El resultado de la operación de actualización.</returns>
-    [HttpPut("{id}/name")]
+    [HttpPut("{id:guid}/name")]
     public async Task<ActionResult> UpdateName(Guid id, [FromBody] UpdateUserNameRequest request)
     {
         var command = request.ToUpdateUserNameCommand(id);
@@ -170,7 +173,7 @@ public class UserController : ApiController
 
         return result.Match(
             onSuccess: NoContent,
-            onFailure: error => Problem(result));
+            onFailure: _ => Problem(result));
     }
 
     /// <summary>
@@ -179,16 +182,16 @@ public class UserController : ApiController
     /// <param name="id">El ID del usuario.</param>
     /// <param name="request">La solicitud de actualización del correo electrónico del usuario.</param>
     /// <returns>El resultado de la operación de actualización.</returns>
-    [HttpPut("{id}/email")]
+    [HttpPut("{id:guid}/email")]
     public async Task<ActionResult> UpdateEmail(Guid id, [FromBody] UpdateUserEmailRequest request)
     {
-        UpdateUserEmailCommand command = request.ToUpdateUserEmailCommand(id);
+        var command = request.ToUpdateUserEmailCommand(id);
 
         var result = await _sender.Send(command);
 
         return result.Match(
             onSuccess: NoContent,
-            onFailure: error => Problem(result));
+            onFailure: _ => Problem(result));
     }
 
     /// <summary>
@@ -197,16 +200,16 @@ public class UserController : ApiController
     /// <param name="id">El ID del usuario.</param>
     /// <param name="request">La solicitud de actualización de la contraseña del usuario.</param>
     /// <returns>El resultado de la operación de actualización.</returns>
-    [HttpPut("{id}/password")]
+    [HttpPut("{id:guid}/password")]
     public async Task<ActionResult> UpdatePassword(Guid id, [FromBody] UpdateUserPasswordRequest request)
     {
-        UpdateUserPasswordCommand command = request.ToUpdateUserPasswordCommand(id);
+        var command = request.ToUpdateUserPasswordCommand(id);
 
         var result = await _sender.Send(command);
 
         return result.Match(
             onSuccess: NoContent,
-            onFailure: error => Problem(result));
+            onFailure: _ => Problem(result));
     }
 
     /// <summary>
@@ -214,7 +217,7 @@ public class UserController : ApiController
     /// </summary>
     /// <param name="id">El identificador del usuario a eliminar.</param>
     /// <returns>El resultado de la operación de eliminación.</returns>
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:guid}")]
     public async Task<ActionResult> Delete(Guid id)
     {
         DeleteUserCommand command = new(id);
@@ -223,6 +226,6 @@ public class UserController : ApiController
 
         return result.Match(
             onSuccess: _ => NoContent(),
-            onFailure: error => Problem(result));
+            onFailure: _ => Problem(result));
     }
 }

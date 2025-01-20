@@ -2,7 +2,6 @@
 using CoWorkingApp.Application.Contracts;
 using CoWorkingApp.Application.Users.Commands.AuthenticateUser;
 using CoWorkingApp.Core.Shared;
-using CoWorkingApp.Core.ValueObjects.Single;
 using CoWorkingApp.Presentation.Abstracts;
 using CoWorkingApp.Presentation.Users.V1.Models;
 using MediatR;

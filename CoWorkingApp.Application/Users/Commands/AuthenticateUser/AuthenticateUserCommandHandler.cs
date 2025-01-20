@@ -14,7 +14,7 @@ public sealed class AuthenticateUserCommandHandler : ICommandHandler<Authenticat
 {
     private readonly IUserRepository _userRepository;
     private readonly IAuthService _authService;
-
+    
     /// <summary>
     /// Inicializa una nueva instancia de la clase <see cref="AuthenticateUserCommandHandler"/>.
     /// </summary>
@@ -27,9 +27,10 @@ public sealed class AuthenticateUserCommandHandler : ICommandHandler<Authenticat
         _authService = authService ?? throw new ArgumentNullException(nameof(authService));
     }
 
+    //fix actualizar este summary?
     /// <summary>
-    /// Maneja la lógica para el comando <see cref="AuthenticateUserCommand"/>.
     /// </summary>
+    /// Maneja la lógica para el comando <see cref="AuthenticateUserCommand"/>.
     /// <param name="request">La solicitud del comando.</param>
     /// <param name="cancellationToken">Token de cancelación opcional.</param>
     /// <returns>La respuesta del comando de autenticación del usuario.</returns>
