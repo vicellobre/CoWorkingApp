@@ -7,12 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-	<PackageReference Include="Asp.Versioning.Mvc" Version="8.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-	<PackageReference Include="Microsoft.AspNetCore.OData" Version="9.0.0" />
-	<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.10" />
-	<PackageReference Include="Scrutor" Version="6.0.1" />
+	<PackageReference Include="Asp.Versioning.Mvc" />
+    <PackageReference Include="Microsoft.AspNetCore.Cors" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" />
+	<PackageReference Include="Microsoft.AspNetCore.OData" />
+	<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+	<PackageReference Include="Scrutor" />
   </ItemGroup>
 
   <ItemGroup>
