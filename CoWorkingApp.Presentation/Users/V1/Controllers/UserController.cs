@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Asp.Versioning;
 using CoWorkingApp.Presentation.Users.V1.Models;
+using Microsoft.Extensions.Logging;
 
 namespace CoWorkingApp.Presentation.Users.V1.Controllers;
 
@@ -27,7 +28,9 @@ public class UserController : ApiController
     /// Inicializa una nueva instancia de la clase <see cref="UserController"/>.
     /// </summary>
     /// <param name="sender">El <see cref="ISender"/> utilizado para enviar solicitudes.</param>
-    public UserController(ISender sender) : base(sender) { }
+    /// <param name="logger">El <see cref="ILogger{UserController}"/> utilizado para registrar eventos y mensajes de diagnóstico.</param>
+    /// <exception cref="ArgumentNullException">Se lanza si el <paramref name="sender"/> o el <paramref name="logger"/> es <see langword="null"/>.</exception>
+    public UserController(ISender sender, ILogger<UserController> logger) : base(sender, logger) { }
 
     /// <summary>
     /// Obtiene todos los usuarios.

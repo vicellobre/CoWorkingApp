@@ -19,7 +19,8 @@ public static partial class ServiceCollectionExtensions
         // Configuración de MediatR
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Application.AssemblyReference.Assembly));
 
-        // MediatR with FluentValidation
+        // MediatR with FluentValidation and logging
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestLoggingPipelineBehavior<,>));
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(InputFilterBehavior<,>));
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
 

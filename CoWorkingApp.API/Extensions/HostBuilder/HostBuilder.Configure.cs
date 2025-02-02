@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using Serilog;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CoWorkingApp.API.Extensions.HostBuilder;
 
@@ -15,7 +16,10 @@ public static partial class HostBuilderExtensions
     /// <returns>Un <see cref="IHostBuilder"/> configurado para usar <see cref="Startup"/>.</returns>
     public static IHostBuilder ConfigureHost(this IHostBuilder hostBuilder)
     {
-        return hostBuilder.ConfigureWebHostDefaults(webBuilder =>
-            webBuilder.UseStartup<Startup>());
+        return hostBuilder
+            .ConfigureWebHostDefaults(webBuilder =>
+                webBuilder.UseStartup<Startup>())
+            .UseSerilog((context, confifuration) =>
+                confifuration.ReadFrom.Configuration(context.Configuration));
     }
 }

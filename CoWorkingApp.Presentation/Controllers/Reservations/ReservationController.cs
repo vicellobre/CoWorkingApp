@@ -14,6 +14,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
+using Microsoft.Extensions.Logging;
 
 namespace CoWorkingApp.Presentation.Controllers.Reservations;
 
@@ -30,7 +31,9 @@ public class ReservationController : ApiController
     /// Inicializa una nueva instancia de la clase <see cref="ReservationController"/>.
     /// </summary>
     /// <param name="sender">El <see cref="ISender"/> utilizado para enviar solicitudes.</param>
-    public ReservationController(ISender sender) : base(sender) { }
+    /// <param name="logger">El <see cref="ILogger{ReservationController}"/> utilizado para registrar eventos y mensajes de diagnóstico.</param>
+    /// <exception cref="ArgumentNullException">Se lanza si el <paramref name="sender"/> o el <paramref name="logger"/> es <see langword="null"/>.</exception>
+    public ReservationController(ISender sender, ILogger<ReservationController> logger) : base(sender, logger) { }
 
     /// <summary>
     /// Obtiene todas las reservas.
