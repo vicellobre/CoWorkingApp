@@ -43,6 +43,7 @@ public class Startup
             .AddSwaggerService()                           // Configura Swagger
             .AddODataServices()                            // Configura OData
             .AddControllersService()                       // Configura los controladores
+            .AddLogging()                                  // Asegúrate de agregar esto
             .AddApiVersioningService(_configuration)
             .AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme); // Agrega el esquema de autenticación OpenID Connect
     }
@@ -54,17 +55,18 @@ public class Startup
     /// <param name="env">El entorno de alojamiento web.</param>
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-
         app
-            .UseExceptionApp(env)        // Configura el manejo de excepciones
-            .UseStatusCodePages()        // Configura las páginas de código de estado
-            .UseSwaggerApp()             // Habilita Swagger
-            .UseHttpsRedirection()       // Redirige HTTP a HTTPS
-            .UseRouting()                // Configura el enrutamiento
-            .UseResponseCaching()        // Habilita la caché de respuestas
-            .UseCors("MyPolicy")         // Habilita CORS con la política "MyPolicy"
-            .UseAuthentication()         // Habilita la autenticación
-            .UseAuthorization()          // Habilita la autorización
-            .UseEndpointsApp();          // Configura los endpoints
+            .UseRequestContextLogging()    // Agrega el middleware de logging del contexto de la solicitud al inicio
+            .UseRequestLog()               // Configura el log
+            .UseExceptionApp(env)          // Configura el manejo de excepciones
+            .UseStatusCodePages()          // Configura las páginas de código de estado
+            .UseSwaggerApp()               // Habilita Swagger
+            .UseHttpsRedirection()         // Redirige HTTP a HTTPS
+            .UseRouting()                  // Configura el enrutamiento
+            .UseResponseCaching()          // Habilita la caché de respuestas
+            .UseCors("MyPolicy")           // Habilita CORS con la política "MyPolicy"
+            .UseAuthentication()           // Habilita la autenticación
+            .UseAuthorization()            // Habilita la autorización
+            .UseEndpointsApp();            // Configura los endpoints
     }
 }

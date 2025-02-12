@@ -12,6 +12,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
+using Microsoft.Extensions.Logging;
 
 namespace CoWorkingApp.Presentation.Controllers.Seats;
 
@@ -28,7 +29,9 @@ public class SeatController : ApiController
     /// Inicializa una nueva instancia de la clase <see cref="SeatController"/>.
     /// </summary>
     /// <param name="sender">El <see cref="ISender"/> utilizado para enviar solicitudes.</param>
-    public SeatController(ISender sender) : base(sender) { }
+    /// <param name="logger">El <see cref="ILogger{SeatController}"/> utilizado para registrar eventos y mensajes de diagnóstico.</param>
+    /// <exception cref="ArgumentNullException">Se lanza si el <paramref name="sender"/> o el <paramref name="logger"/> es <see langword="null"/>.</exception>
+    public SeatController(ISender sender, ILogger<SeatController> logger) : base(sender, logger) { }
 
     /// <summary>
     /// Obtiene todos los asientos.

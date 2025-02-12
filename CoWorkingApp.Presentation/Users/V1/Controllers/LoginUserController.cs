@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace CoWorkingApp.Presentation.Users.V1.Controllers;
 
@@ -21,14 +22,19 @@ namespace CoWorkingApp.Presentation.Users.V1.Controllers;
 [Route("api/v{v:apiVersion}/login")] // Ruta del controlador, en plural por convención RESTful
 public class LoginUserController : ApiController
 {
+    /// <summary>
+    /// Servicio de autenticación utilizado para manejar la lógica de autenticación de usuarios.
+    /// </summary>
     private readonly IAuthService _authService;
 
     /// <summary>
     /// Constructor de la clase LoginUserController.
     /// </summary>
-    /// <param name="service">Instancia del servicio de usuarios.</param>
-    /// <param name="configuration">Instancia de IConfiguration para acceder a la configuración de la aplicación.</param>
-    public LoginUserController(ISender sender, IAuthService? authService) : base(sender)
+    /// <param name="sender">El <see cref="ISender"/> utilizado para enviar solicitudes.</param>
+    /// <param name="logger">El <see cref="ILogger{LoginUserController}"/> utilizado para registrar eventos y mensajes de diagnóstico.</param>
+    /// <param name="authService">Instancia del servicio de autenticación.</param>
+    /// <exception cref="ArgumentNullException">Se lanza si el <paramref name="sender"/>, el <paramref name="logger"/> o el <paramref name="authService"/> es <see langword="null"/>.</exception>
+    public LoginUserController(ISender sender, ILogger<LoginUserController> logger, IAuthService? authService) : base(sender, logger)
     {
         _authService = authService ?? throw new ArgumentNullException(nameof(authService));
     }

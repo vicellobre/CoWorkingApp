@@ -3,6 +3,7 @@ using CoWorkingApp.Presentation.Errors.Extensions;
 using CoWorkingApp.Presentation.Problems;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace CoWorkingApp.Presentation.Abstracts;
 
@@ -18,11 +19,21 @@ public abstract class ApiController : ControllerBase
     protected readonly ISender _sender;
 
     /// <summary>
+    /// Logger para registrar eventos y mensajes de diagnóstico.
+    /// </summary>
+    protected readonly ILogger _logger;
+
+    /// <summary>
     /// Inicializa una nueva instancia de la clase <see cref="ApiController"/>.
     /// </summary>
     /// <param name="sender">El <see cref="ISender"/> utilizado para enviar solicitudes.</param>
-    /// <exception cref="ArgumentNullException">Se lanza si el <paramref name="sender"/> es <see langword="null"/>.</exception>
-    protected ApiController(ISender sender) : base() => _sender = sender ?? throw new ArgumentNullException(nameof(sender));
+    /// <param name="logger">El <see cref="ILogger"/> utilizado para registrar eventos y mensajes de diagnóstico.</param>
+    /// <exception cref="ArgumentNullException">Se lanza si el <paramref name="sender"/> o el <paramref name="logger"/> es <see langword="null"/>.</exception>
+    protected ApiController(ISender sender, ILogger logger) : base()
+    {
+        _sender = sender ?? throw new ArgumentNullException(nameof(sender));
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    }
 
     /// <summary>
     /// Maneja un error y devuelve una respuesta HTTP adecuada basada en el tipo de error.

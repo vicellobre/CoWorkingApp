@@ -19,11 +19,12 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
+using Microsoft.Extensions.Logging;
 
 namespace CoWorkingApp.Presentation.Users.V2.Controllers;
 
 /// <summary>
-/// Controlador para manejar las operaciones relacionadas con usuarios en la versión 1 de la API.
+/// Controlador para manejar las operaciones relacionadas con usuarios en la versión 2 de la API.
 /// </summary>
 [ApiController]
 [ApiVersion(2)]
@@ -34,7 +35,9 @@ public class UserController : ApiController
     /// Inicializa una nueva instancia de la clase <see cref="UserController"/>.
     /// </summary>
     /// <param name="sender">El <see cref="ISender"/> utilizado para enviar solicitudes.</param>
-    public UserController(ISender sender) : base(sender) { }
+    /// <param name="logger">El <see cref="ILogger{UserController}"/> utilizado para registrar eventos y mensajes de diagnóstico.</param>
+    /// <exception cref="ArgumentNullException">Se lanza si el <paramref name="sender"/> o el <paramref name="logger"/> es <see langword="null"/>.</exception>
+    public UserController(ISender sender, ILogger<UserController> logger) : base(sender, logger) { }
 
     /// <summary>
     /// Obtiene todos los usuarios.
@@ -45,6 +48,8 @@ public class UserController : ApiController
     [AllowAnonymous]
     public async Task<ActionResult<GetAllUsersResponse>> GetAll()
     {
+        _logger.LogInformation("Starting request to get all users.");
+
         GetAllUsersQuery query = new();
 
         var result = await _sender.Send(query);
@@ -52,8 +57,16 @@ public class UserController : ApiController
         var response = (GetAllUsersResponse)result.Value;
 
         return result.Match(
-            onSuccess: _ => Ok(response),
-            onFailure: _ => Problem<GetAllUsersResponse>(result));
+            onSuccess: _ =>
+            {
+                _logger.LogInformation("Request to get all users completed successfully. Response: {@Response}", response);
+                return Ok(response);
+            },
+            onFailure: _ =>
+            {
+                _logger.LogWarning("Request to get all users failed. Error: {@Error}", result);
+                return Problem<GetAllUsersResponse>(result);
+            });
     }
 
     /// <summary>
@@ -65,6 +78,8 @@ public class UserController : ApiController
     [ResponseCache(Duration = 60)]
     public async Task<ActionResult<GetUserResponse>> GetById(Guid id)
     {
+        _logger.LogInformation("Starting request to get user with ID {UserId}.", id);
+
         GetUserByIdQuery query = new(id);
 
         var result = await _sender.Send(query);
@@ -72,8 +87,16 @@ public class UserController : ApiController
         var response = (GetUserResponse)result.Value;
 
         return result.Match(
-            onSuccess: _ => Ok(response),
-            onFailure: _ => Problem<GetUserResponse>(result));
+            onSuccess: _ =>
+            {
+                _logger.LogInformation("Request to get user with ID {UserId} completed successfully.", id);
+                return Ok(response);
+            },
+            onFailure: _ =>
+            {
+                _logger.LogWarning("Request to get user with ID {UserId} failed.", id);
+                return Problem<GetUserResponse>(result);
+            });
     }
 
     /// <summary>
@@ -85,6 +108,8 @@ public class UserController : ApiController
     [ResponseCache(Duration = 60)]
     public async Task<ActionResult<GetUserResponse>> GetByEmail(string email)
     {
+        _logger.LogInformation("Starting request to get user with email {UserEmail}.", email);
+
         GetUserByEmailQuery query = new(email);
 
         var result = await _sender.Send(query);
@@ -92,8 +117,16 @@ public class UserController : ApiController
         var response = (GetUserResponse)result.Value;
 
         return result.Match(
-            onSuccess: _ => Ok(response),
-            onFailure: _ => Problem<GetUserResponse>(result));
+            onSuccess: _ =>
+            {
+                _logger.LogInformation("Request to get user with email {UserEmail} completed successfully.", email);
+                return Ok(response);
+            },
+            onFailure: _ =>
+            {
+                _logger.LogWarning("Request to get user with email {UserEmail} failed.", email);
+                return Problem<GetUserResponse>(result);
+            });
     }
 
     /// <summary>
@@ -105,6 +138,8 @@ public class UserController : ApiController
     [AllowAnonymous]
     public async Task<ActionResult<CreateUserResponse>> Create([FromBody] CreateUserRequest request)
     {
+        _logger.LogInformation("Starting request to create a new user.");
+
         var command = (CreateUserCommand)request;
 
         var result = await _sender.Send(command);
@@ -114,10 +149,15 @@ public class UserController : ApiController
         return result.Match(
             onSuccess: _ =>
             {
+                _logger.LogInformation("Request to create a new user completed successfully. UserId: {UserId}", response.UserId);
                 var uri = Url.Action(nameof(GetById), new { id = response.UserId });
                 return Created(uri, response);
             },
-            onFailure: _ => Problem<CreateUserResponse>(result));
+            onFailure: _ =>
+            {
+                _logger.LogWarning("Request to create a new user failed.");
+                return Problem<CreateUserResponse>(result);
+            });
     }
 
     /// <summary>
@@ -129,6 +169,8 @@ public class UserController : ApiController
     [AllowAnonymous]
     public async Task<ActionResult<LoginUserResponse>> Login([FromBody] LoginUserRequest request)
     {
+        _logger.LogInformation("Starting login request for user with email {UserEmail}.", request.Email);
+
         var command = (AuthenticateUserCommand)request;
 
         var result = await _sender.Send(command);
@@ -136,8 +178,16 @@ public class UserController : ApiController
         var response = (LoginUserResponse)result.Value;
 
         return result.Match(
-            onSuccess: _ => Ok(response),
-            onFailure: _ => Problem<LoginUserResponse>(result));
+            onSuccess: _ =>
+            {
+                _logger.LogInformation("Login request for user with email {UserEmail} completed successfully.", request.Email);
+                return Ok(response);
+            },
+            onFailure: _ =>
+            {
+                _logger.LogWarning("Login request for user with email {UserEmail} failed.", request.Email);
+                return Problem<LoginUserResponse>(result);
+            });
     }
 
     /// <summary>
@@ -149,13 +199,23 @@ public class UserController : ApiController
     [HttpPut("{id:guid}")]
     public async Task<ActionResult> Update(Guid id, [FromBody] UpdateUserRequest request)
     {
+        _logger.LogInformation("Starting request to update user with ID {UserId}.", id);
+
         var command = request.ToUpdateUserCommand(id);
 
         var result = await _sender.Send(command);
 
         return result.Match(
-            onSuccess: _ => NoContent(),
-            onFailure: _ => Problem(result));
+            onSuccess: _ =>
+            {
+                _logger.LogInformation("Request to update user with ID {UserId} completed successfully.", id);
+                return NoContent();
+            },
+            onFailure: _ =>
+            {
+                _logger.LogWarning("Request to update user with ID {UserId} failed.", id);
+                return Problem(result);
+            });
     }
 
     /// <summary>
@@ -167,13 +227,23 @@ public class UserController : ApiController
     [HttpPut("{id:guid}/name")]
     public async Task<ActionResult> UpdateName(Guid id, [FromBody] UpdateUserNameRequest request)
     {
+        _logger.LogInformation("Starting request to update name of user with ID {UserId}.", id);
+
         var command = request.ToUpdateUserNameCommand(id);
 
         var result = await _sender.Send(command);
 
         return result.Match(
-            onSuccess: NoContent,
-            onFailure: _ => Problem(result));
+            onSuccess: () =>
+            {
+                _logger.LogInformation("Request to update name of user with ID {UserId} completed successfully.", id);
+                return NoContent();
+            },
+            onFailure: _ =>
+            {
+                _logger.LogWarning("Request to update name of user with ID {UserId} failed.", id);
+                return Problem(result);
+            });
     }
 
     /// <summary>
@@ -185,13 +255,23 @@ public class UserController : ApiController
     [HttpPut("{id:guid}/email")]
     public async Task<ActionResult> UpdateEmail(Guid id, [FromBody] UpdateUserEmailRequest request)
     {
+        _logger.LogInformation("Starting request to update email of user with ID {UserId}.", id);
+
         var command = request.ToUpdateUserEmailCommand(id);
 
         var result = await _sender.Send(command);
 
         return result.Match(
-            onSuccess: NoContent,
-            onFailure: _ => Problem(result));
+            onSuccess: () =>
+            {
+                _logger.LogInformation("Request to update email of user with ID {UserId} completed successfully.", id);
+                return NoContent();
+            },
+            onFailure: _ =>
+            {
+                _logger.LogWarning("Request to update email of user with ID {UserId} failed.", id);
+                return Problem(result);
+            });
     }
 
     /// <summary>
@@ -203,29 +283,49 @@ public class UserController : ApiController
     [HttpPut("{id:guid}/password")]
     public async Task<ActionResult> UpdatePassword(Guid id, [FromBody] UpdateUserPasswordRequest request)
     {
+        _logger.LogInformation("Starting request to update password of user with ID {UserId}.", id);
+
         var command = request.ToUpdateUserPasswordCommand(id);
 
         var result = await _sender.Send(command);
 
         return result.Match(
-            onSuccess: NoContent,
-            onFailure: _ => Problem(result));
+            onSuccess: () =>
+            {
+                _logger.LogInformation("Request to update password of user with ID {UserId} completed successfully.", id);
+                return NoContent();
+            },
+            onFailure: _ =>
+            {
+                _logger.LogWarning("Request to update password of user with ID {UserId} failed.", id);
+                return Problem(result);
+            });
     }
 
     /// <summary>
-    /// Elimina un usuario con el identificador especificado.
+    /// Elimina un usuario existente.
     /// </summary>
-    /// <param name="id">El identificador del usuario a eliminar.</param>
+    /// <param name="id">El ID del usuario.</param>
     /// <returns>El resultado de la operación de eliminación.</returns>
     [HttpDelete("{id:guid}")]
     public async Task<ActionResult> Delete(Guid id)
     {
-        DeleteUserCommand command = new(id);
+        _logger.LogInformation("Starting request to delete user with ID {UserId}.", id);
+
+        var command = new DeleteUserCommand(id);
 
         var result = await _sender.Send(command);
 
         return result.Match(
-            onSuccess: _ => NoContent(),
-            onFailure: _ => Problem(result));
+            onSuccess: _ =>
+            {
+                _logger.LogInformation("Request to delete user with ID {UserId} completed successfully.", id);
+                return NoContent();
+            },
+            onFailure: _ =>
+            {
+                _logger.LogWarning("Request to delete user with ID {UserId} failed.", id);
+                return Problem(result);
+            });
     }
 }
