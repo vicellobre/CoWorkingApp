@@ -10,16 +10,19 @@ namespace CoWorkingApp.Application.Users.Queries.GetUserByEmail;
 /// <param name="FirstName">El nombre del usuario.</param>
 /// <param name="LastName">El apellido del usuario.</param>
 /// <param name="Email">El correo electrónico del usuario.</param>
-public readonly record struct GetUserByEmailResponse(
+public readonly record struct GetUserByEmailQueryResponse(
     Guid UserId,
     string FirstName,
     string LastName,
     string Email) : IResponse
 {
     /// <summary>
-    /// Convierte explícitamente un objeto <see cref="User"/> a <see cref="GetUserByEmailResponse"/>.
+    /// Convierte explícitamente un objeto <see cref="User"/> a <see cref="GetUserByEmailQueryResponse"/>.
     /// </summary>
     /// <param name="user">El usuario a convertir.</param>
-    public static explicit operator GetUserByEmailResponse(User user) =>
-        new(user.Id, user.Name.FirstName, user.Name.LastName, user.Credentials.Email);
+    public static explicit operator GetUserByEmailQueryResponse(User user) =>
+        new(user.Id,
+            user.Name.FirstName,
+            user.Name.LastName,
+            user.Credentials.Email);
 }

@@ -1,4 +1,4 @@
-﻿using CoWorkingApp.Presentation.DTOs.Users;
+﻿using CoWorkingApp.Presentation.Users.V1.Models;
 
 namespace CoWorkingApp.Tests.Application.DTOs
 {

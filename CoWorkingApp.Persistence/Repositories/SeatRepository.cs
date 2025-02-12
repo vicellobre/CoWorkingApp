@@ -3,6 +3,7 @@ using CoWorkingApp.Core.Entities;
 using CoWorkingApp.Core.ValueObjects.Composite;
 using CoWorkingApp.Core.ValueObjects.Single;
 using CoWorkingApp.Persistence.Abstracts;
+using CoWorkingApp.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 
 namespace CoWorkingApp.Persistence.Repositories;
@@ -16,7 +17,7 @@ public class SeatRepository : RepositoryGeneric<Seat>, ISeatRepository
     /// Inicializa una nueva instancia de la clase <see cref="SeatRepository"/> utilizando el contexto de datos especificado.
     /// </summary>
     /// <param name="context">El contexto de datos de Entity Framework.</param>
-    public SeatRepository(DbContext context) : base(context) { }
+    public SeatRepository(CoWorkingContext context) : base(context) { }
 
     /// <summary>
     /// Obtiene las entidades <see cref="Seat"/> disponibles (no bloqueadas) de manera asincrónica sin realizar seguimiento de cambios.

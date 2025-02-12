@@ -9,7 +9,7 @@ namespace CoWorkingApp.Application.Users.Queries.GetUserByEmail;
 /// <summary>
 /// Maneja la consulta para obtener un usuario por su correo electrónico.
 /// </summary>
-public sealed class GetUserByEmailQueryHandler : IQueryHandler<GetUserByEmailQuery, GetUserByEmailResponse>
+public sealed class GetUserByEmailQueryHandler : IQueryHandler<GetUserByEmailQuery, GetUserByEmailQueryResponse>
 {
     private readonly IUserRepository _userRepository;
 
@@ -29,16 +29,16 @@ public sealed class GetUserByEmailQueryHandler : IQueryHandler<GetUserByEmailQue
     /// <param name="request">La solicitud de la consulta.</param>
     /// <param name="cancellationToken">Token de cancelación opcional.</param>
     /// <returns>La respuesta de la consulta para obtener un usuario por su correo electrónico.</returns>
-    public async Task<Result<GetUserByEmailResponse>> Handle(GetUserByEmailQuery request, CancellationToken cancellationToken)
+    public async Task<Result<GetUserByEmailQueryResponse>> Handle(GetUserByEmailQuery request, CancellationToken cancellationToken)
     {
         var emailResult = Email.Create(request.Email);
 
         var user = await _userRepository.GetByEmailAsync(emailResult.Value, cancellationToken);
         if (user is null)
         {
-            return Result.Failure<GetUserByEmailResponse>(Errors.User.EmailNotExist(request.Email));
+            return Result.Failure<GetUserByEmailQueryResponse>(Errors.User.EmailNotExist(request.Email));
         }
 
-        return (GetUserByEmailResponse)user;
+        return (GetUserByEmailQueryResponse)user;
     }
 }

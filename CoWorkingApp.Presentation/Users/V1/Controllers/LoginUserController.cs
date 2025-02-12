@@ -2,16 +2,15 @@
 using CoWorkingApp.Application.Contracts;
 using CoWorkingApp.Application.Users.Commands.AuthenticateUser;
 using CoWorkingApp.Core.Shared;
-using CoWorkingApp.Core.ValueObjects.Single;
 using CoWorkingApp.Presentation.Abstracts;
-using CoWorkingApp.Presentation.DTOs.Users;
+using CoWorkingApp.Presentation.Users.V1.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CoWorkingApp.Presentation.Controllers.Users.Version1;
+namespace CoWorkingApp.Presentation.Users.V1.Controllers;
 
 /// <summary>
 /// Controlador para operaciones relacionadas con la autenticación de usuarios.
@@ -49,22 +48,17 @@ public class LoginUserController : ApiController
                 request.Email!,
                 request.Password!);
 
-            var response = await _sender.Send(command);
+            var result = await _sender.Send(command);
 
-            if (response.IsFailure)
+            if (result.IsFailure)
             {
-                return Unauthorized(response.Errors);
+                return Unauthorized(result.Errors);
             }
 
-            var userResponse = (UserResponse)response.Value;
+            var response = result.Value;
+            var userResponse = (UserResponse)response;
 
-            var token = _authService.BuildToken(
-                FirstName.Create(userResponse.FirstName).Value,
-                LastName.Create(userResponse.LastName).Value,
-                Email.Create(userResponse.Email).Value
-            );
-
-            return Ok(new { Response = userResponse, Token = token });
+            return Ok(new { Response = userResponse, response.Token });
         }
         catch (Exception ex)
         {

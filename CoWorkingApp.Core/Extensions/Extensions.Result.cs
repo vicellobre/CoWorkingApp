@@ -64,4 +64,15 @@ public static class ResultExtensions
     /// <returns>El valor retornado por la función <paramref name="onSuccess"/> si la operación fue exitosa, o por la función <paramref name="onFailure"/> si la operación falló.</returns>
     public static TResult Match<TValue, TResult>(this Result<TValue> result, Func<TValue, TResult> onSuccess, Func<Error, TResult> onFailure) =>
         result.IsSuccess ? onSuccess(result.Value) : onFailure(result.FirstError);
+
+    /// <summary>
+    /// Ejecuta una de las funciones proporcionadas dependiendo del estado del <see cref="Result"/>.
+    /// </summary>
+    /// <param name="result">El resultado de la operación que se va a evaluar.</param>
+    /// <param name="onSuccess">Función a ejecutar si el resultado es exitoso.</param>
+    /// <param name="onFailure">Función a ejecutar si el resultado es fallido, que recibe el primer error como parámetro.</param>
+    /// <returns>El valor retornado por la función <paramref name="onSuccess"/> si la operación fue exitosa, o por la función <paramref name="onFailure"/> si la operación falló.</returns>
+    public static TResult Match<TResult>(this Result result, Func<TResult> onSuccess, Func<Error, TResult> onFailure) =>
+        result.IsSuccess ? onSuccess() : onFailure(result.FirstError);
+
 }

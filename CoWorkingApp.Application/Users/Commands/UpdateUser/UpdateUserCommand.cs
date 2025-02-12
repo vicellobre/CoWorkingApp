@@ -39,5 +39,8 @@ public record struct UpdateUserCommand(
             .GetValueOrDefault(string.Empty)
             .Trim()
             .ToLowerInvariant();
+
+        Password = Password
+            .GetValueOrDefault(string.Empty);
     }
 }

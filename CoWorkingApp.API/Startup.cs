@@ -29,7 +29,9 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services
-            .AddConfigureOptionsService()
+            .AddMemoryCache()                              // Configura la caché en memoria
+            .AddResponseCaching()                          // Configura la caché de respuestas
+            .AddConfigureOptionsService()                  //
             .AddDatabaseService(_configuration)            // Configura la base de datos
             .AddDependencyService()                        // Configura las dependencias necesarias
             .AddMediatWithValidationService()              // Configura MediatR y FluentValidation

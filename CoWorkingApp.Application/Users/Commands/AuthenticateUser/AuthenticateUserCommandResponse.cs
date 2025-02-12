@@ -1,5 +1,6 @@
 ﻿using CoWorkingApp.Core.Entities;
 using CoWorkingApp.Core.Shared;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CoWorkingApp.Application.Users.Commands.AuthenticateUser;
 
@@ -14,16 +15,18 @@ public readonly record struct AuthenticateUserCommandResponse(
     Guid UserId,
     string FirstName,
     string LastName,
-    string Email) : IResponse
+    string Email,
+    JsonResult Token) : IResponse
 {
     /// <summary>
     /// Convierte explícitamente un objeto <see cref="User"/> a <see cref="AuthenticateUserCommandResponse"/>.
     /// </summary>
     /// <param name="user">El usuario a convertir.</param>
-    public static explicit operator AuthenticateUserCommandResponse(User user) =>
+    public static AuthenticateUserCommandResponse CreateFromUser(User user, JsonResult token) =>
         new(
             user.Id,
             user.Name.FirstName,
             user.Name.LastName,
-            user.Credentials.Email);
+            user.Credentials.Email,
+            token);
 }

@@ -3,6 +3,7 @@ using CoWorkingApp.Core.Entities;
 using CoWorkingApp.Core.ValueObjects.Composite;
 using CoWorkingApp.Core.ValueObjects.Single;
 using CoWorkingApp.Persistence.Abstracts;
+using CoWorkingApp.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 
 namespace CoWorkingApp.Persistence.Repositories;
@@ -16,7 +17,7 @@ public class ReservationRepository : RepositoryGeneric<Reservation>, IReservatio
     /// Inicializa una nueva instancia de la clase <see cref="ReservationRepository"/> utilizando el contexto de datos especificado.
     /// </summary>
     /// <param name="context">El contexto de datos de Entity Framework.</param>
-    public ReservationRepository(DbContext context) : base(context) { }
+    public ReservationRepository(CoWorkingContext context) : base(context) { }
 
     /// <summary>
     /// Obtiene todas las reservaciones de la entidad <see cref="Reservation"/> de manera asincrónica, incluyendo información detallada del usuario y del asiento asociados a cada reserva.

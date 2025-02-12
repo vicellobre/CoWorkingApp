@@ -2,6 +2,7 @@
 using CoWorkingApp.Core.Entities;
 using CoWorkingApp.Core.ValueObjects.Single;
 using CoWorkingApp.Persistence.Abstracts;
+using CoWorkingApp.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 
 namespace CoWorkingApp.Persistence.Repositories;
@@ -15,7 +16,7 @@ public class UserRepository : RepositoryGeneric<User>, IUserRepository
     /// Inicializa una nueva instancia de la clase <see cref="UserRepository"/> utilizando el contexto de datos especificado.
     /// </summary>
     /// <param name="context">El contexto de datos de Entity Framework.</param>
-    public UserRepository(DbContext context) : base(context) { }
+    public UserRepository(CoWorkingContext context) : base(context) { }
 
     /// <summary>
     /// Obtiene una entidad <see cref="User"/> por su <see cref="Email"/> de manera asincrónica.
