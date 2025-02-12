@@ -13,30 +13,30 @@
   </PropertyGroup>
 
   <ItemGroup>
-	<PackageReference Include="Asp.Versioning.Mvc" Version="8.1.0" />
-	<PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
-	<PackageReference Include="Azure.Identity" Version="1.13.0" />
-	<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0" />
-	<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjectionFixed" Version="5.1.2" />
-	<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.10" />
-	<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.6" />
-	<PackageReference Include="Microsoft.AspNetCore.DataProtection.Extensions" Version="8.0.10" />
-	<PackageReference Include="Microsoft.AspNetCore.OData" Version="9.0.0" />
-	<PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
-	<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
-	<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.10">
+	<PackageReference Include="Asp.Versioning.Mvc" />
+	<PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" />
+	<PackageReference Include="Azure.Identity" />
+	<PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
+	<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjectionFixed" />
+	<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+	<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" />
+	<PackageReference Include="Microsoft.AspNetCore.DataProtection.Extensions" />
+	<PackageReference Include="Microsoft.AspNetCore.OData" />
+	<PackageReference Include="Microsoft.Data.SqlClient" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.Design" >
 		<PrivateAssets>all</PrivateAssets>
 		<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	</PackageReference>
-	<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.10" />
-	<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.10">
+	<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" >
 		<PrivateAssets>all</PrivateAssets>
 	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	</PackageReference>
-	<PackageReference Include="Microsoft.Identity.Web" Version="2.19.1" />
-	<PackageReference Include="Microsoft.Identity.Web.UI" Version="2.19.1" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.9.0" />
+	<PackageReference Include="Microsoft.Identity.Web" />
+	<PackageReference Include="Microsoft.Identity.Web.UI" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" />
+    <PackageReference Include="Swashbuckle.AspNetCore" />
   </ItemGroup>
 
   <ItemGroup>
