@@ -1,4 +1,5 @@
 ﻿using CoWorkingApp.Core.Enumerations;
+using CoWorkingApp.Core.Extensions;
 
 namespace CoWorkingApp.Core.Shared;
 
@@ -63,6 +64,23 @@ public readonly record struct Error
     }
 
     /// <summary>
+    /// Inicializa una nueva instancia de la estructura <see cref="Error"/> con una pila de errores.
+    /// </summary>
+    /// <param name="stack"></param>
+    private Error(IReadOnlyCollection<Error>? stack)
+    {
+        if (stack.IsNullOrEmptyReadOnly())
+        {
+            throw new ArgumentNullException(nameof(stack), "Error stack cannot be null or empty.");
+        }
+
+        Code = stack?.First().Code ?? string.Empty;
+        Message = stack?.First().Message ?? string.Empty;
+        Type = stack?.First().Type ?? ErrorType.None;
+        StackTrace = stack;
+    }
+
+    /// <summary>
     /// Crea una nueva instancia de la estructura <see cref="Error"/> con el código, mensaje y tipo especificados.
     /// </summary>
     /// <param name="code">El código del error.</param>
@@ -78,6 +96,13 @@ public readonly record struct Error
     /// <param name="stack">La pila de errores asociados opcional.</param>
     /// <returns>Una nueva instancia de la estructura <see cref="Error"/> con la pila de errores.</returns>
     public static Error WithStack(Error error, IReadOnlyCollection<Error>? stack) => new(error.Code, error.Message, error.Type, stack);
+
+    /// <summary>
+    /// Crea una nueva instancia de la estructura <see cref="Error"/> con una pila de errores.
+    /// </summary>
+    /// <param name="errors">Coleccón de errores.</param>
+    /// <returns>Una nueva instancia de la estructura <see cref="Error"/> con la pila de errores.</returns>
+    public static Error WithStack(IReadOnlyCollection<Error>? errors) => new(errors);
 
     /// <summary>
     /// Crea una nueva instancia de la estructura <see cref="Error"/> de tipo <see cref="ErrorType.Failure"/> con el código y mensaje especificados.

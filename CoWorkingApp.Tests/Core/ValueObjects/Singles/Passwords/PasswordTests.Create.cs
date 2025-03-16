@@ -1,4 +1,4 @@
-﻿using CoWorkingApp.Core.DomainErrors;
+﻿using CoWorkingApp.Core.Errors;
 using CoWorkingApp.Core.ValueObjects.Single;
 
 namespace CoWorkingApp.Tests.Core.ValueObjects.Singles.Passwords;
@@ -12,7 +12,7 @@ public class PasswordTests
         {
             // Arrange
             string? value = null;
-            var expectedError = Errors.Password.IsNullOrEmpty;
+            var expectedError = ERRORS.Password.IsNullOrEmpty;
 
             // Act
             var result = Password.Create(value);
@@ -27,7 +27,7 @@ public class PasswordTests
         {
             // Arrange
             var value = string.Empty;
-            var expectedError = Errors.Password.IsNullOrEmpty;
+            var expectedError = ERRORS.Password.IsNullOrEmpty;
 
             // Act
             var result = Password.Create(value);
@@ -43,7 +43,7 @@ public class PasswordTests
         {
             // Arrange
             var value = "aA1!";
-            var expectedError = Errors.Password.TooShort(Password.MinLength);
+            var expectedError = ERRORS.Password.TooShort(Password.MinLength);
 
             // Act
             var result = Password.Create(value);
@@ -58,7 +58,7 @@ public class PasswordTests
         {
             // Arrange
             var longPassword = new string('a', 101) + "A1!";
-            var expectedError = Errors.Password.TooLong(Password.MaxLength);
+            var expectedError = ERRORS.Password.TooLong(Password.MaxLength);
 
             // Act
             var result = Password.Create(longPassword);
@@ -73,7 +73,7 @@ public class PasswordTests
         {
             // Arrange
             var value = "Password123";
-            var expectedError = Errors.Password.InvalidFormat;
+            var expectedError = ERRORS.Password.InvalidFormat;
 
             // Act
             var result = Password.Create(value);

@@ -1,6 +1,7 @@
 ﻿using CoWorkingApp.Application.Abstracts.Messaging;
+using CoWorkingApp.Application.Users.Extensions;
 using CoWorkingApp.Core.Contracts.Repositories;
-using CoWorkingApp.Core.DomainErrors;
+using CoWorkingApp.Core.Errors;
 using CoWorkingApp.Core.Shared;
 using CoWorkingApp.Core.ValueObjects.Single;
 
@@ -36,9 +37,9 @@ public sealed class GetUserByEmailQueryHandler : IQueryHandler<GetUserByEmailQue
         var user = await _userRepository.GetByEmailAsync(emailResult.Value, cancellationToken);
         if (user is null)
         {
-            return Result.Failure<GetUserByEmailQueryResponse>(Errors.User.EmailNotExist(request.Email));
+            return Result.Failure<GetUserByEmailQueryResponse>(ERRORS.User.EmailNotExist(request.Email));
         }
 
-        return (GetUserByEmailQueryResponse)user;
+        return user.ToGetUserByEmailQueryResponse();
     }
 }

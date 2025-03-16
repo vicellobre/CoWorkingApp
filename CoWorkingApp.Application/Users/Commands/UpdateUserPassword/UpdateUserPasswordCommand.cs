@@ -7,12 +7,29 @@ namespace CoWorkingApp.Application.Users.Commands.UpdateUserPassword;
 /// <summary>
 /// Representa un comando para actualizar la contraseña de un usuario.
 /// </summary>
-/// <param name="UserId">El ID del usuario.</param>
-/// <param name="Password">La nueva contraseña del usuario.</param>
-public record struct UpdateUserPasswordCommand(
-    Guid UserId,
-    string Password) : ICommand, IInputFilter
+public record class UpdateUserPasswordCommand : ICommand, IInputFilter
 {
+    /// <summary>
+    /// El ID del usuario.
+    /// </summary>
+    public Guid UserId { get; private set; }
+
+    /// <summary>
+    /// La nueva contraseña del usuario.
+    /// </summary>
+    public string Password { get; private set; }
+
+    /// <summary>
+    /// Inicializa una nueva instancia de la clase <see cref="UpdateUserPasswordCommand"/>.
+    /// </summary>
+    /// <param name="userId">El ID del usuario.</param>
+    /// <param name="password">La nueva contraseña del usuario.</param>
+    public UpdateUserPasswordCommand(Guid userId, string password)
+    {
+        UserId = userId;
+        Password = password;
+    }
+
     /// <summary>
     /// Filtra y normaliza la contraseña del usuario.
     /// </summary>

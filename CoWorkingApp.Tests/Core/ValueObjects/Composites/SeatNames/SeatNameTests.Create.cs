@@ -1,4 +1,4 @@
-﻿using CoWorkingApp.Core.DomainErrors;
+﻿using CoWorkingApp.Core.Errors;
 using CoWorkingApp.Core.ValueObjects.Composite;
 
 namespace CoWorkingApp.Tests.Core.ValueObjects.Composites.SeatNames;
@@ -19,7 +19,7 @@ public partial class SeatNameTests
 
             // Assert
             Assert.False(result.IsSuccess);
-            Assert.Contains(Errors.SeatRow.IsNullOrEmpty, result.Errors);
+            Assert.Contains(ERRORS.SeatRow.IsNullOrEmpty, result.Errors);
         }
 
         [Fact]
@@ -34,7 +34,7 @@ public partial class SeatNameTests
 
             // Assert
             Assert.False(result.IsSuccess);
-            Assert.Contains(Errors.SeatNumber.IsNullOrEmpty, result.Errors);
+            Assert.Contains(ERRORS.SeatNumber.IsNullOrEmpty, result.Errors);
         }
 
         [Fact]
@@ -49,8 +49,8 @@ public partial class SeatNameTests
 
             // Assert
             Assert.False(result.IsSuccess);
-            Assert.Contains(Errors.SeatRow.IsNullOrEmpty, result.Errors);
-            Assert.Contains(Errors.SeatNumber.IsNullOrEmpty, result.Errors);
+            Assert.Contains(ERRORS.SeatRow.IsNullOrEmpty, result.Errors);
+            Assert.Contains(ERRORS.SeatNumber.IsNullOrEmpty, result.Errors);
         }
 
         [Fact]

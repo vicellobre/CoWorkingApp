@@ -1,4 +1,5 @@
 ﻿using CoWorkingApp.Application.Abstracts.Messaging;
+using CoWorkingApp.Application.Reservations.Extensions;
 using CoWorkingApp.Core.Contracts.Repositories;
 using CoWorkingApp.Core.Shared;
 
@@ -7,7 +8,7 @@ namespace CoWorkingApp.Application.Reservations.Queries.GetReservationsBySeatId;
 /// <summary>
 /// Manejador para la consulta de obtener reservas por identificador de asiento.
 /// </summary>
-public sealed class GetReservationsBySeatIdQueryHandler : IQueryHandler<GetReservationsBySeatIdQuery, IEnumerable<GetReservationsBySeatIdQueryResponse>>
+public sealed class GetReservationsBySeatIdQueryHandler : IQueryHandler<GetReservationsBySeatIdQuery, GetReservationsBySeatIdQueryResponse>
 {
     private readonly IReservationRepository _reservationRepository;
 
@@ -27,10 +28,12 @@ public sealed class GetReservationsBySeatIdQueryHandler : IQueryHandler<GetReser
     /// <param name="request">La solicitud de la consulta.</param>
     /// <param name="cancellationToken">Token para notificar la cancelación de la operación.</param>
     /// <returns>Un <see cref="Result{T}"/> que contiene la lista de reservas.</returns>
-    public async Task<Result<IEnumerable<GetReservationsBySeatIdQueryResponse>>> Handle(GetReservationsBySeatIdQuery request, CancellationToken cancellationToken)
+    public async Task<Result<GetReservationsBySeatIdQueryResponse>> Handle(GetReservationsBySeatIdQuery request, CancellationToken cancellationToken)
     {
         var reservations = await _reservationRepository.GetBySeatIdAsNoTrackingAsync(request.SeatId, cancellationToken);
 
-        return reservations.Select(reservation => (GetReservationsBySeatIdQueryResponse)reservation).ToList();
+        var reservationsResponse = reservations.Select(reservation => reservation.ToReservationResponse());
+
+        return new GetReservationsBySeatIdQueryResponse(reservationsResponse);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using CoWorkingApp.Application.Abstracts.Messaging;
+using CoWorkingApp.Application.Users.Extensions;
 using CoWorkingApp.Core.Contracts.Repositories;
-using CoWorkingApp.Core.DomainErrors;
+using CoWorkingApp.Core.Errors;
 using CoWorkingApp.Core.Shared;
 
 namespace CoWorkingApp.Application.Users.Queries.GetUserById;
@@ -33,9 +34,9 @@ public sealed class GetUserByIdQueryHandler : IQueryHandler<GetUserByIdQuery, Ge
         var user = await _userRepository.GetByIdAsync(request.UserId, cancellationToken);
         if (user is null)
         {
-            return Result.Failure<GetUserByIdQueryResponse>(Errors.User.NotFound(request.UserId));
+            return Result.Failure<GetUserByIdQueryResponse>(ERRORS.User.NotFound(request.UserId));
         }
 
-        return (GetUserByIdQueryResponse)user;
+        return user.ToGetUserByIdQueryResponse();
     }
 }

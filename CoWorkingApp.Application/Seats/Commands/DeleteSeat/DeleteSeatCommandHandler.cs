@@ -1,7 +1,8 @@
 ﻿using CoWorkingApp.Application.Abstracts.Messaging;
+using CoWorkingApp.Application.Seats.Extensions;
 using CoWorkingApp.Core.Contracts.Repositories;
 using CoWorkingApp.Core.Contracts.UnitOfWork;
-using CoWorkingApp.Core.DomainErrors;
+using CoWorkingApp.Core.Errors;
 using CoWorkingApp.Core.Shared;
 
 namespace CoWorkingApp.Application.Seats.Commands.DeleteSeat;
@@ -37,12 +38,12 @@ public sealed class DeleteSeatCommandHandler : ICommandHandler<DeleteSeatCommand
         var seat = await _seatRepository.GetByIdAsync(request.SeatId, cancellationToken);
         if (seat == null)
         {
-            return Result.Failure<DeleteSeatCommandResponse>(Errors.Seat.NotFound(request.SeatId));
+            return Result.Failure<DeleteSeatCommandResponse>(ERRORS.Seat.NotFound(request.SeatId));
         }
 
         _seatRepository.Remove(seat);
         await _unitOfWork.CommitAsync(cancellationToken);
 
-        return (DeleteSeatCommandResponse)seat;
+        return seat.ToDeleteSeatCommandResponse();
     }
 }

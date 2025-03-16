@@ -1,9 +1,10 @@
 ﻿using CoWorkingApp.Application.Abstracts.Messaging;
 using CoWorkingApp.Core.Contracts.Repositories;
 using CoWorkingApp.Core.Contracts.UnitOfWork;
-using CoWorkingApp.Core.DomainErrors;
+using CoWorkingApp.Core.Errors;
 using CoWorkingApp.Core.Entities;
 using CoWorkingApp.Core.Shared;
+using CoWorkingApp.Application.Users.Extensions;
 
 namespace CoWorkingApp.Application.Users.Commands.CreateUser;
 
@@ -46,12 +47,12 @@ public sealed class CreateUserCommandHandler : ICommandHandler<CreateUserCommand
         bool isUnique = await _userRepository.IsEmailUniqueAsync(user.Credentials.Email, cancellationToken);
         if (!isUnique)
         {
-            return Result.Failure<CreateUserCommandResponse>(Errors.User.EmailAlreadyInUse);
+            return Result.Failure<CreateUserCommandResponse>(ERRORS.User.EmailAlreadyInUse);
         }
 
         _userRepository.Add(user);
         await _unitOfWork.CommitAsync(cancellationToken);
 
-        return (CreateUserCommandResponse)user;
+        return user.ToCreateUserCommandResponse();
     }
 }

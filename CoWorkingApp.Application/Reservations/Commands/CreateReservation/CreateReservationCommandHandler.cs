@@ -1,9 +1,10 @@
 ﻿using CoWorkingApp.Application.Abstracts.Messaging;
 using CoWorkingApp.Core.Contracts.Repositories;
 using CoWorkingApp.Core.Contracts.UnitOfWork;
-using CoWorkingApp.Core.DomainErrors;
+using CoWorkingApp.Core.Errors;
 using CoWorkingApp.Core.Entities;
 using CoWorkingApp.Core.Shared;
+using CoWorkingApp.Application.Reservations.Extensions;
 
 namespace CoWorkingApp.Application.Reservations.Commands.CreateReservation;
 
@@ -43,13 +44,13 @@ public sealed class CreateReservationCommandHandler : ICommandHandler<CreateRese
         var user = await _userRepository.GetByIdAsync(request.UserId, cancellationToken);
         if (user == null)
         {
-            return Result.Failure<CreateReservationCommandResponse>(Errors.User.NotFound(request.UserId));
+            return Result.Failure<CreateReservationCommandResponse>(ERRORS.User.NotFound(request.UserId));
         }
 
         var seat = await _seatRepository.GetByIdAsNoTrackingAsync(request.SeatId, cancellationToken);
         if (seat == null)
         {
-            return Result.Failure<CreateReservationCommandResponse>(Errors.Seat.NotFound(request.SeatId));
+            return Result.Failure<CreateReservationCommandResponse>(ERRORS.Seat.NotFound(request.SeatId));
         }
 
         var reservationResult = Reservation.Create(
@@ -69,7 +70,7 @@ public sealed class CreateReservationCommandHandler : ICommandHandler<CreateRese
         bool isAvailable = await _seatRepository.IsAvailable(request.SeatId, reservation.Date, cancellationToken);
         if (!isAvailable)
         {
-            return Result.Failure<CreateReservationCommandResponse>(Errors.Seat.NotAvailable(request.SeatId, request.Date));
+            return Result.Failure<CreateReservationCommandResponse>(ERRORS.Seat.NotAvailable(request.SeatId, request.Date));
         }
 
         //_reservationRepository.Add(reservation);
@@ -77,6 +78,6 @@ public sealed class CreateReservationCommandHandler : ICommandHandler<CreateRese
 
         await _unitOfWork.CommitAsync(cancellationToken);
 
-        return (CreateReservationCommandResponse)reservation;
+        return reservation.ToCreateReservationCommandResponse();
     }
 }

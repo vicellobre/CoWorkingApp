@@ -1,6 +1,6 @@
 ﻿using CoWorkingApp.Core.Shared;
 using System.Reflection;
-using ERRORS = CoWorkingApp.Core.DomainErrors.Errors;
+using ERRORS = CoWorkingApp.Core.Errors.ERRORS;
 
 namespace CoWorkingApp.Tests.Core.Shared.Results;
 

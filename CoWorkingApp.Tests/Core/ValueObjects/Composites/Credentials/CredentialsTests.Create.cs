@@ -1,4 +1,4 @@
-﻿using CoWorkingApp.Core.DomainErrors;
+﻿using CoWorkingApp.Core.Errors;
 using CoWorkingApp.Core.ValueObjects.Composite;
 
 namespace CoWorkingApp.Tests.Core.ValueObjects.Composite.Credentials;
@@ -19,7 +19,7 @@ public partial class CredentialsWithEmailAndPasswordTests
 
             // Assert
             Assert.False(result.IsSuccess);
-            Assert.Contains(Errors.Email.InvalidFormat, result.Errors);
+            Assert.Contains(ERRORS.Email.InvalidFormat, result.Errors);
         }
 
         [Fact]
@@ -34,7 +34,7 @@ public partial class CredentialsWithEmailAndPasswordTests
 
             // Assert
             Assert.False(result.IsSuccess);
-            Assert.Contains(Errors.Password.InvalidFormat, result.Errors);
+            Assert.Contains(ERRORS.Password.InvalidFormat, result.Errors);
         }
 
         [Fact]
@@ -49,8 +49,8 @@ public partial class CredentialsWithEmailAndPasswordTests
 
             // Assert
             Assert.False(result.IsSuccess);
-            Assert.Contains(Errors.Email.InvalidFormat, result.Errors);
-            Assert.Contains(Errors.Password.InvalidFormat, result.Errors);
+            Assert.Contains(ERRORS.Email.InvalidFormat, result.Errors);
+            Assert.Contains(ERRORS.Password.InvalidFormat, result.Errors);
         }
 
         [Fact]

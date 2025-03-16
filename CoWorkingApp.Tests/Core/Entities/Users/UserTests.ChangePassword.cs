@@ -1,4 +1,4 @@
-﻿using CoWorkingApp.Core.DomainErrors;
+﻿using CoWorkingApp.Core.Errors;
 using CoWorkingApp.Core.ValueObjects.Single;
 
 namespace CoWorkingApp.Tests.Core.Entities.Users;
@@ -18,7 +18,7 @@ public partial class UserTests
 
             // Assert
             Assert.False(result.IsSuccess);
-            Assert.Contains(Errors.Password.TooShort(Password.MinLength), result.Errors);
+            Assert.Contains(ERRORS.Password.TooShort(Password.MinLength), result.Errors);
         }
 
         [Fact]

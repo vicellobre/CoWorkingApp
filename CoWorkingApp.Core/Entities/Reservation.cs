@@ -1,4 +1,4 @@
-﻿using CoWorkingApp.Core.DomainErrors;
+﻿using CoWorkingApp.Core.Errors;
 using CoWorkingApp.Core.Primitives;
 using CoWorkingApp.Core.Shared;
 using CoWorkingApp.Core.ValueObjects.Single;
@@ -137,7 +137,7 @@ public class Reservation : EntityBase
     {
         if (newUser is null)
         {
-            return Result.Failure(Errors.User.IsNull);
+            return Result.Failure(ERRORS.User.IsNull);
         }
 
         UserId = newUser.Id;
@@ -155,7 +155,7 @@ public class Reservation : EntityBase
     {
         if (newSeat is null)
         {
-            return Result.Failure(Errors.Seat.IsNull);
+            return Result.Failure(ERRORS.Seat.IsNull);
         }
 
         SeatId = newSeat.Id;

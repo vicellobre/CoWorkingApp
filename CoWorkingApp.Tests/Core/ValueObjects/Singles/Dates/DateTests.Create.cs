@@ -1,4 +1,4 @@
-﻿using CoWorkingApp.Core.DomainErrors;
+﻿using CoWorkingApp.Core.Errors;
 using CoWorkingApp.Core.ValueObjects.Single;
 
 namespace CoWorkingApp.Tests.Core.ValueObjects.Singles.Dates;
@@ -12,7 +12,7 @@ public partial class DateTests
         {
             // Arrange
             DateTime value = default;
-            var expectedError = Errors.Date.Invalid;
+            var expectedError = ERRORS.Date.Invalid;
 
             // Act
             var result = Date.Create(value);

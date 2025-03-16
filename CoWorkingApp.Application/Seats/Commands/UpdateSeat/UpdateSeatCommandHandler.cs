@@ -1,7 +1,8 @@
 ﻿using CoWorkingApp.Application.Abstracts.Messaging;
+using CoWorkingApp.Application.Seats.Extensions;
 using CoWorkingApp.Core.Contracts.Repositories;
 using CoWorkingApp.Core.Contracts.UnitOfWork;
-using CoWorkingApp.Core.DomainErrors;
+using CoWorkingApp.Core.Errors;
 using CoWorkingApp.Core.Shared;
 using CoWorkingApp.Core.ValueObjects.Composite;
 
@@ -38,7 +39,7 @@ public sealed class UpdateSeatCommandHandler : ICommandHandler<UpdateSeatCommand
         var seat = await _seatRepository.GetByIdAsync(request.SeatId, cancellationToken);
         if (seat is null)
         {
-            return Result.Failure<UpdateSeatCommandResponse>(Errors.Seat.NotFound(request.SeatId));
+            return Result.Failure<UpdateSeatCommandResponse>(ERRORS.Seat.NotFound(request.SeatId));
         }
 
         SeatName name = SeatName.CreateFromString(request.Name).Value;
@@ -47,6 +48,6 @@ public sealed class UpdateSeatCommandHandler : ICommandHandler<UpdateSeatCommand
 
         await _unitOfWork.CommitAsync(cancellationToken);
 
-        return (UpdateSeatCommandResponse)seat;
+        return seat.ToUpdateSeatCommandResponse();
     }
 }

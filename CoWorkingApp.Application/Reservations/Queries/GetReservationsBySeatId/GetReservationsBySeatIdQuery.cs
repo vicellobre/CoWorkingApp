@@ -5,5 +5,19 @@ namespace CoWorkingApp.Application.Reservations.Queries.GetReservationsBySeatId;
 /// <summary>
 /// Consulta para obtener las reservas por el identificador del asiento.
 /// </summary>
-/// <param name="SeatId">El identificador del asiento.</param>
-public record struct GetReservationsBySeatIdQuery(Guid SeatId) : IQuery<IEnumerable<GetReservationsBySeatIdQueryResponse>>;
+public record class GetReservationsBySeatIdQuery : IQuery<GetReservationsBySeatIdQueryResponse>
+{
+    /// <summary>
+    /// El identificador del asiento.
+    /// </summary>
+    public Guid SeatId { get; private set; }
+
+    /// <summary>
+    /// Inicializa una nueva instancia de la clase <see cref="GetReservationsBySeatIdQuery"/>.
+    /// </summary>
+    /// <param name="seatId">El identificador del asiento.</param>
+    public GetReservationsBySeatIdQuery(Guid seatId)
+    {
+        SeatId = seatId;
+    }
+}

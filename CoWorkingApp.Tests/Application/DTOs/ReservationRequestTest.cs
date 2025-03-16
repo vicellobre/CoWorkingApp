@@ -1,4 +1,4 @@
-﻿using CoWorkingApp.Presentation.DTOs.Reservations;
+﻿using CoWorkingApp.Presentation.Reservations.V1.Models;
 
 namespace CoWorkingApp.Tests.Application.DTOs
 {

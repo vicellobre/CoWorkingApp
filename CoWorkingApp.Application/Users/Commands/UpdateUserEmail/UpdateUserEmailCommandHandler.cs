@@ -1,7 +1,7 @@
 ﻿using CoWorkingApp.Application.Abstracts.Messaging;
 using CoWorkingApp.Core.Contracts.Repositories;
 using CoWorkingApp.Core.Contracts.UnitOfWork;
-using CoWorkingApp.Core.DomainErrors;
+using CoWorkingApp.Core.Errors;
 using CoWorkingApp.Core.Shared;
 using CoWorkingApp.Core.ValueObjects.Single;
 
@@ -44,7 +44,7 @@ public sealed class UpdateUserEmailCommandHandler : ICommandHandler<UpdateUserEm
         var user = await _userRepository.GetByIdAsync(request.UserId, cancellationToken);
         if (user == null)
         {
-            return Result.Failure(Errors.User.NotFound(request.UserId));
+            return Result.Failure(ERRORS.User.NotFound(request.UserId));
         }
 
         Email email = emailResult.Value;

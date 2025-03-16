@@ -1,6 +1,7 @@
 ﻿using CoWorkingApp.Application.Abstracts.Messaging;
+using CoWorkingApp.Application.Reservations.Extensions;
 using CoWorkingApp.Core.Contracts.Repositories;
-using CoWorkingApp.Core.DomainErrors;
+using CoWorkingApp.Core.Errors;
 using CoWorkingApp.Core.Shared;
 using CoWorkingApp.Core.ValueObjects.Single;
 
@@ -9,7 +10,7 @@ namespace CoWorkingApp.Application.Reservations.Queries.GetReservationsByUserEma
 /// <summary>
 /// Maneja la consulta para obtener las reservas por el correo electrónico del usuario.
 /// </summary>
-public sealed class GetReservationsByUserEmailQueryHandler : IQueryHandler<GetReservationsByUserEmailQuery, IEnumerable<GetReservationsByUserEmailQueryResponse>>
+public sealed class GetReservationsByUserEmailQueryHandler : IQueryHandler<GetReservationsByUserEmailQuery, GetReservationsByUserEmailQueryResponse>
 {
     private readonly IReservationRepository _reservationRepository;
     private readonly IUserRepository _userRepository;
@@ -32,17 +33,20 @@ public sealed class GetReservationsByUserEmailQueryHandler : IQueryHandler<GetRe
     /// <param name="request">La solicitud de la consulta.</param>
     /// <param name="cancellationToken">Token de cancelación opcional.</param>
     /// <returns>Una colección de respuestas de la consulta para obtener las reservas por el correo electrónico del usuario.</returns>
-    public async Task<Result<IEnumerable<GetReservationsByUserEmailQueryResponse>>> Handle(GetReservationsByUserEmailQuery request, CancellationToken cancellationToken)
+    public async Task<Result<GetReservationsByUserEmailQueryResponse>> Handle(GetReservationsByUserEmailQuery request, CancellationToken cancellationToken)
     {
         Email email = Email.Create(request.UserEmail).Value;
 
         bool notFound = await _userRepository.GetByEmailAsync(email, cancellationToken) is null;
         if (notFound)
         {
-            return Result.Failure<IEnumerable<GetReservationsByUserEmailQueryResponse>>(Errors.User.EmailNotExist(request.UserEmail));
+            return Result.Failure<GetReservationsByUserEmailQueryResponse>(ERRORS.User.EmailNotExist(request.UserEmail));
         }
 
         var reservations = await _reservationRepository.GetByUserEmailAsNoTrackingAsync(email, cancellationToken);
-        return reservations.Select(reservation => (GetReservationsByUserEmailQueryResponse)reservation).ToList();
+        
+        var reservationResponses = reservations.Select(reservation => reservation.ToReservationResponse());
+
+        return new GetReservationsByUserEmailQueryResponse(reservationResponses);        
     }
 }

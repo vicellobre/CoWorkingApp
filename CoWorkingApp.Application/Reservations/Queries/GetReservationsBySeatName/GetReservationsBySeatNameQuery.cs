@@ -5,5 +5,19 @@ namespace CoWorkingApp.Application.Reservations.Queries.GetReservationsBySeatNam
 /// <summary>
 /// Consulta para obtener las reservas por el nombre del asiento.
 /// </summary>
-/// <param name="SeatName">El nombre del asiento.</param>
-public readonly record struct GetReservationsBySeatNameQuery(string SeatName) : IQuery<IEnumerable<GetReservationsBySeatNameQueryResponse>>;
+public record class GetReservationsBySeatNameQuery : IQuery<GetReservationsBySeatNameQueryResponse>
+{
+    /// <summary>
+    /// El nombre del asiento.
+    /// </summary>
+    public string SeatName { get; private set; }
+
+    /// <summary>
+    /// Inicializa una nueva instancia de la clase <see cref="GetReservationsBySeatNameQuery"/>.
+    /// </summary>
+    /// <param name="seatName">El nombre del asiento.</param>
+    public GetReservationsBySeatNameQuery(string seatName)
+    {
+        SeatName = seatName;
+    }
+}

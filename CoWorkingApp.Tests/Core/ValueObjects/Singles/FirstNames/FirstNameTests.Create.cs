@@ -1,4 +1,4 @@
-﻿using CoWorkingApp.Core.DomainErrors;
+﻿using CoWorkingApp.Core.Errors;
 using CoWorkingApp.Core.ValueObjects.Single;
 
 namespace CoWorkingApp.Tests.Core.ValueObjects.Singles.FirstNames;
@@ -12,7 +12,7 @@ public partial class FirstNameTest
         {
             // Arrange
             string? value = null;
-            var expectedError = Errors.FirstName.IsNullOrEmpty;
+            var expectedError = ERRORS.FirstName.IsNullOrEmpty;
 
             // Act
             var result = FirstName.Create(value);
@@ -27,7 +27,7 @@ public partial class FirstNameTest
         {
             // Arrange
             var value = string.Empty;
-            var expectedError = Errors.FirstName.IsNullOrEmpty;
+            var expectedError = ERRORS.FirstName.IsNullOrEmpty;
 
             // Act
             var result = FirstName.Create(value);
@@ -42,7 +42,7 @@ public partial class FirstNameTest
         {
             // Arrange
             var value = "a";
-            var expectedError = Errors.FirstName.TooShort(FirstName.MinLength);
+            var expectedError = ERRORS.FirstName.TooShort(FirstName.MinLength);
 
             // Act
             var result = FirstName.Create(value);
@@ -57,7 +57,7 @@ public partial class FirstNameTest
         {
             // Arrange
             var longFirstName = new string('a', 51);
-            var expectedError = Errors.FirstName.TooLong(FirstName.MaxLength);
+            var expectedError = ERRORS.FirstName.TooLong(FirstName.MaxLength);
 
             // Act
             var result = FirstName.Create(longFirstName);
@@ -72,7 +72,7 @@ public partial class FirstNameTest
         {
             // Arrange
             var value = "InvalidName123!";
-            var expectedError = Errors.FirstName.InvalidFormat;
+            var expectedError = ERRORS.FirstName.InvalidFormat;
 
             // Act
             var result = FirstName.Create(value);

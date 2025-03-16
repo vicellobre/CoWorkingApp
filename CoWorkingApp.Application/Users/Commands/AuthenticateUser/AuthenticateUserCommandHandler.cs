@@ -1,7 +1,8 @@
 ﻿using CoWorkingApp.Application.Abstracts.Messaging;
 using CoWorkingApp.Application.Contracts;
+using CoWorkingApp.Application.Users.Extensions;
 using CoWorkingApp.Core.Contracts.Repositories;
-using CoWorkingApp.Core.DomainErrors;
+using CoWorkingApp.Core.Errors;
 using CoWorkingApp.Core.Shared;
 using CoWorkingApp.Core.ValueObjects.Single;
 
@@ -42,7 +43,7 @@ public sealed class AuthenticateUserCommandHandler : ICommandHandler<Authenticat
         var user = await _userRepository.AuthenticateAsync(emailResult.Value, passwordResult.Value, cancellationToken);
         if (user is null)
         {
-            return Result.Failure<AuthenticateUserCommandResponse>(Errors.User.InvalidCredentials);
+            return Result.Failure<AuthenticateUserCommandResponse>(ERRORS.User.InvalidCredentials);
         }
 
         var token = _authService.BuildToken(
@@ -51,7 +52,7 @@ public sealed class AuthenticateUserCommandHandler : ICommandHandler<Authenticat
             user.Credentials.Email
         );
 
-        var response = AuthenticateUserCommandResponse.CreateFromUser(user, token);
+        var response = user.ToAuthenticateUserCommandResponse(token);
 
         return Result.Success(response);
     }

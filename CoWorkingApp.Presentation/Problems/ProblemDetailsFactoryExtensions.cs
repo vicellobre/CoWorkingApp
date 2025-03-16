@@ -30,8 +30,11 @@ namespace CoWorkingApp.Presentation.Problems
         /// <param name="result">El resultado que contiene el estado de éxito o fallo y los errores correspondientes.</param>
         /// <returns>Un <see cref="ProblemDetails"/> que contiene información detallada sobre el problema.</returns>
         /// <exception cref="InvalidOperationException">Se lanza si el resultado es exitoso.</exception>
+        /// <exception cref="ArgumentNullException">Se lanza si <paramref name="factory"/> es <c>null</c>.</exception>
         public static ProblemDetails FromResult(this ProblemDetailsFactory factory, Result result)
         {
+            ArgumentNullException.ThrowIfNull(factory);
+
             EnsureFailure(result);
 
             return new ProblemDetails
@@ -50,14 +53,19 @@ namespace CoWorkingApp.Presentation.Problems
         /// <param name="factory">Instancia de <see cref="ProblemDetailsFactory"/> utilizada para la extensión del método.</param>
         /// <param name="error">El error que contiene el código y mensaje del problema.</param>
         /// <returns>Un <see cref="ProblemDetails"/> que contiene información detallada sobre el problema.</returns>
-        public static ProblemDetails FromError(this ProblemDetailsFactory factory, Error error) =>
-           new()
-           {
-               Title = error.Code,
-               Type = error.Type.ToString(),
-               Detail = error.Message,
-               Status = error.Type.ToStatusCode(),
-               Extensions = { { nameof(error.StackTrace), error.StackTrace } }
-           };
+        /// <exception cref="ArgumentNullException">Se lanza si <paramref name="factory"/> es <c>null</c>.</exception>
+        public static ProblemDetails FromError(this ProblemDetailsFactory factory, Error error)
+        {
+            ArgumentNullException.ThrowIfNull(factory);
+
+            return new()
+            {
+                Title = error.Code,
+                Type = error.Type.ToString(),
+                Detail = error.Message,
+                Status = error.Type.ToStatusCode(),
+                Extensions = { { nameof(error.StackTrace), error.StackTrace } }
+            };
+        }
     }
 }

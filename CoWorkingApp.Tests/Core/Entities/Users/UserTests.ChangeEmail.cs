@@ -1,4 +1,4 @@
-﻿using CoWorkingApp.Core.DomainErrors;
+﻿using CoWorkingApp.Core.Errors;
 
 namespace CoWorkingApp.Tests.Core.Entities.Users;
 
@@ -17,7 +17,7 @@ public partial class UserTests
 
             // Assert
             Assert.False(result.IsSuccess);
-            Assert.Contains(result.Errors, e => e == Errors.Email.InvalidFormat);
+            Assert.Contains(result.Errors, e => e == ERRORS.Email.InvalidFormat);
         }
 
         [Fact]

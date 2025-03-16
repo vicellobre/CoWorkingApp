@@ -1,4 +1,4 @@
-﻿using CoWorkingApp.Core.DomainErrors;
+﻿using CoWorkingApp.Core.Errors;
 
 namespace CoWorkingApp.Tests.Core.Entities.Users;
 
@@ -17,7 +17,7 @@ public partial class UserTests
 
             // Assert
             Assert.True(result.IsFailure);
-            Assert.Contains(result.Errors, e => e == Errors.FirstName.IsNullOrEmpty);
+            Assert.Contains(result.Errors, e => e == ERRORS.FirstName.IsNullOrEmpty);
         }
 
         [Fact]
@@ -31,7 +31,7 @@ public partial class UserTests
 
             // Assert
             Assert.True(result.IsFailure);
-            Assert.Contains(result.Errors, e => e == Errors.LastName.IsNullOrEmpty);
+            Assert.Contains(result.Errors, e => e == ERRORS.LastName.IsNullOrEmpty);
         }
 
         [Fact]

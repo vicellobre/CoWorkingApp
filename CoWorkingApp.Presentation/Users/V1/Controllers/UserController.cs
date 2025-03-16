@@ -1,7 +1,7 @@
 ﻿using CoWorkingApp.Application.Users.Commands.CreateUser;
 using CoWorkingApp.Application.Users.Commands.DeleteUser;
 using CoWorkingApp.Application.Users.Commands.UpdateUser;
-using CoWorkingApp.Application.Users.Queries.GetAllUsers;
+using CoWorkingApp.Application.Users.Queries.GetUsers;
 using CoWorkingApp.Application.Users.Queries.GetUserByEmail;
 using CoWorkingApp.Application.Users.Queries.GetUserById;
 using CoWorkingApp.Core.Extensions;
@@ -41,7 +41,7 @@ public class UserController : ApiController
     [AllowAnonymous]
     public async Task<IActionResult> GetAll()
     {
-        GetAllUsersQuery query = new();
+        GetUsersQuery query = new();
 
         var response = await _sender.Send(query);
 

@@ -7,9 +7,22 @@ namespace CoWorkingApp.Application.Seats.Queries.GetSeatByName;
 /// <summary>
 /// Consulta para obtener un asiento por su nombre.
 /// </summary>
-/// <param name="Name">El nombre del asiento.</param>
-public record struct GetSeatByNameQuery(string Name) : IQuery<GetSeatByNameQueryResponse>, IInputFilter
+public record class GetSeatByNameQuery : IQuery<GetSeatByNameQueryResponse>, IInputFilter
 {
+    /// <summary>
+    /// El nombre del asiento.
+    /// </summary>
+    public string Name { get; private set; }
+
+    /// <summary>
+    /// Inicializa una nueva instancia de la clase <see cref="GetSeatByNameQuery"/>.
+    /// </summary>
+    /// <param name="name">El nombre del asiento.</param>
+    public GetSeatByNameQuery(string name)
+    {
+        Name = name;
+    }
+
     /// <summary>
     /// Filtra y normaliza el nombre del asiento.
     /// </summary>

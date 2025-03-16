@@ -1,5 +1,5 @@
 ﻿using CoWorkingApp.Core.Shared;
-using CoWorkingApp.Core.DomainErrors;
+using CoWorkingApp.Core.Errors;
 
 namespace CoWorkingApp.Core.ValueObjects.Single;
 
@@ -31,7 +31,7 @@ public readonly record struct Date
     {
         if (value == default)
         {
-            return Result<Date>.Failure(Errors.Date.Invalid);
+            return Result<Date>.Failure(ERRORS.Date.Invalid);
         }
 
         return Result<Date>.Success(new(value));

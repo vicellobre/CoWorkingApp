@@ -5,5 +5,19 @@ namespace CoWorkingApp.Application.Seats.Commands.DeleteSeat;
 /// <summary>
 /// Comando para eliminar un asiento.
 /// </summary>
-/// <param name="SeatId">El identificador del asiento.</param>
-public readonly record struct DeleteSeatCommand(Guid SeatId) : ICommand<DeleteSeatCommandResponse>;
+public record class DeleteSeatCommand : ICommand<DeleteSeatCommandResponse>
+{
+    /// <summary>
+    /// El identificador del asiento.
+    /// </summary>
+    public Guid SeatId { get; private set; }
+
+    /// <summary>
+    /// Inicializa una nueva instancia de la clase <see cref="DeleteSeatCommand"/>.
+    /// </summary>
+    /// <param name="seatId">El identificador del asiento.</param>
+    public DeleteSeatCommand(Guid seatId)
+    {
+        SeatId = seatId;
+    }
+}

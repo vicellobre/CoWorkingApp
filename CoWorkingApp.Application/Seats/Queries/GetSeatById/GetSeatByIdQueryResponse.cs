@@ -1,5 +1,4 @@
-﻿using CoWorkingApp.Core.Entities;
-using CoWorkingApp.Core.Shared;
+﻿using CoWorkingApp.Core.Shared;
 
 namespace CoWorkingApp.Application.Seats.Queries.GetSeatById;
 
@@ -12,12 +11,4 @@ namespace CoWorkingApp.Application.Seats.Queries.GetSeatById;
 public readonly record struct GetSeatByIdQueryResponse(
     Guid SeatId,
     string Name,
-    string Description) : IResponse
-{
-    /// <summary>
-    /// Convierte explícitamente un objeto <see cref="Seat"/> a <see cref="GetSeatByIdQueryResponse"/>.
-    /// </summary>
-    /// <param name="seat">El asiento a convertir.</param>
-    public static explicit operator GetSeatByIdQueryResponse(Seat seat) =>
-        new(seat.Id, seat.Name, seat.Description);
-}
+    string Description) : IResponse;

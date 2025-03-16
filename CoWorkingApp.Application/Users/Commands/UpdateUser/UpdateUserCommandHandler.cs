@@ -1,7 +1,8 @@
 ﻿using CoWorkingApp.Application.Abstracts.Messaging;
+using CoWorkingApp.Application.Users.Extensions;
 using CoWorkingApp.Core.Contracts.Repositories;
 using CoWorkingApp.Core.Contracts.UnitOfWork;
-using CoWorkingApp.Core.DomainErrors;
+using CoWorkingApp.Core.Errors;
 using CoWorkingApp.Core.Extensions;
 using CoWorkingApp.Core.Shared;
 using CoWorkingApp.Core.ValueObjects.Composite;
@@ -52,9 +53,9 @@ public sealed class UpdateUserCommandHandler : ICommandHandler<UpdateUserCommand
         }
 
         var passwordResult = Password.Create(request.Password);
-        if (emailResult.IsFailure)
+        if (passwordResult.IsFailure)
         {
-            errors.AddRange(emailResult.Errors);
+            errors.AddRange(passwordResult.Errors);
         }
 
         if (!errors.IsEmpty())
@@ -65,7 +66,7 @@ public sealed class UpdateUserCommandHandler : ICommandHandler<UpdateUserCommand
         var user = await _userRepository.GetByIdAsync(request.UserId, cancellationToken);
         if (user is null)
         {
-            return Result.Failure<UpdateUserCommandResponse>(Errors.User.NotFound(request.UserId));
+            return Result.Failure<UpdateUserCommandResponse>(ERRORS.User.NotFound(request.UserId));
         }
 
         user.ChangeName(fullNameResult.Value.FirstName, fullNameResult.Value.LastName);
@@ -74,6 +75,6 @@ public sealed class UpdateUserCommandHandler : ICommandHandler<UpdateUserCommand
 
         await _unitOfWork.CommitAsync(cancellationToken);
 
-        return (UpdateUserCommandResponse)user;
+        return user.ToUpdateUserCommandResponse();
     }
 }

@@ -1,10 +1,11 @@
 ﻿using CoWorkingApp.Application.Abstracts.Messaging;
 using CoWorkingApp.Core.Contracts.Repositories;
 using CoWorkingApp.Core.Contracts.UnitOfWork;
-using CoWorkingApp.Core.DomainErrors;
+using CoWorkingApp.Core.Errors;
 using CoWorkingApp.Core.Entities;
 using CoWorkingApp.Core.Shared;
 using CoWorkingApp.Core.ValueObjects.Composite;
+using CoWorkingApp.Application.Seats.Extensions;
 
 namespace CoWorkingApp.Application.Seats.Commands.CreateSeat;
 
@@ -47,12 +48,12 @@ public sealed class CreateSeatCommandHandler : ICommandHandler<CreateSeatCommand
         bool isUnique = await _seatRepository.IsNameUniqueAsync(seat.Name, cancellationToken);
         if (!isUnique)
         {
-            return Result.Failure<CreateSeatCommandResponse>(Errors.Seat.NameAlreadyInUse);
+            return Result.Failure<CreateSeatCommandResponse>(ERRORS.Seat.NameAlreadyInUse);
         }
 
         _seatRepository.Add(seat);
         await _unitOfWork.CommitAsync(cancellationToken);
 
-        return (CreateSeatCommandResponse)seat;
+        return seat.ToCreateSeatCommandResponse();
     }
 }

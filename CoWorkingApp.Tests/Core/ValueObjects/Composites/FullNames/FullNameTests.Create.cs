@@ -1,4 +1,4 @@
-﻿using CoWorkingApp.Core.DomainErrors;
+﻿using CoWorkingApp.Core.Errors;
 using CoWorkingApp.Core.ValueObjects.Composite;
 using CoWorkingApp.Core.ValueObjects.Single;
 
@@ -20,7 +20,7 @@ public partial class FullNameTests
 
             // Assert
             Assert.False(result.IsSuccess);
-            Assert.Contains(Errors.FirstName.TooShort(FirstName.MinLength), result.Errors);
+            Assert.Contains(ERRORS.FirstName.TooShort(FirstName.MinLength), result.Errors);
         }
 
         [Fact]
@@ -35,7 +35,7 @@ public partial class FullNameTests
 
             // Assert
             Assert.False(result.IsSuccess);
-            Assert.Contains(Errors.LastName.IsNullOrEmpty, result.Errors);
+            Assert.Contains(ERRORS.LastName.IsNullOrEmpty, result.Errors);
         }
 
         [Fact]
@@ -50,8 +50,8 @@ public partial class FullNameTests
 
             // Assert
             Assert.False(result.IsSuccess);
-            Assert.Contains(Errors.FirstName.TooShort(FirstName.MinLength), result.Errors);
-            Assert.Contains(Errors.LastName.IsNullOrEmpty, result.Errors);
+            Assert.Contains(ERRORS.FirstName.TooShort(FirstName.MinLength), result.Errors);
+            Assert.Contains(ERRORS.LastName.IsNullOrEmpty, result.Errors);
         }
 
         [Fact]

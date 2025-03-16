@@ -1,6 +1,7 @@
 ﻿using CoWorkingApp.Application.Abstracts.Messaging;
+using CoWorkingApp.Application.Reservations.Extensions;
 using CoWorkingApp.Core.Contracts.Repositories;
-using CoWorkingApp.Core.DomainErrors;
+using CoWorkingApp.Core.Errors;
 using CoWorkingApp.Core.Shared;
 
 namespace CoWorkingApp.Application.Reservations.Queries.GetReservationById;
@@ -33,9 +34,9 @@ public sealed class GetReservationByIdQueryHandler : IQueryHandler<GetReservatio
         var reservation = await _reservationRepository.GetByIdAsNoTrackingAsync(request.ReservationId, cancellationToken);
         if (reservation is null)
         {
-            return Result.Failure<GetReservationByIdQueryResponse>(Errors.Reservation.NotFound(request.ReservationId));
+            return Result.Failure<GetReservationByIdQueryResponse>(ERRORS.Reservation.NotFound(request.ReservationId));
         }
 
-        return (GetReservationByIdQueryResponse)reservation;
+        return reservation.ToGetReservationByIdQueryResponse();
     }
 }

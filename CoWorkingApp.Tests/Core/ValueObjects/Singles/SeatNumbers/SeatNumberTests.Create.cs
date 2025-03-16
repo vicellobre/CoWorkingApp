@@ -1,4 +1,4 @@
-﻿using CoWorkingApp.Core.DomainErrors;
+﻿using CoWorkingApp.Core.Errors;
 using CoWorkingApp.Core.ValueObjects.Single;
 
 namespace CoWorkingApp.Tests.Core.ValueObjects.Singles.SeatNumbers;
@@ -12,7 +12,7 @@ public partial class SeatNumberTests
         {
             // Arrange
             string? value = null;
-            var expectedError = Errors.SeatNumber.IsNullOrEmpty;
+            var expectedError = ERRORS.SeatNumber.IsNullOrEmpty;
 
             // Act
             var result = SeatNumber.Create(value);
@@ -27,7 +27,7 @@ public partial class SeatNumberTests
         {
             // Arrange
             var value = string.Empty;
-            var expectedError = Errors.SeatNumber.IsNullOrEmpty;
+            var expectedError = ERRORS.SeatNumber.IsNullOrEmpty;
 
             // Act
             var result = SeatNumber.Create(value);

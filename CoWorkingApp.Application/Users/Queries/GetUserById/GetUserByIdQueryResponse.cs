@@ -1,5 +1,4 @@
-﻿using CoWorkingApp.Core.Entities;
-using CoWorkingApp.Core.Shared;
+﻿using CoWorkingApp.Core.Shared;
 
 namespace CoWorkingApp.Application.Users.Queries.GetUserById;
 
@@ -10,19 +9,8 @@ namespace CoWorkingApp.Application.Users.Queries.GetUserById;
 /// <param name="FirstName">El nombre del usuario.</param>
 /// <param name="LastName">El apellido del usuario.</param>
 /// <param name="Email">El correo electrónico del usuario.</param>
-public readonly record struct GetUserByIdQueryResponse(Guid UserId,
+public record class GetUserByIdQueryResponse(
+    Guid UserId,
     string FirstName,
     string LastName,
-    string Email
-    ) : IResponse
-{
-    /// <summary>
-    /// Convierte explícitamente un objeto <see cref="User"/> a <see cref="GetUserByIdQueryResponse"/>.
-    /// </summary>
-    /// <param name="user">El usuario a convertir.</param>
-    public static explicit operator GetUserByIdQueryResponse(User user) =>
-        new(user.Id,
-            user.Name.FirstName,
-            user.Name.LastName,
-            user.Credentials.Email);
-}
+    string Email) : IResponse;

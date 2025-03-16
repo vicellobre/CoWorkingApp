@@ -1,7 +1,8 @@
 ﻿using CoWorkingApp.Application.Abstracts.Messaging;
+using CoWorkingApp.Application.Reservations.Extensions;
 using CoWorkingApp.Core.Contracts.Repositories;
 using CoWorkingApp.Core.Contracts.UnitOfWork;
-using CoWorkingApp.Core.DomainErrors;
+using CoWorkingApp.Core.Errors;
 using CoWorkingApp.Core.Shared;
 
 namespace CoWorkingApp.Application.Reservations.Commands.DeleteReservation;
@@ -36,12 +37,12 @@ public sealed class DeleteReservationCommandHandler : ICommandHandler<DeleteRese
         var reservation = await _reservationRepository.GetByIdAsNoTrackingAsync(request.ReservationId, cancellationToken);
         if (reservation == null)
         {
-            return Result.Failure<DeleteReservationCommandResponse>(Errors.Reservation.NotFound(request.ReservationId));
+            return Result.Failure<DeleteReservationCommandResponse>(ERRORS.Reservation.NotFound(request.ReservationId));
         }
 
         _reservationRepository.Remove(reservation);
         await _unitOfWork.CommitAsync(cancellationToken);
 
-        return (DeleteReservationCommandResponse)reservation;
+        return reservation.ToDeleteReservationCommandResponse();
     }
 }

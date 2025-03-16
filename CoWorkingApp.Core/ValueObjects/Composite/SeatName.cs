@@ -1,4 +1,4 @@
-﻿using CoWorkingApp.Core.DomainErrors;
+﻿using CoWorkingApp.Core.Errors;
 using CoWorkingApp.Core.Extensions;
 using CoWorkingApp.Core.Shared;
 using CoWorkingApp.Core.ValueObjects.Single;
@@ -99,12 +99,12 @@ public record struct SeatName
     {
         if (string.IsNullOrWhiteSpace(name))
         {
-            return Result<SeatName>.Failure(Errors.SeatName.IsNullOrEmpty);
+            return Result<SeatName>.Failure(ERRORS.SeatName.IsNullOrEmpty);
         }
 
         if (!Regex.IsMatch(name, Pattern))
         {
-            return Result<SeatName>.Failure(Errors.SeatName.InvalidFormat);
+            return Result<SeatName>.Failure(ERRORS.SeatName.InvalidFormat);
         }
 
         var parts = name.Split(Separator);

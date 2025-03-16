@@ -36,6 +36,20 @@ public abstract class ApiController : ControllerBase
     }
 
     /// <summary>
+    /// Crea una respuesta de creación con la URI del recurso creado.
+    /// </summary>
+    /// <typeparam name="TResponse">El tipo de la respuesta.</typeparam>
+    /// <param name="actionName">El nombre de la acción.</param>
+    /// <param name="routeValues">Los valores de la ruta para generar la URI.</param>
+    /// <param name="response">La respuesta de la creación.</param>
+    /// <returns>Un <see cref="CreatedResult"/> con la URI del recurso creado.</returns>
+    protected ActionResult<TResponse> CreatedAtAction<TResponse>(string actionName, object routeValues, TResponse response)
+    {
+        var uri = Url.Action(actionName, routeValues);
+        return Created(uri, response);
+    }
+
+    /// <summary>
     /// Maneja un error y devuelve una respuesta HTTP adecuada basada en el tipo de error.
     /// </summary>
     /// <param name="error">El <see cref="Error"/> que contiene información sobre el error ocurrido.</param>

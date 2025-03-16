@@ -1,4 +1,5 @@
 ﻿using CoWorkingApp.Application.Abstracts.Messaging;
+using CoWorkingApp.Application.Reservations.Extensions;
 using CoWorkingApp.Core.Contracts.Repositories;
 using CoWorkingApp.Core.Shared;
 using CoWorkingApp.Core.ValueObjects.Single;
@@ -8,7 +9,7 @@ namespace CoWorkingApp.Application.Reservations.Queries.GetReservationsByDate;
 /// <summary>
 /// Maneja la consulta para obtener las reservas por la fecha especificada.
 /// </summary>
-public sealed class GetReservationsByDateQueryHandler : IQueryHandler<GetReservationsByDateQuery, IEnumerable<GetReservationsByDateQueryResponse>>
+public sealed class GetReservationsByDateQueryHandler : IQueryHandler<GetReservationsByDateQuery, GetReservationsByDateQueryResponse>
 {
     private readonly IReservationRepository _reservationRepository;
 
@@ -28,12 +29,14 @@ public sealed class GetReservationsByDateQueryHandler : IQueryHandler<GetReserva
     /// <param name="request">La solicitud de la consulta.</param>
     /// <param name="cancellationToken">Token de cancelación opcional.</param>
     /// <returns>Una colección de respuestas de la consulta para obtener las reservas por la fecha especificada.</returns>
-    public async Task<Result<IEnumerable<GetReservationsByDateQueryResponse>>> Handle(GetReservationsByDateQuery request, CancellationToken cancellationToken)
+    public async Task<Result<GetReservationsByDateQueryResponse>> Handle(GetReservationsByDateQuery request, CancellationToken cancellationToken)
     {
         Date date = Date.Create(request.DateTime).Value;
 
         var reservations = await _reservationRepository.GetByDateAsNoTrackingAsync(date, cancellationToken);
 
-        return reservations.Select(reservation => (GetReservationsByDateQueryResponse)reservation).ToList();
+        var reservationResponses = reservations.Select(reservation => reservation.ToReservationResponse());
+
+        return new GetReservationsByDateQueryResponse(reservationResponses);
     }
 }

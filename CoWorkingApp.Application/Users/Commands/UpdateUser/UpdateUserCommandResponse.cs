@@ -1,5 +1,4 @@
-﻿using CoWorkingApp.Core.Entities;
-using CoWorkingApp.Core.Shared;
+﻿using CoWorkingApp.Core.Shared;
 
 namespace CoWorkingApp.Application.Users.Commands.UpdateUser;
 
@@ -11,20 +10,8 @@ namespace CoWorkingApp.Application.Users.Commands.UpdateUser;
 /// <param name="LastName">El apellido del usuario.</param>
 /// <param name="Email">El correo electrónico del usuario.</param>
 /// <param name="Password">La contraseña del usuario.</param>
-public readonly record struct UpdateUserCommandResponse(
+public record class UpdateUserCommandResponse(
     Guid UserId,
     string FirstName,
     string LastName,
-    string Email
-    ) : IResponse
-{
-    /// <summary>
-    /// Convierte explícitamente un objeto <see cref="User"/> a <see cref="UpdateUserCommandResponse"/>.
-    /// </summary>
-    /// <param name="user">El usuario a convertir.</param>
-    public static explicit operator UpdateUserCommandResponse(User user) =>
-        new(user.Id,
-            user.Name.FirstName,
-            user.Name.LastName,
-            user.Credentials.Email);
-}
+    string Email) : IResponse;

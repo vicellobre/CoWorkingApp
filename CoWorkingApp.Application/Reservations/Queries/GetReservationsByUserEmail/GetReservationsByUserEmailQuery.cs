@@ -7,9 +7,22 @@ namespace CoWorkingApp.Application.Reservations.Queries.GetReservationsByUserEma
 /// <summary>
 /// Consulta para obtener las reservas por el correo electrónico del usuario.
 /// </summary>
-/// <param name="UserEmail">El correo electrónico del usuario.</param>
-public record struct GetReservationsByUserEmailQuery(string UserEmail) : IQuery<IEnumerable<GetReservationsByUserEmailQueryResponse>>, IInputFilter
+public record class GetReservationsByUserEmailQuery : IQuery<GetReservationsByUserEmailQueryResponse>, IInputFilter
 {
+    /// <summary>
+    /// El correo electrónico del usuario.
+    /// </summary>
+    public string UserEmail { get; private set; }
+
+    /// <summary>
+    /// Inicializa una nueva instancia de la clase <see cref="GetReservationsByUserEmailQuery"/>.
+    /// </summary>
+    /// <param name="userEmail">El correo electrónico del usuario.</param>
+    public GetReservationsByUserEmailQuery(string userEmail)
+    {
+        UserEmail = userEmail;
+    }
+
     /// <summary>
     /// Filtra y normaliza el correo electrónico del usuario.
     /// </summary>

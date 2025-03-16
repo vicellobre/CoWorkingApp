@@ -1,4 +1,4 @@
-﻿using CoWorkingApp.Core.DomainErrors;
+﻿using CoWorkingApp.Core.Errors;
 using CoWorkingApp.Core.Shared;
 
 namespace CoWorkingApp.Core.ValueObjects.Single;
@@ -31,7 +31,7 @@ public readonly record struct SeatRow
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            return Result<SeatRow>.Failure(Errors.SeatRow.IsNullOrEmpty);
+            return Result<SeatRow>.Failure(ERRORS.SeatRow.IsNullOrEmpty);
         }
 
         return Result<SeatRow>.Success(new(value));

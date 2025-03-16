@@ -1,4 +1,5 @@
 ﻿using CoWorkingApp.Application.Abstracts.Messaging;
+using CoWorkingApp.Application.Reservations.Extensions;
 using CoWorkingApp.Core.Contracts.Repositories;
 using CoWorkingApp.Core.Shared;
 
@@ -7,7 +8,7 @@ namespace CoWorkingApp.Application.Reservations.Queries.GetReservationsByUserId;
 /// <summary>
 /// Manejador para la consulta de obtener reservas por identificador de usuario.
 /// </summary>
-public sealed class GetReservationsByUserIdQueryHandler : IQueryHandler<GetReservationsByUserIdQuery, IEnumerable<GetReservationsByUserIdQueryResponse>>
+public sealed class GetReservationsByUserIdQueryHandler : IQueryHandler<GetReservationsByUserIdQuery, GetReservationsByUserIdQueryResponse>
 {
     private readonly IReservationRepository _reservationRepository;
 
@@ -28,10 +29,12 @@ public sealed class GetReservationsByUserIdQueryHandler : IQueryHandler<GetReser
     /// <param name="cancellationToken">Token para notificar la cancelación de la operación.</param>
     /// <returns>Un <see cref="Result{T}"/> que contiene la lista de reservas.</returns>
     /// <exception cref="NotImplementedException">Se lanza cuando el método no está implementado.</exception>
-    public async Task<Result<IEnumerable<GetReservationsByUserIdQueryResponse>>> Handle(GetReservationsByUserIdQuery request, CancellationToken cancellationToken)
+    public async Task<Result<GetReservationsByUserIdQueryResponse>> Handle(GetReservationsByUserIdQuery request, CancellationToken cancellationToken)
     {
         var reservations = await _reservationRepository.GetByUserIdAsNoTrackingAsync(request.UserId, cancellationToken);
 
-        return reservations.Select(reservation => (GetReservationsByUserIdQueryResponse)reservation).ToList();
+        var reservationResponses = reservations.Select(reservation => reservation.ToReservationResponse());
+
+        return new GetReservationsByUserIdQueryResponse(reservationResponses);
     }
 }

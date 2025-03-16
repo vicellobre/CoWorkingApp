@@ -25,4 +25,13 @@ public static class CollectionExtensions
     /// <param name="collection">La colección a comprobar.</param>
     /// <returns>True si la colección es nula o está vacía; de lo contrario, false.</returns>
     public static bool IsNullOrEmpty<T>(this ICollection<T> collection) => collection.IsNull() || collection.IsEmpty();
+
+    /// <summary>
+    /// Comprueba si la colección de solo lectura es nula o está vacía.
+    /// </summary>
+    /// <typeparam name="T">El tipo de elementos en la colección.</typeparam>
+    /// <param name="collection">La colección de solo lectura a comprobar.</param>
+    /// <returns>True si la colección es nula o está vacía; de lo contrario, false.</returns>
+    public static bool IsNullOrEmptyReadOnly<T>(this IReadOnlyCollection<T>? collection) =>
+        collection is null || collection.Count <= 0;
 }

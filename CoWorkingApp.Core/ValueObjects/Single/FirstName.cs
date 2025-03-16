@@ -1,5 +1,5 @@
 ﻿using System.Text.RegularExpressions;
-using CoWorkingApp.Core.DomainErrors;
+using CoWorkingApp.Core.Errors;
 using CoWorkingApp.Core.Extensions;
 using CoWorkingApp.Core.Shared;
 
@@ -49,24 +49,24 @@ public readonly record struct FirstName
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            return Result<FirstName>.Failure(Errors.FirstName.IsNullOrEmpty);
+            return Result<FirstName>.Failure(ERRORS.FirstName.IsNullOrEmpty);
         }
 
         List<Error> errors = [];
 
         if (value.Length < MinLength)
         {
-            errors.Add(Errors.FirstName.TooShort(MinLength));
+            errors.Add(ERRORS.FirstName.TooShort(MinLength));
         }
 
         if (value.Length > MaxLength)
         {
-            errors.Add(Errors.FirstName.TooLong(MaxLength));
+            errors.Add(ERRORS.FirstName.TooLong(MaxLength));
         }
 
         if (!Regex.IsMatch(value, Pattern))
         {
-            errors.Add(Errors.FirstName.InvalidFormat);
+            errors.Add(ERRORS.FirstName.InvalidFormat);
         }
 
         return errors.IsEmpty()

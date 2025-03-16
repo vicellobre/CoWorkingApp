@@ -7,9 +7,22 @@ namespace CoWorkingApp.Application.Users.Queries.GetUserByEmail;
 /// <summary>
 /// Consulta para obtener un usuario por su correo electrónico.
 /// </summary>
-/// <param name="Email">El correo electrónico del usuario.</param>
-public record struct GetUserByEmailQuery(string Email) : IQuery<GetUserByEmailQueryResponse>, IInputFilter
+public record class GetUserByEmailQuery : IQuery<GetUserByEmailQueryResponse>, IInputFilter
 {
+    /// <summary>
+    /// El correo electrónico del usuario.
+    /// </summary>
+    public string Email { get; private set; }
+
+    /// <summary>
+    /// Inicializa una nueva instancia de la clase <see cref="GetUserByEmailQuery"/>.
+    /// </summary>
+    /// <param name="email">El correo electrónico del usuario.</param>
+    public GetUserByEmailQuery(string email)
+    {
+        Email = email;
+    }
+
     /// <summary>
     /// Filtra y normaliza el correo electrónico del usuario.
     /// </summary>

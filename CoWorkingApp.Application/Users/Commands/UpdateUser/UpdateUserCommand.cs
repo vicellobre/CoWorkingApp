@@ -7,19 +7,50 @@ namespace CoWorkingApp.Application.Users.Commands.UpdateUser;
 /// <summary>
 /// Comando para actualizar un usuario.
 /// </summary>
-/// <param name="UserId">El identificador del usuario.</param>
-/// <param name="FirstName">El nombre del usuario.</param>
-/// <param name="LastName">El apellido del usuario.</param>
-/// <param name="Email">El correo electrónico del usuario.</param>
-/// <param name="Password">La contraseña del usuario.</param>
-public record struct UpdateUserCommand(
-    Guid UserId,
-    string FirstName,
-    string LastName,
-    string Email,
-    string Password
-) : ICommand<UpdateUserCommandResponse>, IInputFilter
+public record class UpdateUserCommand : ICommand<UpdateUserCommandResponse>, IInputFilter
 {
+    /// <summary>
+    /// El identificador del usuario.
+    /// </summary>
+    public Guid UserId { get; private set; }
+
+    /// <summary>
+    /// El nombre del usuario.
+    /// </summary>
+    public string FirstName { get; private set; }
+
+    /// <summary>
+    /// El apellido del usuario.
+    /// </summary>
+    public string LastName { get; private set; }
+
+    /// <summary>
+    /// El correo electrónico del usuario.
+    /// </summary>
+    public string Email { get; private set; }
+
+    /// <summary>
+    /// La contraseña del usuario.
+    /// </summary>
+    public string Password { get; private set; }
+
+    /// <summary>
+    /// Inicializa una nueva instancia de la clase <see cref="UpdateUserCommand"/>.
+    /// </summary>
+    /// <param name="userId">El identificador del usuario.</param>
+    /// <param name="firstName">El nombre del usuario.</param>
+    /// <param name="lastName">El apellido del usuario.</param>
+    /// <param name="email">El correo electrónico del usuario.</param>
+    /// <param name="password">La contraseña del usuario.</param>
+    public UpdateUserCommand(Guid userId, string firstName, string lastName, string email, string password)
+    {
+        UserId = userId;
+        FirstName = firstName;
+        LastName = lastName;
+        Email = email;
+        Password = password;
+    }
+
     /// <summary>
     /// Filtra y normaliza los campos del usuario.
     /// </summary>

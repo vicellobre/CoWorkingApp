@@ -1,4 +1,4 @@
-﻿using CoWorkingApp.Core.DomainErrors;
+﻿using CoWorkingApp.Core.Errors;
 
 namespace CoWorkingApp.Tests.Core.Entities.Reservations;
 
@@ -17,7 +17,7 @@ public partial class ReservationTests
 
             // Assert
             Assert.True(result.IsFailure);
-            Assert.Equal(Errors.Seat.IsNull, result.FirstError);
+            Assert.Equal(ERRORS.Seat.IsNull, result.FirstError);
         }
 
         [Fact]

@@ -1,5 +1,4 @@
-﻿using CoWorkingApp.Core.Entities;
-using CoWorkingApp.Core.Shared;
+﻿using CoWorkingApp.Core.Shared;
 
 namespace CoWorkingApp.Application.Seats.Commands.UpdateSeat;
 
@@ -9,15 +8,7 @@ namespace CoWorkingApp.Application.Seats.Commands.UpdateSeat;
 /// <param name="SeatId">El identificador del asiento.</param>
 /// <param name="Name">El nombre del asiento.</param>
 /// <param name="Description">La descripción del asiento.</param>
-public readonly record struct UpdateSeatCommandResponse(
+public record class UpdateSeatCommandResponse(
     Guid SeatId,
     string Name,
-    string Description) : IResponse
-{
-    /// <summary>
-    /// Convierte explícitamente un objeto <see cref="Seat"/> a <see cref="UpdateSeatCommandResponse"/>.
-    /// </summary>
-    /// <param name="seat">El asiento a convertir.</param>
-    public static explicit operator UpdateSeatCommandResponse(Seat seat) =>
-        new(seat.Id, seat.Name, seat.Description);
-}
+    string Description) : IResponse;

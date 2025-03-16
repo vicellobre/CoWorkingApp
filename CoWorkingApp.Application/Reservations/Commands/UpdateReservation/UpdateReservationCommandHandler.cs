@@ -1,7 +1,8 @@
 ﻿using CoWorkingApp.Application.Abstracts.Messaging;
+using CoWorkingApp.Application.Reservations.Extensions;
 using CoWorkingApp.Core.Contracts.Repositories;
 using CoWorkingApp.Core.Contracts.UnitOfWork;
-using CoWorkingApp.Core.DomainErrors;
+using CoWorkingApp.Core.Errors;
 using CoWorkingApp.Core.Shared;
 
 namespace CoWorkingApp.Application.Reservations.Commands.UpdateReservation;
@@ -44,7 +45,7 @@ public sealed class UpdateReservationCommandHandler : ICommandHandler<UpdateRese
         var reservation = await _reservationRepository.GetByIdAsync(request.ReservationId, cancellationToken);
         if (reservation == null)
         {
-            return Result.Failure<UpdateReservationCommandResponse>(Errors.Reservation.NotFound(request.ReservationId));
+            return Result.Failure<UpdateReservationCommandResponse>(ERRORS.Reservation.NotFound(request.ReservationId));
         }
 
         if (reservation.UserId != request.UserId)
@@ -52,7 +53,7 @@ public sealed class UpdateReservationCommandHandler : ICommandHandler<UpdateRese
             var user = await _userRepository.GetByIdAsNoTrackingAsync(request.UserId, cancellationToken);
             if (user == null)
             {
-                return Result.Failure<UpdateReservationCommandResponse>(Errors.User.NotFound(request.UserId));
+                return Result.Failure<UpdateReservationCommandResponse>(ERRORS.User.NotFound(request.UserId));
             }
 
             reservation.ChangeUser(user);
@@ -63,7 +64,7 @@ public sealed class UpdateReservationCommandHandler : ICommandHandler<UpdateRese
             var seat = await _seatRepository.GetByIdAsNoTrackingAsync(request.SeatId, cancellationToken);
             if (seat == null)
             {
-                return Result.Failure<UpdateReservationCommandResponse>(Errors.Seat.NotFound(request.SeatId));
+                return Result.Failure<UpdateReservationCommandResponse>(ERRORS.Seat.NotFound(request.SeatId));
             }
 
             reservation.ChangeSeat(seat);
@@ -77,11 +78,11 @@ public sealed class UpdateReservationCommandHandler : ICommandHandler<UpdateRese
         bool isAvailable = await _seatRepository.IsAvailable(reservation.SeatId, reservation.Date, cancellationToken);
         if (!isAvailable)
         {
-            return Result.Failure<UpdateReservationCommandResponse>(Errors.Seat.NotAvailable(request.SeatId, request.Date));
+            return Result.Failure<UpdateReservationCommandResponse>(ERRORS.Seat.NotAvailable(request.SeatId, request.Date));
         }
 
         await _unitOfWork.CommitAsync(cancellationToken);
 
-        return (UpdateReservationCommandResponse)reservation;
+        return reservation.ToUpdateReservationCommandResponse();
     }
 }

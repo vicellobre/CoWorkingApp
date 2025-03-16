@@ -1,7 +1,8 @@
 ﻿using CoWorkingApp.Application.Abstracts.Messaging;
+using CoWorkingApp.Application.Users.Extensions;
 using CoWorkingApp.Core.Contracts.Repositories;
 using CoWorkingApp.Core.Contracts.UnitOfWork;
-using CoWorkingApp.Core.DomainErrors;
+using CoWorkingApp.Core.Errors;
 using CoWorkingApp.Core.Shared;
 
 namespace CoWorkingApp.Application.Users.Commands.DeleteUser;
@@ -37,12 +38,12 @@ public sealed record class DeleteUserCommandHandler : ICommandHandler<DeleteUser
         var user = await _userRepository.GetByIdAsync(request.UserId, cancellationToken);
         if (user == null)
         {
-            return Result.Failure<DeleteUserCommandResponse>(Errors.User.NotFound(request.UserId));
+            return Result.Failure<DeleteUserCommandResponse>(ERRORS.User.NotFound(request.UserId));
         }
 
         _userRepository.Remove(user);
         await _unitOfWork.CommitAsync(cancellationToken);
 
-        return (DeleteUserCommandResponse)user;
+        return user.ToDeleteUserCommandResponse();
     }
 }

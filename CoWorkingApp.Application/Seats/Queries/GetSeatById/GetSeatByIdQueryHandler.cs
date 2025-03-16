@@ -1,6 +1,7 @@
 ﻿using CoWorkingApp.Application.Abstracts.Messaging;
+using CoWorkingApp.Application.Seats.Extensions;
 using CoWorkingApp.Core.Contracts.Repositories;
-using CoWorkingApp.Core.DomainErrors;
+using CoWorkingApp.Core.Errors;
 using CoWorkingApp.Core.Shared;
 
 namespace CoWorkingApp.Application.Seats.Queries.GetSeatById;
@@ -33,9 +34,9 @@ public sealed class GetSeatByIdQueryHandler : IQueryHandler<GetSeatByIdQuery, Ge
         var seat = await _seatRepository.GetByIdAsNoTrackingAsync(request.SeatId, cancellationToken);
         if (seat is null)
         {
-            return Result.Failure<GetSeatByIdQueryResponse>(Errors.Seat.NotFound(request.SeatId));
+            return Result.Failure<GetSeatByIdQueryResponse>(ERRORS.Seat.NotFound(request.SeatId));
         }
 
-        return (GetSeatByIdQueryResponse)seat;
+        return seat.ToGetSeatByIdQueryResponse();
     }
 }

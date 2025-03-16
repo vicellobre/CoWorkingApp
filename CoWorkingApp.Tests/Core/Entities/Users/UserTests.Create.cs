@@ -1,4 +1,4 @@
-﻿using CoWorkingApp.Core.DomainErrors;
+﻿using CoWorkingApp.Core.Errors;
 using CoWorkingApp.Core.Entities;
 using CoWorkingApp.Core.ValueObjects.Single;
 
@@ -23,7 +23,7 @@ public partial class UserTests
 
             // Assert
             Assert.True(result.IsFailure);
-            Assert.Contains(Errors.FirstName.IsNullOrEmpty, result.Errors);
+            Assert.Contains(ERRORS.FirstName.IsNullOrEmpty, result.Errors);
         }
 
         [Fact]
@@ -41,7 +41,7 @@ public partial class UserTests
 
             // Assert
             Assert.True(result.IsFailure);
-            Assert.Contains(Errors.LastName.IsNullOrEmpty, result.Errors);
+            Assert.Contains(ERRORS.LastName.IsNullOrEmpty, result.Errors);
         }
 
         [Fact]
@@ -59,7 +59,7 @@ public partial class UserTests
 
             // Assert
             Assert.True(result.IsFailure);
-            Assert.Contains(Errors.Email.InvalidFormat, result.Errors);
+            Assert.Contains(ERRORS.Email.InvalidFormat, result.Errors);
         }
 
         [Fact]
@@ -77,7 +77,7 @@ public partial class UserTests
 
             // Assert
             Assert.True(result.IsFailure);
-            Assert.Contains(Errors.Password.TooShort(Password.MinLength), result.Errors);
+            Assert.Contains(ERRORS.Password.TooShort(Password.MinLength), result.Errors);
         }
 
         [Fact]

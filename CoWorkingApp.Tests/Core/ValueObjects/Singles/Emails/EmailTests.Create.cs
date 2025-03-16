@@ -1,4 +1,4 @@
-﻿using CoWorkingApp.Core.DomainErrors;
+﻿using CoWorkingApp.Core.Errors;
 using CoWorkingApp.Core.ValueObjects.Single;
 
 namespace CoWorkingApp.Tests.Core.ValueObjects.Singles.Emails;
@@ -12,7 +12,7 @@ public partial class EmailTest
         {
             // Arrange
             string? value = null;
-            var expectedError = Errors.Email.IsNullOrEmpty;
+            var expectedError = ERRORS.Email.IsNullOrEmpty;
 
             // Act
             var result = Email.Create(value);
@@ -27,7 +27,7 @@ public partial class EmailTest
         {
             // Arrange
             var value = string.Empty;
-            var expectedError = Errors.Email.IsNullOrEmpty;
+            var expectedError = ERRORS.Email.IsNullOrEmpty;
 
             // Act
             var result = Email.Create(value);
@@ -43,7 +43,7 @@ public partial class EmailTest
         {
             // Arrange
             var value = "a@b.c";
-            var expectedError = Errors.Email.TooShort(Email.MinLength);
+            var expectedError = ERRORS.Email.TooShort(Email.MinLength);
 
             // Act
             var result = Email.Create(value);
@@ -58,7 +58,7 @@ public partial class EmailTest
         {
             // Arrange
             var longEmail = new string('a', 51) + "@example.com";
-            var expectedError = Errors.Email.TooLong(Email.MaxLength);
+            var expectedError = ERRORS.Email.TooLong(Email.MaxLength);
 
             // Act
             var result = Email.Create(longEmail);
@@ -74,7 +74,7 @@ public partial class EmailTest
         {
             // Arrange
             var value = "invalid-email";
-            var expectedError = Errors.Email.InvalidFormat;
+            var expectedError = ERRORS.Email.InvalidFormat;
 
             // Act
             var result = Email.Create(value);

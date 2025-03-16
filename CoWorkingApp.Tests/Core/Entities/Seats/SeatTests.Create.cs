@@ -1,4 +1,4 @@
-﻿using CoWorkingApp.Core.DomainErrors;
+﻿using CoWorkingApp.Core.Errors;
 using CoWorkingApp.Core.Entities;
 
 namespace CoWorkingApp.Tests.Core.Entities.Seats;
@@ -21,7 +21,7 @@ public partial class SeatTests
 
             // Assert
             Assert.True(result.IsFailure);
-            Assert.Contains(Errors.SeatNumber.IsNullOrEmpty, result.Errors);
+            Assert.Contains(ERRORS.SeatNumber.IsNullOrEmpty, result.Errors);
         }
 
         [Fact]
@@ -38,7 +38,7 @@ public partial class SeatTests
 
             // Assert
             Assert.True(result.IsFailure);
-            Assert.Contains(Errors.SeatRow.IsNullOrEmpty, result.Errors);
+            Assert.Contains(ERRORS.SeatRow.IsNullOrEmpty, result.Errors);
         }
 
         [Fact]

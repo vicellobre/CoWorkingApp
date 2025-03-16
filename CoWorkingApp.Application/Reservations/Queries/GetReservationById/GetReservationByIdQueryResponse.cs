@@ -1,5 +1,4 @@
-﻿using CoWorkingApp.Core.Entities;
-using CoWorkingApp.Core.Shared;
+﻿using CoWorkingApp.Core.Shared;
 
 namespace CoWorkingApp.Application.Reservations.Queries.GetReservationById;
 
@@ -20,19 +19,4 @@ public readonly record struct GetReservationByIdQueryResponse(
     string UserLastName,
     string UserEmail,
     string SeatName,
-    string SeatDescription) : IResponse
-{
-    /// <summary>
-    /// Convierte explícitamente un objeto <see cref="Reservation"/> a <see cref="GetReservationByIdQueryResponse"/>.
-    /// </summary>
-    /// <param name="reservation">La reserva a convertir.</param>
-    public static explicit operator GetReservationByIdQueryResponse(Reservation reservation) =>
-        new(
-            reservation.Id,
-            reservation.Date,
-            reservation.User.Name.FirstName,
-            reservation.User.Name.LastName,
-            reservation.User.Credentials.Email,
-            reservation.Seat.Name,
-            reservation.Seat.Description);
-}
+    string SeatDescription) : IResponse;

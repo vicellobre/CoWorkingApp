@@ -1,6 +1,7 @@
 ﻿using CoWorkingApp.Application.Abstracts.Messaging;
+using CoWorkingApp.Application.Seats.Extensions;
 using CoWorkingApp.Core.Contracts.Repositories;
-using CoWorkingApp.Core.DomainErrors;
+using CoWorkingApp.Core.Errors;
 using CoWorkingApp.Core.Shared;
 using CoWorkingApp.Core.ValueObjects.Composite;
 
@@ -37,9 +38,9 @@ public sealed class GetSeatByNameQueryHandler : IQueryHandler<GetSeatByNameQuery
         var seat = await _seatRepository.GetByNameAsync(name, cancellationToken);
         if (seat is null)
         {
-            return Result.Failure<GetSeatByNameQueryResponse>(Errors.Seat.NameNotExist(request.Name));
+            return Result.Failure<GetSeatByNameQueryResponse>(ERRORS.Seat.NameNotExist(request.Name));
         }
 
-        return (GetSeatByNameQueryResponse)seat;
+        return seat.ToGetSeatByNameQueryResponse();
     }
 }

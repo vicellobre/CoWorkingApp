@@ -1,6 +1,6 @@
 ﻿using CoWorkingApp.Core.Extensions;
 using CoWorkingApp.Core.Primitives;
-using ERRORS = CoWorkingApp.Core.DomainErrors.Errors;
+using ERRORS = CoWorkingApp.Core.Errors.ERRORS;
 
 namespace CoWorkingApp.Core.Shared;
 
@@ -196,5 +196,5 @@ public readonly record struct Result<TValue> : IResult<TValue>
     /// </summary>
     /// <param name="result">El resultado que contiene el estado de éxito o fallo y los errores correspondientes.</param>
     /// <returns>Una instancia de <see cref="Result"/>.</returns>
-    public static implicit operator Result(Result<TValue> result) => result.IsSuccess ? Result.Success() : Result.Failure(result.FirstError);
+    public static implicit operator Result(Result<TValue> result) => result.IsSuccess ? Result.Success() : Result.Failure(result.Errors);
 }
