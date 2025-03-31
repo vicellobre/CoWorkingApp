@@ -1,7 +1,6 @@
 ﻿using CoWorkingApp.Core.Extensions;
 using CoWorkingApp.Core.Shared;
-using ERRORS = CoWorkingApp.Core.Errors.ERRORS;
-using Xunit;
+using CoWorkingApp.Core.Errors;
 
 namespace CoWorkingApp.Tests.Core.Extensions.Results;
 

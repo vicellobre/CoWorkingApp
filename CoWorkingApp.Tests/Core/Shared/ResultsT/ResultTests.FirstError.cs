@@ -1,5 +1,5 @@
 ﻿using CoWorkingApp.Core.Shared;
-using ERRORS = CoWorkingApp.Core.Errors.ERRORS;
+using CoWorkingApp.Core.Errors;
 
 namespace CoWorkingApp.Tests.Core.Shared.ResultsT;
 

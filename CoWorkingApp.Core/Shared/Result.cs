@@ -1,6 +1,6 @@
 ﻿using CoWorkingApp.Core.Extensions;
 using CoWorkingApp.Core.Primitives;
-using ERRORS = CoWorkingApp.Core.Errors.ERRORS;
+using CoWorkingApp.Core.Errors;
 
 namespace CoWorkingApp.Core.Shared;
 
